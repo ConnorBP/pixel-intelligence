@@ -4,7 +4,7 @@
  **Group Members:**
  - Connor *"ConnorBP"* Postma
  - Yoon "superYM222" Min
- - Sanjeevkumar "?" Chauhan
+ - Sanjeevkumar "sanjeev-cs" Chauhan
  - Parmila "Parmilashams" Shams
 
 # Design / Wireframes
