@@ -46,6 +46,8 @@ The application must:
 - extended color palete presets
 - additional file export formats (popular sprite editor formats, json, webp, etc)
 
+
+ftyfytftyfytftttfty 
 ## User Stories and Use Cases 
 ### User Stories
 - TODO
