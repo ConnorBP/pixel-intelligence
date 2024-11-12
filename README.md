@@ -10,6 +10,18 @@
 # Design / Wireframes
 mockup can be viewed here: https://www.figma.com/design/MgBOfcN73AzYPKFxObLKvs/Pixel-Editor-Concept?node-id=0-1&t=L3mJyJCMEhV7dZpK-1
 
+designs todo:
+
+- [ ] create new image prompt screen (overlay)
+- [ ] share options prompt screen (overlay)
+- [ ] save options screen (overlay)
+- [ ] top-left context menu actions
+- [ ] color selector popup
+- [ ] deletion confirmation popup
+- [ ] (Maybe) landing page
+- [ ] (Maybe) gallery page
+- [ ] (Maybe) color pallets menu
+
 ![first mockup](./docs/mockupv1.svg)
 *first wireframe mockup of the pixel editor concept*
 
