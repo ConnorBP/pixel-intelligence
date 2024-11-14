@@ -18,8 +18,8 @@ designs todo:
 - [ ] top-left context menu actions
 - [ ] color selector popup
 - [ ] deletion confirmation popup
+- [ ] gallery page
 - [ ] (Maybe) landing page
-- [ ] (Maybe) gallery page
 - [ ] (Maybe) color pallets menu
 
 ![first mockup](./docs/mockupv1.svg)
@@ -45,6 +45,7 @@ The application must:
 - gallery with shared creations stored on server (maybe s3 bucket)
 - extended color palete presets
 - additional file export formats (popular sprite editor formats, json, webp, etc)
+- login page (user login system)
 
 ## User Stories and Use Cases 
 ### User Stories
