@@ -18,8 +18,8 @@ designs todo:
 - [ ] top-left context menu actions
 - [ ] color selector popup
 - [ ] deletion confirmation popup
+- [ ] gallery page
 - [ ] (Maybe) landing page
-- [ ] (Maybe) gallery page
 - [ ] (Maybe) color pallets menu
 
 ![first mockup](./docs/mockupv1.svg)
