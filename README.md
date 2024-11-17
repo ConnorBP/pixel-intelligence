@@ -30,13 +30,13 @@ designs todo:
 *first wireframe mockup of the pixel editor concept*
 
 ![Gallery Page](./docs/Gallery%20Page.svg)
-_Wireframe mockup for Gallery page._
+_Wireframe mokup for Gallery page._
 
 ![Share Screen](./docs/Share%20Screen.svg)
-_Wireframe mockup for Share Screen._
+_Wireframe mokup for Share Screen._
 
 ![Color Selector PopUp](./docs/Color%20Selector%20Screen.svg)
-_Wireframe mockup for Color Selector PopUp._
+_Wireframe mokup for Color Selector PopUp._
 
 # Functional Requirements
 
