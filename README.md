@@ -182,3 +182,38 @@ The application must:
     - The artwork is available in the gallery.
     #### Postconditions:
     - The artwork is displayed and downloadable.
+
+## User Interface Flow
+
+```mermaid
+graph TD
+    A[Gallery Page] --> B[View Artwork]
+    A --> C[Upload Artwork]
+    A --> D[Open Editor]
+    
+    B --> E[View Artwork in Fullscreen]
+    B --> F[Download Artwork]
+    
+    Q --> G[Enter Title and Description]
+    P --> H[Upload to Gallery]
+    H --> I[Success Confirmation]
+    P --> V[Generate Shareable URL]
+    V --> I
+    D --> J[Main Editor]
+    
+    J --> K[Create New Canvas]
+    G --> L[Generate Image with AI]
+    J --> M[Drawing Tools & Options]
+    J --> N[Save Artwork]
+    J --> O[Export Artwork]
+    J --> P[Share Artwork]
+    J --> A[Back to Gallery]
+    
+    K --> Q[Set Canvas Size]
+    L --> R[Canvas Initialized]
+  
+    O --> T[Select Export Format]
+    T --> U[Export Completed]
+
+```
+
