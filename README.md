@@ -189,19 +189,19 @@ User can save their creations on library(sever).
 
 1. Download a png copy of the image.
 
-As a user, I want to download my creation as a png file.
+As a user, I want to download my creations as a png image file.
 
 **Acceptance Criteria:** 
 
-The user should have a “Download” button. When clicked, the png file downloads current canvas state. 
+The user should have a “Download” button. When clicked, the PNG file should download the current canvas state. 
 
 1. Provide drawing tools.
 
-As a user, I want drawing tools(e.g., pencil, eraser, and fill-bucket) to create and refine my pixel art.
+As a user, I want drawing tools(e.g., pencil, eraser, and fill-bucket) to create and edit details of my pixel art.
 
 **Acceptance Criteria:** 
 
-The editor should include the following tools in the toolbar: 
+The editor include the tools in the toolbar:
 
 Pencil Tool: Draws on pixels using the selected colors.
 
