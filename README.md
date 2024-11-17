@@ -78,11 +78,58 @@ The application must:
 
 ## User Stories and Use Cases 
 ### User Stories
-- TODO
+
+1. Select a Pixel. 
+
+As a user, I want to select pixel art canvas at the beginning, so that I can create images.
+
+**Acceptance Criteria:** 
+
+When the user opens the editor,  a messege apeers asking for user to choose the canvas size.
+
+The options should range between 8x8 to 64x62 pixels.
+
+A default size is 16x16 for first-time user.
+
+The canvas should be initialized to the pixel chosen by user, and users can start it.
+
+2. Save canvas state and creations
+
+As a user, I want to save my creations to library and canvas state to local storage.
+
+**Acceptance Criteria:** 
+
+The canvas state should save on local storage. 
+
+When user reload the page without losing their canvas state.
+
+User can save their creations on library(sever). 
+
+3. Download a png copy of the image.
+
+As a user, I want to download my creations as a png image file.
+
+**Acceptance Criteria:** 
+
+The user should have a “Download” button. When clicked, the PNG file should download the current canvas state. 
+
+4. Provide drawing tools.
+
+As a user, I want drawing tools(e.g., pencil, eraser, and fill-bucket) to create and edit details of my pixel art.
+
+**Acceptance Criteria:** 
+
+The editor include the tools in the toolbar:
+
+Pencil Tool: Draws on pixels using the selected colors.
+
+Eraser Tool: Clear pixels.
+
+Fill-Bucket Tool: Fills areas which clicked from user to select a color.
+
+Clear Tool: Reset the entire canvas to empty state.
+
 ### Use Cases
-<<<<<<< Updated upstream
-- TODO
-=======
 1. Use Case: Creating a New Pixel Art Canvas
     #### Actors:
     User: Initiates the canvas creation process.
@@ -186,7 +233,7 @@ The application must:
     #### Postconditions:
     - The artwork is displayed and downloadable.
 
-1. Use Case: Creating a New Pixel Art Canvas
+9. Use Case: Creating a New Pixel Art Canvas
     #### Actors:
     User: Initiates the canvas creation process.
 	System: Provides options for canvas size and initializes the canvas.
@@ -200,7 +247,7 @@ The application must:
     #### Postconditions:
     - The new canvas is created with the specified size.
     - The user can begin drawing on the canvas.
-2. Use Case: Drawing on the Canvas
+10. Use Case: Drawing on the Canvas
     #### Actors:
     - User: Selects drawing tools and interacts with the canvas.
     - System: Updates the canvas pixels and maintains the drawing state.
@@ -213,7 +260,7 @@ The application must:
     #### Postconditions:
     - The pixels on the canvas are updated according to the tool and color selected.
     - The editor state is saved in local storage.
-3. Use Case: Using the Color Selection Tool
+11. Use Case: Using the Color Selection Tool
     #### Actors:
     - User: Chooses primary and secondary colors and interacts with the swap button.
     - System: Updates the selected colors and applies them to the tools.
@@ -226,7 +273,7 @@ The application must:
     #### Postconditions:
     - The selected colors are updated.
     - The colors are swapped and applied to the drawing tools.
-4. Use Case: Saving Pixel Art as PNG
+12. Use Case: Saving Pixel Art as PNG
     #### Actors:
     - User: Initiates the save process.
     - System: Converts the artwork into a PNG file and provides it for download.
@@ -238,7 +285,7 @@ The application must:
     - The user has made changes to the canvas.
     #### Postconditions:
     - The pixel art is saved as a PNG file and downloaded to the user's device.
-5. Use Case: Exporting Pixel Art in Multiple Formats
+13. Use Case: Exporting Pixel Art in Multiple Formats
     #### Actors:
     - User: Chooses the export format.
     - System: Prepares and downloads the artwork in the selected format.
@@ -251,7 +298,7 @@ The application must:
     - The user has created a pixel art image.
     #### Postconditions:
     - The artwork is exported and downloaded in the selected format.
-6. Use Case: Gallery Upload
+14. Use Case: Gallery Upload
     #### Actors:
     - User: Provides the artwork for upload.
     - System: Uploads the artwork to the server and confirms success.
@@ -263,7 +310,7 @@ The application must:
     - The user is logged in and has a pixel art image.
     #### Postconditions:
     - The artwork is uploaded to the gallery and confirmation is provided.
-7. Use Case: Browsing the Gallery
+15. Use Case: Browsing the Gallery
     #### Actors:
     - User: Navigates the gallery and views artwork.
     - System: Retrieves and displays gallery content.
@@ -276,7 +323,7 @@ The application must:
     - The system has artwork in the gallery.
     #### Postconditions:
     - The user browses and views gallery content.
-8. Use Case: Viewing and Downloading Shared Artwork
+16. Use Case: Viewing and Downloading Shared Artwork
     #### Actors:
     - User: Selects artwork for viewing or downloading.
     - System: Displays the artwork and allows downloads.
@@ -323,59 +370,3 @@ graph TD
     T --> U[Export Completed]
 
 ```
-
-
-<<<<<<< Updated upstream
-### Use story
-
-
-1. Select a Pixel. 
-
-As a user, I want to select pixel art canvas at the beginning, so that I can create images.
-
-**Acceptance Criteria:** 
-
-When the user opens the editor,  a messege apeers asking for user to choose the canvas size.
-
-The options should range between 8x8 to 64x62 pixels.
-
-A default size is 16x16 for first-time user.
-
-The canvas should be initialized to the pixel chosen by user, and users can start it.
-
-1. Save canvas state and creations
-
-As a user, I want to save my creations to library and canvas state to local storage.
-
-**Acceptance Criteria:** 
-
-The canvas state should save on local storage. 
-
-When user reload the page without losing their canvas state.
-
-User can save their creations on library(sever). 
-
-1. Download a png copy of the image.
-
-As a user, I want to download my creations as a png image file.
-
-**Acceptance Criteria:** 
-
-The user should have a “Download” button. When clicked, the PNG file should download the current canvas state. 
-
-1. Provide drawing tools.
-
-As a user, I want drawing tools(e.g., pencil, eraser, and fill-bucket) to create and edit details of my pixel art.
-
-**Acceptance Criteria:** 
-
-The editor include the tools in the toolbar:
-
-Pencil Tool: Draws on pixels using the selected colors.
-
-Eraser Tool: Clear pixels.
-
-Fill-Bucket Tool: Fills areas which clicked from user to select a color.
-
-Clear Tool: Reset the entire canvas to empty state.
-
