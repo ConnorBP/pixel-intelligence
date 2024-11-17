@@ -21,17 +21,6 @@ A Pixel Art Editor with generative AI functionality, image downscale processing,
 - Share Screen: https://www.figma.com/design/7c2ijnyfajgfeeMJjpeS9j/Comp_229_Project?node-id=20-30&t=HFC8hwDvlPgtngwJ-1
 - Color Selector Popup: https://www.figma.com/design/7c2ijnyfajgfeeMJjpeS9j/Comp_229_Project?node-id=20-2&t=HFC8hwDvlPgtngwJ-1
 
-designs todo:
-
-- [x] create new image prompt screen (overlay)
-- [x] share options prompt screen (overlay)
-- [x] save options screen (overlay)
-- [x] top-left context menu actions
-- [x] color selector popup
-- [x] color pallets menu (built into color-selector overlay)
-- [x] deletion confirmation popup
-- [x] gallery page (also is the main landing page)
-
 ![first mockup](./docs/mockupv1.svg)
 _Wireframe mockup of the main pixel editor ui._
 
