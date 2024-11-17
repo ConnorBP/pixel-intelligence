@@ -207,7 +207,8 @@ graph TD
     J --> N[Save Artwork]
     J --> O[Export Artwork]
     J --> P[Share Artwork]
-    J --> A[Back to Gallery]
+    J --> A2[Back to Gallery]
+    A2 --> A
     
     K --> Q[Set Canvas Size]
     L --> R[Canvas Initialized]
