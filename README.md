@@ -2,10 +2,10 @@
 A Pixel Art Editor with generative AI functionality, image downscale processing, image export, and a showcase gallery. Comp229 Group Project (Fall 2024).
 
  **Group Members:**
- - Connor *"ConnorBP"* Postma
- - Yoon "superYM222" Min
- - Sanjeevkumar "sanjeev-cs" Chauhan
- - Parmila "Parmilashams" Shams
+ - Connor *"[ConnorBP](https://github.com/ConnorBP)"* Postma
+ - Yoon "[superYM222](https://github.com/superYM222)" Min
+ - Sanjeevkumar "[sanjeev-cs](https://github.com/sanjeev-cs)" Chauhan
+ - Parmila "[Parmilashams](https://github.com/Parmilashams)" Shams
 
 [TOC]
 
