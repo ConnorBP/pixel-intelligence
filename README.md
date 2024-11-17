@@ -79,7 +79,6 @@ The application must:
 ## User Stories and Use Cases 
 ### User Stories
 
-### Use story
 1. Create account.
 
 As a user, I want to create an account with email and password.
