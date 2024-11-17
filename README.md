@@ -1,4 +1,4 @@
-# pixel-intelligence
+# Pixel Intelligence
  Pixel art editor with generative AI functionality. Comp229 Group Project.
 
  **Group Members:**
@@ -8,7 +8,8 @@
  - Parmila "Parmilashams" Shams
 
 # Design / Wireframes
-*Original figma mockups may be viewed here:*
+*Original Figma mockups may be viewed here:*
+
 - Main Editor UI: https://www.figma.com/design/MgBOfcN73AzYPKFxObLKvs/Pixel-Editor-Concept?node-id=0-1&t=L3mJyJCMEhV7dZpK-1
 - New Image: https://www.figma.com/design/MgBOfcN73AzYPKFxObLKvs/Pixel-Editor-Concept?node-id=30-170&t=8Nb4CZyowUKdhHfR-1
 - Save Image: https://www.figma.com/design/MgBOfcN73AzYPKFxObLKvs/Pixel-Editor-Concept?node-id=30-142&t=8Nb4CZyowUKdhHfR-1
@@ -51,7 +52,7 @@ _Wireframe mockup for Gallery page._
 _Wireframe mockup for Share Screen._
 
 ![Color Selector PopUp](./docs/Color%20Selector%20Screen.svg)
-_Wireframe mockup for Color Selector PopUp._
+_Wireframe mockup for Color Selector Pop-Up._
 
 # Functional Requirements
 
@@ -67,12 +68,12 @@ The application must:
 - have drawing tools including: pencil, eraser, clear, eyedropper, and fill-bucket
 - have a color selection tool with primary color, secondary color, and a swap button
 
-## Strech Goals
+## Stretch Goals
 - Crochet pattern export
-- encoded url share codes for pixel art (could use RLE encoding format by ConnorBP)
+- encoded URL share codes for pixel art (could use RLE encoding format by ConnorBP)
 - gallery with shared creations stored on server (maybe s3 bucket)
 - extended color palette presets
-- additional file export formats (popular sprite editor formats, json, webp, etc)
+- additional file export formats (popular sprite editor formats, JSON, WebP, etc)
 - login page (user login system)
 
 ## User Stories and Use Cases 
