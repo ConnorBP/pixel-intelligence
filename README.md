@@ -8,7 +8,11 @@
  - Parmila "Parmilashams" Shams
 
 # Design / Wireframes
-mockup can be viewed here: https://www.figma.com/design/MgBOfcN73AzYPKFxObLKvs/Pixel-Editor-Concept?node-id=0-1&t=L3mJyJCMEhV7dZpK-1
+- mockup can be viewed here: https://www.figma.com/design/MgBOfcN73AzYPKFxObLKvs/Pixel-Editor-Concept?node-id=0-1&t=L3mJyJCMEhV7dZpK-1
+
+- Gallery Page: https://www.figma.com/design/7c2ijnyfajgfeeMJjpeS9j/Comp_229_Project?node-id=0-1&t=HFC8hwDvlPgtngwJ-1
+- Share Screen: https://www.figma.com/design/7c2ijnyfajgfeeMJjpeS9j/Comp_229_Project?node-id=20-30&t=HFC8hwDvlPgtngwJ-1
+- Color Selector Popup: https://www.figma.com/design/7c2ijnyfajgfeeMJjpeS9j/Comp_229_Project?node-id=20-2&t=HFC8hwDvlPgtngwJ-1
 
 designs todo:
 
@@ -24,6 +28,15 @@ designs todo:
 
 ![first mockup](./docs/mockupv1.svg)
 *first wireframe mockup of the pixel editor concept*
+
+![Gallery Page](./docs/Gallery%20Page.svg)
+_Wireframe mokup for Gallery page._
+
+![Share Screen](./docs/Share%20Screen.svg)
+_Wireframe mokup for Share Screen._
+
+![Color Selector PopUp](./docs/Color%20Selector%20Screen.svg)
+_Wireframe mokup for Color Selector PopUp._
 
 # Functional Requirements
 
