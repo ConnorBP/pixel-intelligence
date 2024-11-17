@@ -79,9 +79,39 @@ The application must:
 ## User Stories and Use Cases 
 ### User Stories
 
-1. Select a Pixel. 
+### Use story
+1. Create account.
+
+As a user, I want to create an account with email and password.
+
+Property: High
+
+**Acceptance Criteria:** 
+
+When the user for the first, create an account with their email and password. 
+
+Create account is successful and an message show the create account succesfully.
+
+2. Login with account. 
+
+As a user, I want to login with my account to start.
+
+Property: High
+
+**Acceptance Criteria:** 
+
+The user enter their email and password in the input box.
+
+Login is successful user can start canvas.
+
+Login fails, and an error message is displayed to the user for an incorrect email or password.
+
+
+3. Select a Pixel. 
 
 As a user, I want to select pixel art canvas at the beginning, so that I can create images.
+
+Property: High
 
 **Acceptance Criteria:** 
 
@@ -93,9 +123,11 @@ A default size is 16x16 for first-time user.
 
 The canvas should be initialized to the pixel chosen by user, and users can start it.
 
-2. Save canvas state and creations
+4. Save canvas state and creations
 
 As a user, I want to save my creations to library and canvas state to local storage.
+
+Property: High
 
 **Acceptance Criteria:** 
 
@@ -105,17 +137,21 @@ When user reload the page without losing their canvas state.
 
 User can save their creations on library(sever). 
 
-3. Download a png copy of the image.
+5. Download a png copy of the image.
 
 As a user, I want to download my creations as a png image file.
+
+Property: Medium
 
 **Acceptance Criteria:** 
 
 The user should have a “Download” button. When clicked, the PNG file should download the current canvas state. 
 
-4. Provide drawing tools.
+6. Provide drawing tools.
 
 As a user, I want drawing tools(e.g., pencil, eraser, and fill-bucket) to create and edit details of my pixel art.
+
+Property: Medium
 
 **Acceptance Criteria:** 
 
@@ -128,6 +164,8 @@ Eraser Tool: Clear pixels.
 Fill-Bucket Tool: Fills areas which clicked from user to select a color.
 
 Clear Tool: Reset the entire canvas to empty state.
+
+
 
 ### Use Cases
 1. Use Case: Creating a New Pixel Art Canvas
