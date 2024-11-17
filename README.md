@@ -1,4 +1,4 @@
-# pixel-intelligence
+# Pixel Intelligence
  Pixel art editor with generative AI functionality. Comp229 Group Project.
 
  **Group Members:**
@@ -8,35 +8,51 @@
  - Parmila "Parmilashams" Shams
 
 # Design / Wireframes
-- mockup can be viewed here: https://www.figma.com/design/MgBOfcN73AzYPKFxObLKvs/Pixel-Editor-Concept?node-id=0-1&t=L3mJyJCMEhV7dZpK-1
+*Original Figma mockups may be viewed here:*
 
+- Main Editor UI: https://www.figma.com/design/MgBOfcN73AzYPKFxObLKvs/Pixel-Editor-Concept?node-id=0-1&t=L3mJyJCMEhV7dZpK-1
+- New Image: https://www.figma.com/design/MgBOfcN73AzYPKFxObLKvs/Pixel-Editor-Concept?node-id=30-170&t=8Nb4CZyowUKdhHfR-1
+- Save Image: https://www.figma.com/design/MgBOfcN73AzYPKFxObLKvs/Pixel-Editor-Concept?node-id=30-142&t=8Nb4CZyowUKdhHfR-1
+- Confirmation box: https://www.figma.com/design/MgBOfcN73AzYPKFxObLKvs/Pixel-Editor-Concept?node-id=25-132&t=8Nb4CZyowUKdhHfR-1
+- Context Menu: https://www.figma.com/design/MgBOfcN73AzYPKFxObLKvs/Pixel-Editor-Concept?node-id=25-54&t=8Nb4CZyowUKdhHfR-1
 - Gallery Page: https://www.figma.com/design/7c2ijnyfajgfeeMJjpeS9j/Comp_229_Project?node-id=0-1&t=HFC8hwDvlPgtngwJ-1
 - Share Screen: https://www.figma.com/design/7c2ijnyfajgfeeMJjpeS9j/Comp_229_Project?node-id=20-30&t=HFC8hwDvlPgtngwJ-1
 - Color Selector Popup: https://www.figma.com/design/7c2ijnyfajgfeeMJjpeS9j/Comp_229_Project?node-id=20-2&t=HFC8hwDvlPgtngwJ-1
 
 designs todo:
 
-- [ ] create new image prompt screen (overlay)
+- [x] create new image prompt screen (overlay)
 - [x] share options prompt screen (overlay)
-- [ ] save options screen (overlay)
-- [ ] top-left context menu actions
+- [x] save options screen (overlay)
+- [x] top-left context menu actions
 - [x] color selector popup
-- [ ] deletion confirmation popup
-- [x] gallery page
-- [ ] (Maybe) landing page
-- [ ] (Maybe) color pallets menu
+- [x] color pallets menu (built into color-selector overlay)
+- [x] deletion confirmation popup
+- [x] gallery page (also is the main landing page)
 
 ![first mockup](./docs/mockupv1.svg)
-*first wireframe mockup of the pixel editor concept*
+_Wireframe mockup of the main pixel editor ui._
+
+![first mockup](./docs/ContextMenu.svg)
+_Wireframe mockup of the pixel editor context menu._
+
+![confirmation dialogue](./docs/AlertBox.svg)
+_Confirmation box for delete or overwrite._
+
+![save image dialogue](./docs/SaveImage.svg)
+_Save image popup menu._
+
+![create image dialogue](./docs/NewImage.svg)
+_Create new image popup overlay._
 
 ![Gallery Page](./docs/Gallery%20Page.svg)
-_Wireframe mokup for Gallery page._
+_Wireframe mockup for Gallery page._
 
 ![Share Screen](./docs/Share%20Screen.svg)
-_Wireframe mokup for Share Screen._
+_Wireframe mockup for Share Screen._
 
 ![Color Selector PopUp](./docs/Color%20Selector%20Screen.svg)
-_Wireframe mokup for Color Selector PopUp._
+_Wireframe mockup for Color Selector Pop-Up._
 
 # Functional Requirements
 
@@ -52,12 +68,12 @@ The application must:
 - have drawing tools including: pencil, eraser, clear, eyedropper, and fill-bucket
 - have a color selection tool with primary color, secondary color, and a swap button
 
-## Strech Goals
+## Stretch Goals
 - Crochet pattern export
-- encoded url share codes for pixel art (could use RLE encoding format by ConnorBP)
+- encoded URL share codes for pixel art (could use RLE encoding format by ConnorBP)
 - gallery with shared creations stored on server (maybe s3 bucket)
-- extended color palete presets
-- additional file export formats (popular sprite editor formats, json, webp, etc)
+- extended color palette presets
+- additional file export formats (popular sprite editor formats, JSON, WebP, etc)
 - login page (user login system)
 
 ## User Stories and Use Cases 
@@ -166,3 +182,39 @@ The application must:
     - The artwork is available in the gallery.
     #### Postconditions:
     - The artwork is displayed and downloadable.
+
+## User Interface Flow
+
+```mermaid
+graph TD
+    A[Gallery Page] --> B[View Artwork]
+    A --> C[Upload Artwork]
+    A --> D[Open Editor]
+    
+    B --> E[View Artwork in Fullscreen]
+    B --> F[Download Artwork]
+    
+    Q --> G[Enter Title and Description]
+    P --> H[Upload to Gallery]
+    H --> I[Success Confirmation]
+    P --> V[Generate Shareable URL]
+    V --> I
+    D --> J[Main Editor]
+    
+    J --> K[Create New Canvas]
+    G --> L[Generate Image with AI]
+    J --> M[Drawing Tools & Options]
+    J --> N[Save Artwork]
+    J --> O[Export Artwork]
+    J --> P[Share Artwork]
+    J --> A2[Back to Gallery]
+    A2 --> A
+    
+    K --> Q[Set Canvas Size]
+    L --> R[Canvas Initialized]
+  
+    O --> T[Select Export Format]
+    T --> U[Export Completed]
+
+```
+
