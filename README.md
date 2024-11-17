@@ -19,12 +19,12 @@ Color Selector Popup: https://www.figma.com/design/7c2ijnyfajgfeeMJjpeS9j/Comp_2
 designs todo:
 
 - [ ] create new image prompt screen (overlay)
-- [ ] share options prompt screen (overlay)
+- [x] share options prompt screen (overlay)
 - [ ] save options screen (overlay)
 - [ ] top-left context menu actions
-- [ ] color selector popup
+- [x] color selector popup
 - [ ] deletion confirmation popup
-- [ ] gallery page
+- [x] gallery page
 - [ ] (Maybe) landing page
 - [ ] (Maybe) color pallets menu
 
