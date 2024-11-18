@@ -1,11 +1,13 @@
 # Pixel Intelligence
- Pixel art editor with generative AI functionality. Comp229 Group Project.
+A Pixel Art Editor with generative AI functionality, image downscale processing, image export, and a showcase gallery. Comp229 Group Project (Fall 2024).
 
  **Group Members:**
- - Connor *"ConnorBP"* Postma
- - Yoon "superYM222" Min
- - Sanjeevkumar "sanjeev-cs" Chauhan
- - Parmila "Parmilashams" Shams
+ - Connor *"[ConnorBP](https://github.com/ConnorBP)"* Postma (301005412)
+ - Yoon "[superYM222](https://github.com/superYM222)" Min (301317593)
+ - Sanjeevkumar "[sanjeev-cs](https://github.com/sanjeev-cs)" Chauhan (301480021)
+ - Parmila "[Parmilashams](https://github.com/Parmilashams)" Shams (301426195)
+
+[TOC]
 
 # Design / Wireframes
 *Original Figma mockups may be viewed here:*
@@ -18,17 +20,6 @@
 - Gallery Page: https://www.figma.com/design/7c2ijnyfajgfeeMJjpeS9j/Comp_229_Project?node-id=0-1&t=HFC8hwDvlPgtngwJ-1
 - Share Screen: https://www.figma.com/design/7c2ijnyfajgfeeMJjpeS9j/Comp_229_Project?node-id=20-30&t=HFC8hwDvlPgtngwJ-1
 - Color Selector Popup: https://www.figma.com/design/7c2ijnyfajgfeeMJjpeS9j/Comp_229_Project?node-id=20-2&t=HFC8hwDvlPgtngwJ-1
-
-designs todo:
-
-- [x] create new image prompt screen (overlay)
-- [x] share options prompt screen (overlay)
-- [x] save options screen (overlay)
-- [x] top-left context menu actions
-- [x] color selector popup
-- [x] color pallets menu (built into color-selector overlay)
-- [x] deletion confirmation popup
-- [x] gallery page (also is the main landing page)
 
 ![first mockup](./docs/mockupv1.svg)
 _Wireframe mockup of the main pixel editor ui._
@@ -67,110 +58,111 @@ The application must:
 - allow the user to download a png copy of the image
 - have drawing tools including: pencil, eraser, clear, eyedropper, and fill-bucket
 - have a color selection tool with primary color, secondary color, and a swap button
+- have a database for storing gallery entries
+- have some sort of storage for storing gallery uploads (maybe s3 bucket)
+- allow users to share their creations
 
 ## Stretch Goals
 - Crochet pattern export
 - encoded URL share codes for pixel art (could use RLE encoding format by ConnorBP)
-- gallery with shared creations stored on server (maybe s3 bucket)
 - extended color palette presets
 - additional file export formats (popular sprite editor formats, JSON, WebP, etc)
 - login page (user login system)
 
-## User Stories and Use Cases 
+# User Stories and Use Cases 
 ### User Stories
 
-1. Create account.
+1. **Create account.**
 
-As a user, I want to create an account with email and password.
+​		As a user, I want to create an account with email and password.
 
-Property: High
+​		Property: Medium
 
-**Acceptance Criteria:** 
+​		**Acceptance Criteria:** 
 
-When the user for the first, create an account with their email and password. 
+​		When the user for the first, create an account with their email and password. 
 
-Create account is successful and an message show the create account succesfully.
+​		Create account is successful and an message show the create account succesfully.
 
-2. Login with account. 
+2. **Login with account.** 
 
-As a user, I want to login with my account to start.
+​		As a user, I want to login with my account to start.
 
-Property: High
+​		Property: High
 
-**Acceptance Criteria:** 
+​		**Acceptance Criteria:** 
 
-The user enter their email and password in the input box.
+​		The user enter their email and password in the input box.
 
-Login is successful user can start canvas.
+​		Login is successful user can start canvas.
 
-Login fails, and an error message is displayed to the user for an incorrect email or password.
-
-
-3. Select a Pixel. 
-
-As a user, I want to select pixel art canvas at the beginning, so that I can create images.
-
-Property: High
-
-**Acceptance Criteria:** 
-
-When the user opens the editor,  a messege apeers asking for user to choose the canvas size.
-
-The options should range between 8x8 to 64x62 pixels.
-
-A default size is 16x16 for first-time user.
-
-The canvas should be initialized to the pixel chosen by user, and users can start it.
-
-4. Save canvas state and creations
-
-As a user, I want to save my creations to library and canvas state to local storage.
-
-Property: High
-
-**Acceptance Criteria:** 
-
-The canvas state should save on local storage. 
-
-When user reload the page without losing their canvas state.
-
-User can save their creations on library(sever). 
-
-5. Download a png copy of the image.
-
-As a user, I want to download my creations as a png image file.
-
-Property: Medium
-
-**Acceptance Criteria:** 
-
-The user should have a “Download” button. When clicked, the PNG file should download the current canvas state. 
-
-6. Provide drawing tools.
-
-As a user, I want drawing tools(e.g., pencil, eraser, and fill-bucket) to create and edit details of my pixel art.
-
-Property: Medium
-
-**Acceptance Criteria:** 
-
-The editor include the tools in the toolbar:
-
-Pencil Tool: Draws on pixels using the selected colors.
-
-Eraser Tool: Clear pixels.
-
-Fill-Bucket Tool: Fills areas which clicked from user to select a color.
-
-Clear Tool: Reset the entire canvas to empty state.
+​		Login fails, and an error message is displayed to the user for an incorrect email or password.
 
 
+3. **Select a Pixel.** 
+
+​		As a user, I want to select pixel art canvas at the beginning, so that I can create images.
+
+​		Property: High
+
+​		**Acceptance Criteria:** 
+
+​		When the user opens the editor,  a message appears asking for user to choose the canvas size.
+
+​		The options should range between 8x8 to 64x64 pixels.
+
+​		A default size is 16x16 for first-time user.
+
+​		The canvas should be initialized to the pixel chosen by user, and users can start it.
+
+4. **Save canvas state and creations**
+
+​		As a user, I want to save my creations to library and canvas state to local storage.
+
+​		Property: High
+
+​		**Acceptance Criteria:** 
+
+​		The canvas state should save on local storage. 
+
+​		When user reload the page without losing their canvas state.
+
+​		User can save their creations on library(sever). 
+
+5. **Download a png copy of the image.**
+
+​		As a user, I want to download my creations as a png image file.
+
+​		Property: Medium
+
+​		**Acceptance Criteria:** 
+
+​		The user should have a “Download” button. When clicked, the PNG file should download the current canvas state. 
+
+6. **Provide drawing tools.**
+
+​		As a user, I want drawing tools(e.g., pencil, eraser, and fill-bucket) to create and edit details of my pixel art.
+
+​		Property: Medium
+
+​		**Acceptance Criteria:** 
+
+​		The editor include the tools in the toolbar:
+
+​		Pencil Tool: Draws on pixels using the selected colors.
+
+​		Eraser Tool: Clear pixels.
+
+​		Fill-Bucket Tool: Fills areas which clicked from user to select a color.
+
+​		Clear Tool: Reset the entire canvas to empty state.
 
 ### Use Cases
-1. Use Case: Creating a New Pixel Art Canvas
+1. **Use Case: Creating a New Pixel Art Canvas**
+   
     #### Actors:
-    User: Initiates the canvas creation process.
-	System: Provides options for canvas size and initializes the canvas.
+	User: Initiates the canvas creation process.
+    System: Provides options for canvas size and initializes the canvas.
     #### Description:
     1.	The user selects the option to create a new canvas.
     2.	The system prompts the user to choose the canvas size (8x8 to 64x64 pixels).
@@ -181,7 +173,8 @@ Clear Tool: Reset the entire canvas to empty state.
     #### Postconditions:
     - The new canvas is created with the specified size.
     - The user can begin drawing on the canvas.
-2. Use Case: Drawing on the Canvas
+2. **Use Case: Drawing on the Canvas**
+   
     #### Actors:
     - User: Selects drawing tools and interacts with the canvas.
     - System: Updates the canvas pixels and maintains the drawing state.
@@ -194,7 +187,8 @@ Clear Tool: Reset the entire canvas to empty state.
     #### Postconditions:
     - The pixels on the canvas are updated according to the tool and color selected.
     - The editor state is saved in local storage.
-3. Use Case: Using the Color Selection Tool
+3. **Use Case: Using the Color Selection Tool**
+   
     #### Actors:
     - User: Chooses primary and secondary colors and interacts with the swap button.
     - System: Updates the selected colors and applies them to the tools.
@@ -207,7 +201,8 @@ Clear Tool: Reset the entire canvas to empty state.
     #### Postconditions:
     - The selected colors are updated.
     - The colors are swapped and applied to the drawing tools.
-4. Use Case: Saving Pixel Art as PNG
+4. **Use Case: Saving Pixel Art as PNG**
+   
     #### Actors:
     - User: Initiates the save process.
     - System: Converts the artwork into a PNG file and provides it for download.
@@ -219,7 +214,8 @@ Clear Tool: Reset the entire canvas to empty state.
     - The user has made changes to the canvas.
     #### Postconditions:
     - The pixel art is saved as a PNG file and downloaded to the user's device.
-5. Use Case: Exporting Pixel Art in Multiple Formats
+5. **Use Case: Exporting Pixel Art in Multiple Formats**
+   
     #### Actors:
     - User: Chooses the export format.
     - System: Prepares and downloads the artwork in the selected format.
@@ -232,7 +228,8 @@ Clear Tool: Reset the entire canvas to empty state.
     - The user has created a pixel art image.
     #### Postconditions:
     - The artwork is exported and downloaded in the selected format.
-6. Use Case: Gallery Upload
+6. **Use Case: Gallery Upload**
+   
     #### Actors:
     - User: Provides the artwork for upload.
     - System: Uploads the artwork to the server and confirms success.
@@ -244,7 +241,8 @@ Clear Tool: Reset the entire canvas to empty state.
     - The user is logged in and has a pixel art image.
     #### Postconditions:
     - The artwork is uploaded to the gallery and confirmation is provided.
-7. Use Case: Browsing the Gallery
+7. **Use Case: Browsing the Gallery**
+   
     #### Actors:
     - User: Navigates the gallery and views artwork.
     - System: Retrieves and displays gallery content.
@@ -257,7 +255,8 @@ Clear Tool: Reset the entire canvas to empty state.
     - The system has artwork in the gallery.
     #### Postconditions:
     - The user browses and views gallery content.
-8. Use Case: Viewing and Downloading Shared Artwork
+8. **Use Case: Viewing and Downloading Shared Artwork**
+   
     #### Actors:
     - User: Selects artwork for viewing or downloading.
     - System: Displays the artwork and allows downloads.
@@ -269,11 +268,12 @@ Clear Tool: Reset the entire canvas to empty state.
     - The artwork is available in the gallery.
     #### Postconditions:
     - The artwork is displayed and downloadable.
-
-9. Use Case: Creating a New Pixel Art Canvas
+    
+9. **Use Case: Creating a New Pixel Art Canvas**
+   
     #### Actors:
-    User: Initiates the canvas creation process.
-	System: Provides options for canvas size and initializes the canvas.
+	User: Initiates the canvas creation process.
+    System: Provides options for canvas size and initializes the canvas.
     #### Description:
     1.	The user selects the option to create a new canvas.
     2.	The system prompts the user to choose the canvas size (8x8 to 64x64 pixels).
@@ -284,7 +284,8 @@ Clear Tool: Reset the entire canvas to empty state.
     #### Postconditions:
     - The new canvas is created with the specified size.
     - The user can begin drawing on the canvas.
-10. Use Case: Drawing on the Canvas
+10. **Use Case: Drawing on the Canvas**
+    
     #### Actors:
     - User: Selects drawing tools and interacts with the canvas.
     - System: Updates the canvas pixels and maintains the drawing state.
@@ -297,7 +298,8 @@ Clear Tool: Reset the entire canvas to empty state.
     #### Postconditions:
     - The pixels on the canvas are updated according to the tool and color selected.
     - The editor state is saved in local storage.
-11. Use Case: Using the Color Selection Tool
+11. **Use Case: Using the Color Selection Tool**
+    
     #### Actors:
     - User: Chooses primary and secondary colors and interacts with the swap button.
     - System: Updates the selected colors and applies them to the tools.
@@ -310,7 +312,8 @@ Clear Tool: Reset the entire canvas to empty state.
     #### Postconditions:
     - The selected colors are updated.
     - The colors are swapped and applied to the drawing tools.
-12. Use Case: Saving Pixel Art as PNG
+12. **Use Case: Saving Pixel Art as PNG**
+    
     #### Actors:
     - User: Initiates the save process.
     - System: Converts the artwork into a PNG file and provides it for download.
@@ -322,7 +325,8 @@ Clear Tool: Reset the entire canvas to empty state.
     - The user has made changes to the canvas.
     #### Postconditions:
     - The pixel art is saved as a PNG file and downloaded to the user's device.
-13. Use Case: Exporting Pixel Art in Multiple Formats
+13. **Use Case: Exporting Pixel Art in Multiple Formats**
+    
     #### Actors:
     - User: Chooses the export format.
     - System: Prepares and downloads the artwork in the selected format.
@@ -335,7 +339,8 @@ Clear Tool: Reset the entire canvas to empty state.
     - The user has created a pixel art image.
     #### Postconditions:
     - The artwork is exported and downloaded in the selected format.
-14. Use Case: Gallery Upload
+14. **Use Case: Gallery Upload**
+    
     #### Actors:
     - User: Provides the artwork for upload.
     - System: Uploads the artwork to the server and confirms success.
@@ -347,7 +352,8 @@ Clear Tool: Reset the entire canvas to empty state.
     - The user is logged in and has a pixel art image.
     #### Postconditions:
     - The artwork is uploaded to the gallery and confirmation is provided.
-15. Use Case: Browsing the Gallery
+15. **Use Case: Browsing the Gallery**
+    
     #### Actors:
     - User: Navigates the gallery and views artwork.
     - System: Retrieves and displays gallery content.
@@ -360,7 +366,8 @@ Clear Tool: Reset the entire canvas to empty state.
     - The system has artwork in the gallery.
     #### Postconditions:
     - The user browses and views gallery content.
-16. Use Case: Viewing and Downloading Shared Artwork
+16. **Use Case: Viewing and Downloading Shared Artwork**
+    
     #### Actors:
     - User: Selects artwork for viewing or downloading.
     - System: Displays the artwork and allows downloads.
@@ -373,7 +380,7 @@ Clear Tool: Reset the entire canvas to empty state.
     #### Postconditions:
     - The artwork is displayed and downloadable.
 
-## User Interface Flow
+# User Interface Flow
 
 ```mermaid
 graph TD
