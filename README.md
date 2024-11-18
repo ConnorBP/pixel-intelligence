@@ -58,11 +58,13 @@ The application must:
 - allow the user to download a png copy of the image
 - have drawing tools including: pencil, eraser, clear, eyedropper, and fill-bucket
 - have a color selection tool with primary color, secondary color, and a swap button
+- have a database for storing gallery entries
+- have some sort of storage for storing gallery uploads (maybe s3 bucket)
+- allow users to share their creations
 
 ## Stretch Goals
 - Crochet pattern export
 - encoded URL share codes for pixel art (could use RLE encoding format by ConnorBP)
-- gallery with shared creations stored on server (maybe s3 bucket)
 - extended color palette presets
 - additional file export formats (popular sprite editor formats, JSON, WebP, etc)
 - login page (user login system)
