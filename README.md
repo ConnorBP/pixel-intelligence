@@ -105,9 +105,9 @@ The application must:
 
 ​		**Acceptance Criteria:** 
 
-​		When the user opens the editor,  a messege apeers asking for user to choose the canvas size.
+​		When the user opens the editor,  a message appears asking for user to choose the canvas size.
 
-​		The options should range between 8x8 to 64x62 pixels.
+​		The options should range between 8x8 to 64x64 pixels.
 
 ​		A default size is 16x16 for first-time user.
 
