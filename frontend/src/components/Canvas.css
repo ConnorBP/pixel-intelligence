@@ -1,0 +1,6 @@
+.pixel-canvas {
+    border: 1px solid black;
+    cursor: pointer;
+    width: 100vh;
+    height: 100vh;
+}
