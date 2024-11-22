@@ -97,3 +97,13 @@ button {
   background: #95544f;
   backdrop-filter: blur(50px);
 }
+
+/* dark mode compatibility */
+@media (prefers-color-scheme: dark) {
+  .alert-overlay {
+    background: rgba(255, 255, 255, 0.25);
+  }
+  .alert-box {
+    background: #282b30;
+  }
+}
