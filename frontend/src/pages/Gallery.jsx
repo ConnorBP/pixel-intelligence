@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import Section from "../../components/Section";
+import { useState, useEffect } from "react";
+import Section from "../components/Section.jsx";
 // import "../../css/Gallery.css";
 
 function Gallery() {

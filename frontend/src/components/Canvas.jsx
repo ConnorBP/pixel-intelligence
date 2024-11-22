@@ -37,8 +37,8 @@ const Canvas = ({
       Math.floor(
         (((event.clientY - rect.top) / rect.height) * canvas.height) / pixelSize
       ) * pixelSize;
-    const centerX = topLeftX + pixelSize / 2;
-    const centerY = topLeftY + pixelSize / 2;
+    // const centerX = topLeftX + pixelSize / 2;
+    // const centerY = topLeftY + pixelSize / 2;
 
     // Draw a circle at the clicked position
     context.fillStyle = "blue";
