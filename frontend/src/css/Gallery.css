@@ -15,3 +15,10 @@
   align-items: center;
   width: 100vw;
 }
+
+/* dark mode compatibility */
+@media (prefers-color-scheme: dark) {
+  .gallery_container h1 {
+    color: #666;
+  }
+}
