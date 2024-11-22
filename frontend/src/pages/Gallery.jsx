@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import Section from "../components/Section.jsx";
-// import "../../css/Gallery.css";
+import "../css/Gallery.css";
 
 function Gallery() {
     const [galleryData, setGalleryData] = useState([]);
@@ -28,7 +28,7 @@ function Gallery() {
 
     return (
         <div className="gallery_container">
-            <h1>Your Gallery</h1>
+            <h1>Creations Gallery</h1>
             {galleryData.map((data, index) => (
                 <Section key={index} month={data.month} images={data.images} />
             ))}
