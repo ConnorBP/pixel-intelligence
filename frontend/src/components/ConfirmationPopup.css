@@ -1,105 +1,99 @@
-
-@import url('https://fonts.googleapis.com/css2?family=Asap:ital,wght@0,100..900;1,100..900&family=Karla:ital,wght@0,200..800;1,200..800&family=Outfit:wght@100..900&family=Pixelify+Sans:wght@400..700&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Asap:ital,wght@0,100..900;1,100..900&family=Karla:ital,wght@0,200..800;1,200..800&family=Outfit:wght@100..900&family=Pixelify+Sans:wght@400..700&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
 .alert-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-    font-family: "Pixelify Sans", sans-serif;
-    font-optical-sizing: auto;
-    font-weight: 200;
-    font-style: normal;
-  
-  }
-  
-  .alert-box {
-    background: rgb(230, 225, 225);
-    padding: 0px;
-    border-radius: 20px;
-    width: 70%;
-    max-width: 300px;
-    text-align: center;
-    height: 30%;
-    max-height: 150px;
-    text-align: left;
-  }
-  
-  .title {
-   font-size: 0.9rem;
-    margin: 2px;
-    padding:6px;
-    padding-left: 5%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  font-family: "Pixelify Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 200;
+  font-style: normal;
+}
 
-    position: relative; 
-  }
-  .title::after {
+.alert-box {
+  background: rgb(230, 225, 225);
+  padding: 0px;
+  border-radius: 20px;
+  width: 70%;
+  max-width: 300px;
+  text-align: center;
+  height: 30%;
+  max-height: 150px;
+  text-align: left;
+}
 
-    content: ' ';
-    position: absolute;
-    bottom: 0;
-    left: 5%;
-    width:90%;
-    border-bottom: 1px solid black;
+.title {
+  font-size: 0.9rem;
+  margin: 2px;
+  padding: 6px;
+  padding-left: 5%;
 
-  }
+  position: relative;
+}
+.title::after {
+  content: " ";
+  position: absolute;
+  bottom: 0;
+  left: 5%;
+  width: 90%;
+  border-bottom: 1px solid black;
+}
 
-  .message1 {
-    margin-bottom: 0;
-    font-size: 0.9rem; 
-    padding-left: 15%;
-  }
-  
-  .message2 {
-    margin-top: 0; 
-    font-size: 0.9rem;
-    padding-left: 15%;
-  }
+.message1 {
+  margin-bottom: 0;
+  font-size: 0.9rem;
+  padding-left: 15%;
+}
 
-  button {
-    margin: 5px;
-    padding: 5px 10px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    border-radius: 20px;
-  }
-  .button{
-    display: flex;
-    justify-content: flex-end;
-    font-size: 0.9rem;
-    
-  }
-  
-  .cancel-button {
-    align-items: right;
-    background: #9c6b67;
-    width:70px;
-    height: 32px;
-    border: solid #ddd 2px;
-    box-shadow: 2px 4px 6px rgba(126, 116, 116, 0.3); 
-  }
-  
-  .cancel-button:hover {
-    background: #95544f; 
-    backdrop-filter: blur(50px);
-  }
-  
-  .confirm-button {
-    background: #9c6b67;
-    width:50px;
-    height: 32px;
-    border: solid #ddd 2px;
-    box-shadow: 2px 4px 6px rgba(126, 116, 116, 0.3); 
-  }
-  
-  .confirm-button:hover {
-    background: #95544f; 
-    backdrop-filter: blur(50px);
-  }
-  
+.message2 {
+  margin-top: 0;
+  font-size: 0.9rem;
+  padding-left: 15%;
+}
+
+button {
+  margin: 5px;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  border-radius: 20px;
+}
+.button {
+  display: flex;
+  justify-content: flex-end;
+  font-size: 0.9rem;
+}
+
+.cancel-button {
+  align-items: right;
+  background: #9c6b67;
+  width: 70px;
+  height: 32px;
+  border: solid #ddd 2px;
+  box-shadow: 2px 4px 6px rgba(126, 116, 116, 0.3);
+}
+
+.cancel-button:hover {
+  background: #95544f;
+  backdrop-filter: blur(50px);
+}
+
+.confirm-button {
+  background: #9c6b67;
+  width: 50px;
+  height: 32px;
+  border: solid #ddd 2px;
+  box-shadow: 2px 4px 6px rgba(126, 116, 116, 0.3);
+}
+
+.confirm-button:hover {
+  background: #95544f;
+  backdrop-filter: blur(50px);
+}
