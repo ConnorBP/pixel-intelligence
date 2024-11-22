@@ -3,6 +3,7 @@ import Gallery from "./pages/Gallery.jsx";
 import PopupTest from "./pages/PopupTest.jsx";
 import Layout from "./pages/Layout.jsx";
 import Editor from "./pages/Editor.jsx";
+import './css/App.css';
 
 function App() {
   return (
