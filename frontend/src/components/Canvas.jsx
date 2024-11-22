@@ -1,7 +1,12 @@
 import { useRef, useEffect } from "react";
 import "./Canvas.css";
 
-const Canvas = ({ pixelWidth = 16, pixelHeight = 16, elementWidth = 64, elementHeight = 64 }) => {
+const Canvas = ({
+  pixelWidth = 16,
+  pixelHeight = 16,
+  canvasWidth = 64,
+  canvasHeight = 64,
+}) => {
   const canvasRef = useRef(null);
 
   // onload
@@ -21,16 +26,25 @@ const Canvas = ({ pixelWidth = 16, pixelHeight = 16, elementWidth = 64, elementH
     // Get the bounding rectangle of the canvas
     const rect = canvas.getBoundingClientRect();
 
-    const pixelSize = rect.width / pixelWidth;
+    const pixelSize = canvasWidth / pixelWidth;
 
     // Get the center position of the pixel that was clicked on
-    const x = Math.floor((event.clientX - rect.left) / rect.width * canvas.width / pixelSize) * pixelSize + pixelSize / 2;
-    const y = Math.floor((event.clientY - rect.top) / rect.height * canvas.height / pixelSize) * pixelSize + pixelSize / 2;
+    const topLeftX =
+      Math.floor(
+        (((event.clientX - rect.left) / rect.width) * canvas.width) / pixelSize
+      ) * pixelSize;
+    const topLeftY =
+      Math.floor(
+        (((event.clientY - rect.top) / rect.height) * canvas.height) / pixelSize
+      ) * pixelSize;
+    const centerX = topLeftX + pixelSize / 2;
+    const centerY = topLeftY + pixelSize / 2;
 
     // Draw a circle at the clicked position
     context.fillStyle = "blue";
     context.beginPath();
-    context.arc(x, y, pixelSize/2, 0, 2 * Math.PI); // Draw a circle with radius 10
+    // context.arc(centerX, centerY, pixelSize/2, 0, 2 * Math.PI); // Draw a circle with radius 10
+    context.fillRect(topLeftX, topLeftY, pixelSize, pixelSize);
     context.fill();
   };
 
@@ -43,8 +57,8 @@ const Canvas = ({ pixelWidth = 16, pixelHeight = 16, elementWidth = 64, elementH
       <canvas
         className="pixel-canvas"
         ref={canvasRef}
-        width={elementWidth}
-        height={elementHeight}
+        width={canvasWidth}
+        height={canvasHeight}
         onClick={handleCanvasClick}
       ></canvas>
     </>
