@@ -1,6 +1,5 @@
-import './ConfirmationPopup.css'
+import '../css/ConfirmationPopup.css'
 
-// eslint-disable-next-line react/prop-types
 function ConfirmationPopup({ isOpen, title, message1, message2,onCancel, onConfirm }) {
  
     if (!isOpen) return null; 

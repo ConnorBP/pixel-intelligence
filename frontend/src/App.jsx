@@ -1,40 +1,22 @@
-import { useState } from 'react';
-import ConfirmationPopup from '../components/ConfirmationPopup'
-
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Gallery from "./pages/Gallery.jsx";
+import PopupTest from "./pages/PopupTest.jsx";
+import Layout from "./pages/Layout.jsx";
+import Editor from "./pages/Editor.jsx";
+import './css/App.css';
 
 function App() {
-  const [isPopupOpen, setIsPopupOpen] = useState(false);
-
-  const handleOpenPopup = () => {
-    setIsPopupOpen(true);
-  };
-
-  const handleClosePopup = () => {
-    setIsPopupOpen(false);
-  };
-
-
   return (
-
-      <div>
-        <button onClick={handleOpenPopup}>Test Popup</button>
-        <ConfirmationPopup
-        isOpen={isPopupOpen}
-        title="Title of Message Box"
-        message1="This action cannot be undone."
-        message2="Continue anyways?"
-        onCancel={handleClosePopup}
-        onConfirm={() => {
-          console.log('Confirmed!');
-          handleClosePopup(); 
-        }}
-      />
-      
-      </div>
-  
-
-  )
-
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route index element={<Gallery />} />
+          <Route path="popuptest" element={<PopupTest />} />
+        </Route>
+        <Route path="/editor" element={<Editor />} />
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
 export default App;
