@@ -16,6 +16,9 @@ const Layout = () => {
           <li>
             <Link to="/popuptest">Test Popup Component</Link>
           </li>
+          <li>
+            <Link to="/menu">Menu</Link>
+          </li>
         </ul>
       </nav>
       <Outlet />
