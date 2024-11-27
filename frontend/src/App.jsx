@@ -9,11 +9,11 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route index element={<Gallery />} />
-          <Route path="popuptest" element={<PopupTest />} />
-        </Route>
-        <Route path="/editor" element={<Editor />} />
+        {/* <Route path="/" element={<Layout />}> */}
+        <Route index element={<Gallery />} />
+        {/* <Route path="popuptest" element={<PopupTest />} /> */}
+        {/* </Route>
+        <Route path="/editor" element={<Editor />} /> */}
       </Routes>
     </BrowserRouter>
   );
