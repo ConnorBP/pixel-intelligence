@@ -1,5 +1,5 @@
 import React from "react";
-import "../css/Image.css";
+import "../../css/GalleryPageCSS/Image.css";
 
 function Image({ src, alt }) {
     if (!src) {

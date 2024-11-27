@@ -1,6 +1,6 @@
 import React from "react";
 import Image from "./Image";
-import "../css/Section.css";
+import "../../css/GalleryPageCSS/Section.css";
 
 function Section({ month, images }) {
     return (
