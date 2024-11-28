@@ -4,6 +4,7 @@ import PopupTest from "./pages/PopupTest.jsx";
 import Layout from "./pages/Layout.jsx";
 import Editor from "./pages/Editor.jsx";
 import Menu from "./components/Menu.jsx"
+import ColorPickerToolbar from "./components/\bColorPickerToolbar.jsx";
 import './css/App.css';
 
 function App() {
@@ -14,6 +15,7 @@ function App() {
           <Route index element={<Gallery />} />
           <Route path="popuptest" element={<PopupTest />} />
           <Route path="menu" element={<Menu/>}/>
+          <Route path="colorpicker" element={<ColorPickerToolbar/>}/>
         </Route>
         <Route path="/editor" element={<Editor />} />
       </Routes>

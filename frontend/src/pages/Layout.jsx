@@ -19,6 +19,9 @@ const Layout = () => {
           <li>
             <Link to="/menu">Menu</Link>
           </li>
+          <li>
+            <Link to="/colorpicker">Color Picker</Link>
+          </li>
         </ul>
       </nav>
       <Outlet />
