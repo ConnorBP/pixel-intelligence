@@ -1,69 +1,51 @@
-*{
-  margin: 0;
-  padding: 0;
+/* Styles for the gallery layout */
+
+.gallery_title{
+    text-align: center;
+    font-size: 2rem; 
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 20px;
+    letter-spacing: 2px; 
 }
 
-.gallery_container {
-  width: 100vw;
-  height: 100vh;
-  font-family: Arial, sans-serif;
+.gallery {
+    -webkit-column-count: 3;
+    -moz-column-count: 3;
+    column-count: 3;
+    -webkit-column-width:33%;
+    -moz-column-width: 33%;
+    column-width: 33%;
+    padding: 0 12px;
 }
 
-.gallery_container h1 {
-  font-size: 2.5rem;
-  margin-bottom: 30px;
-  color: #333;
-  text-align: center;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100vw;
+.gallery .images{
+    -webkit-transition: all 350ms ease;
+    transition: all 350ms ease;
+    cursor: pointer;
+    margin-bottom: 12px;
 }
 
-/* dark mode compatibility */
-@media (prefers-color-scheme: dark) {
-  .gallery_container h1 {
-    color: #666;
-  }
+.gallery .images:hover{
+    filter: opacity(0.8);
 }
 
-.gallery_image {
-  border: 2px solid #ccc;
-  border-radius: 8px;
-  overflow: hidden;
-  width: 150px;
-  height: 150px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+/* Responsive adjustments */
+@media (max-width: 991px){
+    .gallery{
+    -webkit-column-count: 2;
+    -moz-column-count: 2;
+    column-count: 2;
+    }
 }
 
-.gallery_image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.gallery_image:hover {
-  transform: scale(1.05);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-}
-
-.gallery_section {
-  margin-bottom: 40px;
-}
-
-.gallery_section h2 {
-  font-size: 2rem;
-  margin-bottom: 20px;
-  color: #555;
-}
-
-.gallery_grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  gap: 15px;
-  align-items: center;
-  justify-items: center;
+@media (max-width: 480px){
+    .gallery {
+        -webkit-column-count:1;
+        -moz-column-count:1;
+        column-count: 1;
+        -webkit-column-width:100%;
+        -moz-column-width: 100%;
+        column-width: 100%;
+    }
 }
