@@ -9,19 +9,23 @@ function GalleryPageLayout({ images }) {
         <div className="gallery_container">
             {/* Title centered at the top */}
             <h1 className="gallery_title">Gallery</h1>
-
-            <div className="gallery">
-                {images.map((data, index) => (
-                    // Each image is wrapped in a Link for navigation to the detailed view overlay window
-                    <div className="images" key={data.id}>
-                        <Link to={`/gallery/viewImage/${data.id}`}>
-                            <img src={data.imgSrc} alt={`Gallery Image ${data.id}`} style={{ width: "100%" }} />
-                        </Link>
-                    </div>
-                ))}
-            </div>
+            {images.length === 0 ? (
+                <p>No images available</p>
+            ) : (
+                <div className="gallery">
+                    {images.map((image, index) => (
+                        // Each image is wrapped in a Link for navigation to the detailed view overlay window
+                        <div className="images" key={index}>
+                            <Link to={`/gallery/viewImage/${image.id}`}>
+                                <img src={image.imgSrc} alt={`Gallery Image ${image.id}`} style={{ width: "100%" }} />
+                            </Link>
+                        </div>
+                    ))}
+                </div>
+            )}
         </div>
     );
 }
+
 
 export default GalleryPageLayout;

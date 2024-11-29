@@ -14,12 +14,14 @@ function ImageDetailsOverlay({ images }) {
 
     if (!image) return <div>Image not found</div>; // If no matching image is found, display a fallback message
 
+    // Copy the image link to the clipboard
     const copyToClipboard = () => {
         navigator.clipboard.writeText(image.imgSrc);
         setCopied(true);
         setTimeout(() => setCopied(false), 2000);
     };
 
+    // Download the Image
     const downloadImage = () => {
         const link = document.createElement('a');
         link.href = image.imgSrc;
@@ -45,12 +47,12 @@ function ImageDetailsOverlay({ images }) {
 
                     <p><b>Share:</b></p>
                     <div className="share_links">
-                        <a href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(image.imgSrc)}`} target="_blank" rel="noopener noreferrer">
+                        <a href={`https://wa.me/?text=${encodeURIComponent(image.imgSrc)}`} target="_blank" rel="noopener noreferrer">
                             <WhatsAppIcon />
                         </a>
-                        {/* <a href={`https://www.facebook.com/sharer/sharer.php?u=${image.imgSrc}`} target="_blank" rel="noopener noreferrer">
+                        <a href={`https://www.facebook.com/sharer/sharer.php?u=${image.imgSrc}`} target="_blank" rel="noopener noreferrer">
                             <FacebookIcon />
-                        </a> */}
+                        </a>
                         <a href={`https://twitter.com/intent/tweet?url=${image.imgSrc}`} target="_blank" rel="noopener noreferrer">
                             <TwitterIcon />
                         </a>
