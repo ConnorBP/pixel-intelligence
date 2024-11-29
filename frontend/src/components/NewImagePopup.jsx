@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import "../css/NewImagePopup.css";
-import image from "../assets/image.png";
 
 const NewImagePopup = ({ onClose, onCreate }) => {
   const [description, setDescription] = useState("");
@@ -29,30 +28,31 @@ const NewImagePopup = ({ onClose, onCreate }) => {
             placeholder="Describe what your image will be..."
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            className="popup-input"
+            className="input"
           />
           <div className="popup-preview-wrapper">
             <div className="popup-preview">
-              <img src={image} alt="Preview" className="popup-preview-image" />
+              <div alt="Preview" className="" />
             </div>
             <div className="popup-canvas-size">
               <label className="popup-label">Canvas Size:</label>
               <select
                 value={canvasSize}
                 onChange={(e) => updatePreview(e.target.value)}
-                className="popup-select"
+                className="select"
               >
+                <option value="08x08">08x08</option>
                 <option value="16x16">16x16</option>
                 <option value="32x32">32x32</option>
                 <option value="64x64">64x64</option>
               </select>
             </div>
           </div>
-          <div className="popup-buttons">
-            <button onClick={onClose} className="popup-button cancel-button">
+          <div className="flex flex-end">
+            <button onClick={onClose} className="button cancel-button">
               Cancel
             </button>
-            <button onClick={handleCreate} className="popup-button create-button">
+            <button onClick={handleCreate} className="button create-button">
               Create
             </button>
           </div>

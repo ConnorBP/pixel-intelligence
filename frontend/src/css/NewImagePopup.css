@@ -1,11 +1,21 @@
-/* Overlay background */
+:root {
+  --overlay-bg-light: rgba(0, 0, 0, 0.5);
+  --overlay-bg-dark: rgba(255, 255, 255, 0.25);
+  --popup-bg: rgb(220, 220, 220);
+  --button-bg: #95544f;
+  --text-color: #333;
+  --border-color: #ccc;
+  --border-radius: 5px;
+  --shadow-color: rgba(0, 0, 0, 0.2);
+}
+
 .popup-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0, 0, 0, 0.5);
+  background: var(--overlay-bg-light);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -13,16 +23,14 @@
   font-family: "Pixelify Sans", sans-serif;
 }
 
-
 .popup-box {
-  background: rgb(220, 220, 220);
+  background: var(--popup-bg);
   padding: 20px;
   border-radius: 15px;
   width: 280px;
   text-align: center;
-  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
+  box-shadow: 2px 2px 8px var(--shadow-color);
 }
-
 
 .popup-title {
   text-align: left;
@@ -36,25 +44,33 @@
   border-top: 1px solid #aaa;
 }
 
-
-.popup-label {
-  font-size: 0.85rem;
-  font-weight: bold;
-  display: block;
-  text-align: center;
-  margin-bottom: 5px;
-}
-
-.popup-input {
+/* Shared input styles */
+.input,
+.select {
   width: 90%;
   padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
   font-size: 0.9rem;
   margin-bottom: 15px;
 }
 
+/* Flex utilities */
+.flex {
+  display: flex;
+  align-items: center;
+}
 
+.flex-between {
+  justify-content: space-between;
+}
+
+.flex-end {
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+/* Preview styles */
 .popup-preview-wrapper {
   display: flex;
   justify-content: space-between;
@@ -63,60 +79,38 @@
 }
 
 .popup-preview {
-  width: 70px;
-  height: 70px;
+  width: 80px;
+  height: 80px;
   border: 1px solid #aaa;
-  border-radius: 5px;
+  border-radius: var(--border-radius);
+  background: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #fff;
 }
 
-.popup-preview-image {
-  width: 100px;
-  height: 100px;
-}
-
-.popup-canvas-size {
-  text-align: left;
-}
-
-.popup-select {
-  width: 100%;
-  padding: 5px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-
-.popup-buttons {
-  display: flex;
-  justify-content: flex-end; 
-  gap: 10px; 
-  margin-top: 15px; 
+/* Button styles */
+.button {
+  padding: 8px 12px;
+  border: none;
+  border-radius: var(--border-radius);
+  cursor: pointer;
 }
 
 .cancel-button {
-  background-color:  #95544f;
-  color: #333;
-  padding: 8px 12px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
+  background-color: var(--button-bg);
+  color: var(--text-color);
 }
 
 .create-button {
-  background: #95544f;
+  background-color: var(--button-bg);
   backdrop-filter: blur(50px);
-  color: #333;
-  padding: 8px 12px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
+  color: var(--text-color);
 }
+
+/* Dark mode styles */
 @media (prefers-color-scheme: dark) {
   .popup-overlay {
-    background: rgba(255, 255, 255, 0.25);
+    background: var(--overlay-bg-dark);
   }
 }
