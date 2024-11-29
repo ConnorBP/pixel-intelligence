@@ -48,9 +48,9 @@ function ImageDetailsOverlay({ images }) {
                         <a href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(image.imgSrc)}`} target="_blank" rel="noopener noreferrer">
                             <WhatsAppIcon />
                         </a>
-                        <a href={`https://www.facebook.com/sharer/sharer.php?u=${image.imgSrc}`} target="_blank" rel="noopener noreferrer">
+                        {/* <a href={`https://www.facebook.com/sharer/sharer.php?u=${image.imgSrc}`} target="_blank" rel="noopener noreferrer">
                             <FacebookIcon />
-                        </a>
+                        </a> */}
                         <a href={`https://twitter.com/intent/tweet?url=${image.imgSrc}`} target="_blank" rel="noopener noreferrer">
                             <TwitterIcon />
                         </a>
