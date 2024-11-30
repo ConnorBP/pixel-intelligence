@@ -20,8 +20,12 @@ const Canvas = ({
     pixels: []
   };
 
+  // reference to the canvas object for us to draw to
   const canvasRef = useRef(null);
+  // automatically keeps track of canvas state on the browser storage
   const [canvasData, setCanvasData] = useLocalStorage("canvas", defaultCanvas);
+  // how big a single pixel is on the actual rendering canvas:
+  const pixelSize = canvasRenderWidth / pixelDrawingWidth;
 
   // onload
   useEffect(() => {
@@ -33,6 +37,8 @@ const Canvas = ({
     context.fillRect(0, 0, canvas.width, canvas.height);
   }, []);
   
+  // updates the state of a pixel at specific coordinate
+  // in the react context and browser localstorage
   const updatePixelAt = (x,y,color) => {
     setCanvasData(oldCanvas => {
       console.log('setCanvas called with ', oldCanvas);
@@ -49,39 +55,49 @@ const Canvas = ({
     });
   };
   
-  const handleCanvasClick = (event) => {
+  // outputs a pixel to the display canvas (does not save)
+  const drawPixelAt = (x,y,color) => {
+    const canvasX = x * pixelSize;
+    const canvasY = y * pixelSize;
+
+    // reference the canvas context for drawing to
     const canvas = canvasRef.current;
     const context = canvas.getContext("2d");
+    // const centerX = x + pixelSize / 2;
+    // const centerY = y + pixelSize / 2;
+
+    // Draw a pixel at the clicked position
+    context.fillStyle = "blue";
+    context.beginPath();
+    // context.arc(centerX, centerY, pixelSize/2, 0, 2 * Math.PI); // Draw a circle with radius 10
+    context.fillRect(canvasX, canvasY, pixelSize, pixelSize);
+    context.fill();
+  };
+  
+  const handleCanvasClick = (event) => {
+    const canvas = canvasRef.current;
 
     // Get the bounding rectangle of the canvas
     const rect = canvas.getBoundingClientRect();
-
-    const pixelSize = canvasRenderWidth / pixelDrawingWidth;
 
     // Get the position of the pixel that was clicked on
     const pixelX =
       Math.floor(
         (((event.clientX - rect.left) / rect.width) * canvas.width) / pixelSize
       );
-    const canvasX = pixelX * pixelSize;
+    
     const pixelY =
       Math.floor(
         (((event.clientY - rect.top) / rect.height) * canvas.height) / pixelSize
       );
-    const canvasY = pixelY * pixelSize;
-    // const centerX = topLeftX + pixelSize / 2;
-    // const centerY = topLeftY + pixelSize / 2;
+    
 
     // update the pixel in local storage
     updatePixelAt(pixelX,pixelY,"blue")
-
-
-    // Draw a circle at the clicked position
-    context.fillStyle = "blue";
-    context.beginPath();
-    // context.arc(centerX, centerY, pixelSize/2, 0, 2 * Math.PI); // Draw a circle with radius 10
-    context.fillRect(canvasX, canvasY, pixelSize, pixelSize);
-    context.fill();
+    
+    // draw to the pixel on the canvas for display
+    drawPixelAt(pixelX, pixelY);
+    
   };
 
   useEffect(() => {
