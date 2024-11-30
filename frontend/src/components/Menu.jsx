@@ -1,6 +1,7 @@
 import {useState} from "react";
 import { IoMdMenu } from "react-icons/io";
 import '../css/Menu.css'
+import ContextMenuItem from "./ContextMenuItem";
 function Menu(){
 
  const [ menuOpen, setMenuOpen] = useState(false);
@@ -12,12 +13,12 @@ function Menu(){
     <button className="menu-button" onClick={toggle}><IoMdMenu className="icon" /></button>
     {menuOpen &&(
     <ul className="menuBox">
-    <li><a href="#">New Drawing</a></li>
-    <li><a href="#">Open</a></li>
-    <li><a href="#">View Gallery</a></li>
-    <li><a href="#">Download</a></li>
-    <li><a href="#">Share Drawing</a></li>
-    <li><a href="#">Save Drawing</a></li>
+    <ContextMenuItem>New Drawing</ContextMenuItem>
+    <ContextMenuItem><a href="#">Open</a></ContextMenuItem>
+    <ContextMenuItem><a href="#">View Gallery</a></ContextMenuItem>
+    <ContextMenuItem><a href="#">Download</a></ContextMenuItem>
+    <ContextMenuItem><a href="#">Share Drawing</a></ContextMenuItem>
+    <ContextMenuItem><a href="#">Save Drawing</a></ContextMenuItem>
     </ul>
     )}
     
