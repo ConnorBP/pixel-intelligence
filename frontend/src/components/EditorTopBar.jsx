@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import NewImagePopup from "../components/NewImagePopup";
 import '../css/EditorPageCSS/EditorTopBar.css';
+import Menu from "./Menu";
 
 const EditorTopBar = () => {
   const [showPopup, setShowPopup] = useState(false);
@@ -22,6 +23,7 @@ const EditorTopBar = () => {
         />
       )}
       <div className="top-toolbar">
+        <Menu />
         <button onClick={() => setShowPopup(true)}>Create New Image</button>
         <button onClick={() => navigate("/")}>Back to Gallery</button>
       </div>
