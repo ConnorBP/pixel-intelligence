@@ -7,6 +7,7 @@ const Canvas = ({
   pixelDrawingHeight = 16,
   canvasRenderWidth = 128, // determines the actual rendering of the pixels to the screen (including editor lines)
   canvasRenderHeight = 128,
+  brushColor = "blue",
 }) => {
   // default canvas storage object
   // NOTE: once we deploy, we cannot change this without breaking users localstorage
@@ -151,10 +152,10 @@ const Canvas = ({
     );
 
     // update the pixel in local storage
-    updatePixelAt(pixelX, pixelY, "blue");
+    updatePixelAt(pixelX, pixelY, brushColor);
 
     // draw to the pixel on the canvas for display
-    drawPixelAt(pixelX, pixelY, "blue");
+    drawPixelAt(pixelX, pixelY, brushColor);
   };
 
   //

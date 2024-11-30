@@ -1,28 +1,36 @@
-import {useState} from "react";
+import { useState } from "react";
 import { IoMdMenu } from "react-icons/io";
-import '../css/Menu.css'
+import "../css/Menu.css";
 import ContextMenuItem from "./ContextMenuItem";
-function Menu(){
+import { useNavigate } from "react-router-dom";
 
- const [ menuOpen, setMenuOpen] = useState(false);
- const toggle = () =>{
+function Menu({ onNewDrawing }) {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const toggle = () => {
     setMenuOpen((v) => !v);
- };
- return(
-  <div className="menu-container">
-    <button className="menu-button" onClick={toggle}><IoMdMenu className="icon" /></button>
-    {menuOpen &&(
-    <ul className="menuBox">
-    <ContextMenuItem>New Drawing</ContextMenuItem>
-    <ContextMenuItem><a href="#">Open</a></ContextMenuItem>
-    <ContextMenuItem><a href="#">View Gallery</a></ContextMenuItem>
-    <ContextMenuItem><a href="#">Download</a></ContextMenuItem>
-    <ContextMenuItem><a href="#">Share Drawing</a></ContextMenuItem>
-    <ContextMenuItem><a href="#">Save Drawing</a></ContextMenuItem>
-    </ul>
-    )}
-    
+  };
+
+  const nav = useNavigate();
+
+  return (
+    <div className="menu-container">
+      <button className="menu-button" onClick={toggle}>
+        <IoMdMenu className="icon" />
+      </button>
+      {menuOpen && (
+        <ul className="menuBox">
+          {/* todo insert these menu items from a map please */}
+          <ContextMenuItem>New Drawing</ContextMenuItem>
+          <ContextMenuItem onClick={onNewDrawing}>Open</ContextMenuItem>
+          <ContextMenuItem onClick={() => nav("/")}>
+            View Gallery
+          </ContextMenuItem>
+          <ContextMenuItem>Download</ContextMenuItem>
+          <ContextMenuItem>Share Drawing</ContextMenuItem>
+          <ContextMenuItem>Save Drawing</ContextMenuItem>
+        </ul>
+      )}
     </div>
- )
+  );
 }
 export default Menu;

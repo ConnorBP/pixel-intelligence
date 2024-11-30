@@ -1,21 +1,17 @@
-import { useState } from "react";
 import "../css/ColorPickerToolbar.css";
 import { FaExchangeAlt } from "react-icons/fa";
 
-function ColorPickerToolbar() {
-  const [firstColor, setFirstColor] = useState("#000000");
-  const [secondColor, setSecondColor] = useState("#ffffff");
-
+function ColorPickerToolbar({primaryColor, setPrimaryColor, secondaryColor, setSecondaryColor}) {
   const handleColorPickerFirst = (event) => {
-    setFirstColor(event.target.value);
+    setPrimaryColor(event.target.value);
   };
   const handleColorPickerSecond = (event) => {
-    setSecondColor(event.target.value);
+    setSecondaryColor(event.target.value);
   };
   const handleChange = () => {
-    const temp = firstColor;
-    setFirstColor(secondColor);
-    setSecondColor(temp);
+    const temp = primaryColor;
+    setPrimaryColor(secondaryColor);
+    setSecondaryColor(temp);
   };
   return (
     <div className="color-container">
@@ -23,13 +19,13 @@ function ColorPickerToolbar() {
         <input
           className="color-pcik-first"
           type="color"
-          value={firstColor}
+          value={primaryColor}
           onChange={handleColorPickerFirst}
         />
         <input
           className="color-pcik-second"
           type="color"
-          value={secondColor}
+          value={secondaryColor}
           onChange={handleColorPickerSecond}
         />
         <button className="btn-color-change" onClick={handleChange}>
@@ -39,25 +35,25 @@ function ColorPickerToolbar() {
       <div className="color-display-box">
         <div
           className="color-display-first"
-          style={{ backgroundColor: firstColor }}
+          style={{ backgroundColor: primaryColor }}
         >
           <p
             className="color-box-first"
             style={{ visibility: "hidden", margin: 0 }}
           >
-            {firstColor}
+            {primaryColor}
           </p>
         </div>
 
         <div
           className="color-display-second"
-          style={{ backgroundColor: secondColor }}
+          style={{ backgroundColor: secondaryColor }}
         >
           <p
             className="color-box-first"
             style={{ visibility: "hidden", margin: 0 }}
           >
-            {secondColor}
+            {secondaryColor}
           </p>
         </div>
       </div>

@@ -48,6 +48,12 @@
   font-size: 15px;
   align-items: center;
   color: black;
+  cursor: pointer;
+}
+
+.menuBox li:hover {
+  background-color: #b0a9a9;
+  color: #0303c4;
 }
 
 .menuBox li:last-child {

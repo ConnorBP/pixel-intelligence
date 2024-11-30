@@ -1,6 +1,6 @@
-const ContextMenuItem = ({children}) => {
+const ContextMenuItem = ({children, onClick}) => {
   return (
-    <li>{children}</li>
+    <li onClick={onClick}>{children}</li>
   )
 }
 
