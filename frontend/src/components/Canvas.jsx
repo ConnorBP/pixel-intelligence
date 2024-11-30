@@ -8,7 +8,6 @@ const Canvas = ({
   canvasRenderWidth = 128, // determines the actual rendering of the pixels to the screen (including editor lines)
   canvasRenderHeight = 128,
 }) => {
-
   // default canvas storage object
   // NOTE: once we deploy, we cannot change this without breaking users localstorage
   // so keep this consistent
@@ -17,7 +16,7 @@ const Canvas = ({
     height: pixelDrawingHeight,
     // pixels are stored in one array.
     // pixels are stored left to right then top down
-    pixels: []
+    pixels: [],
   };
 
   // reference to the canvas object for us to draw to
@@ -36,27 +35,29 @@ const Canvas = ({
     context.fillStyle = "#f0f0f0";
     context.fillRect(0, 0, canvas.width, canvas.height);
   }, []);
-  
+
   // updates the state of a pixel at specific coordinate
   // in the react context and browser localstorage
-  const updatePixelAt = (x,y,color) => {
-    setCanvasData(oldCanvas => {
-      console.log('setCanvas called with ', oldCanvas);
+  const updatePixelAt = (x, y, color) => {
+    setCanvasData((oldCanvas) => {
+      console.log("setCanvas called with ", oldCanvas);
       // don't allow out of bounds access
-      if(x >= oldCanvas.width || y >= oldCanvas.height) {
-        console.error(`X ${x} Y ${y} is out of bounds in canvas of size: {${x}, ${y}}`);
+      if (x >= oldCanvas.width || y >= oldCanvas.height) {
+        console.error(
+          `X ${x} Y ${y} is out of bounds in canvas of size: {${x}, ${y}}`
+        );
         return oldCanvas;
       }
-      const newCanvas = {...oldCanvas};
+      const newCanvas = { ...oldCanvas };
       // insert pixel at x position starting at row base (y*width)
-      newCanvas.pixels[x+(y*newCanvas.width)] = color;
-      console.log('returning from setCanvas with ', newCanvas);
+      newCanvas.pixels[x + y * newCanvas.width] = color;
+      console.log("returning from setCanvas with ", newCanvas);
       return newCanvas;
     });
   };
-  
+
   // outputs a pixel to the display canvas (does not save)
-  const drawPixelAt = (x,y,color) => {
+  const drawPixelAt = (x, y, color) => {
     const canvasX = x * pixelSize;
     const canvasY = y * pixelSize;
 
@@ -73,7 +74,7 @@ const Canvas = ({
     context.fillRect(canvasX, canvasY, pixelSize, pixelSize);
     context.fill();
   };
-  
+
   const handleCanvasClick = (event) => {
     const canvas = canvasRef.current;
 
@@ -81,23 +82,19 @@ const Canvas = ({
     const rect = canvas.getBoundingClientRect();
 
     // Get the position of the pixel that was clicked on
-    const pixelX =
-      Math.floor(
-        (((event.clientX - rect.left) / rect.width) * canvas.width) / pixelSize
-      );
-    
-    const pixelY =
-      Math.floor(
-        (((event.clientY - rect.top) / rect.height) * canvas.height) / pixelSize
-      );
-    
+    const pixelX = Math.floor(
+      (((event.clientX - rect.left) / rect.width) * canvas.width) / pixelSize
+    );
+
+    const pixelY = Math.floor(
+      (((event.clientY - rect.top) / rect.height) * canvas.height) / pixelSize
+    );
 
     // update the pixel in local storage
-    updatePixelAt(pixelX,pixelY,"blue")
-    
+    updatePixelAt(pixelX, pixelY, "blue");
+
     // draw to the pixel on the canvas for display
     drawPixelAt(pixelX, pixelY);
-    
   };
 
   useEffect(() => {
