@@ -92,9 +92,10 @@
 /* Button styles */
 .button {
   padding: 8px 12px;
-  border: none;
+  border: 1px solid transparent;
   border-radius: var(--border-radius);
   cursor: pointer;
+  transition: border-color 0.25s;
 }
 
 .cancel-button {
@@ -106,6 +107,14 @@
   background-color: var(--button-bg);
   backdrop-filter: blur(50px);
   color: var(--text-color);
+}
+
+.button:hover {
+  border-color: #646cff;
+}
+.button:focus,
+.button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
 }
 
 /* Dark mode styles */
