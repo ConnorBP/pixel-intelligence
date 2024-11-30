@@ -1,0 +1,119 @@
+:root {
+  --overlay-bg-light: rgba(0, 0, 0, 0.5);
+  --overlay-bg-dark: rgba(255, 255, 255, 0.25);
+  --popup-bg: rgb(220, 220, 220);
+  --button-bg: #95544f;
+  --text-color: #333;
+  --border-color: #ccc;
+  --border-radius: 5px;
+  --shadow-color: rgba(0, 0, 0, 0.2);
+}
+
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: var(--overlay-bg-light);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  font-family: "Pixelify Sans", sans-serif;
+}
+
+.popup-box {
+  background: var(--popup-bg);
+  padding: 20px;
+  border-radius: 15px;
+  width: 280px;
+  text-align: center;
+  box-shadow: 2px 2px 8px var(--shadow-color);
+}
+
+.popup-title {
+  text-align: left;
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.popup-line {
+  margin: 10px 0;
+  border-top: 1px solid #aaa;
+}
+
+/* Shared input styles */
+.input,
+.select {
+  width: 90%;
+  padding: 8px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  font-size: 0.9rem;
+  margin-bottom: 15px;
+}
+
+/* Flex utilities */
+.flex {
+  display: flex;
+  align-items: center;
+}
+
+.flex-between {
+  justify-content: space-between;
+}
+
+.flex-end {
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+/* Preview styles */
+.popup-preview-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.popup-preview {
+  width: 80px;
+  height: 80px;
+  border: 1px solid #aaa;
+  border-radius: var(--border-radius);
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Button styles */
+.button {
+  padding: 8px 12px;
+  border: none;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+}
+
+.cancel-button {
+  background-color: var(--button-bg);
+  color: var(--text-color);
+}
+
+.create-button {
+  background-color: var(--button-bg);
+  backdrop-filter: blur(50px);
+  color: var(--text-color);
+}
+
+/* Dark mode styles */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --popup-bg: #3c3c3c;
+  }
+  .popup-overlay {
+    background: var(--overlay-bg-dark);
+  }
+}
