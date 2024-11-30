@@ -68,7 +68,7 @@ const Canvas = ({
     // const centerY = y + pixelSize / 2;
 
     // Draw a pixel at the clicked position
-    context.fillStyle = "blue";
+    context.fillStyle = color;
     context.beginPath();
     // context.arc(centerX, centerY, pixelSize/2, 0, 2 * Math.PI); // Draw a circle with radius 10
     context.fillRect(canvasX, canvasY, pixelSize, pixelSize);
