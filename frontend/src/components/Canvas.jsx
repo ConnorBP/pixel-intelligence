@@ -34,7 +34,7 @@ const Canvas = ({
   // in the react context and browser localstorage
   const updatePixelAt = (x, y, color) => {
     setCanvasData((oldCanvas) => {
-      console.log("setCanvas called with ", oldCanvas);
+      // console.log("setCanvas called with ", oldCanvas);
       // don't allow out of bounds access
       if (x >= oldCanvas.width || y >= oldCanvas.height) {
         console.error(
@@ -45,7 +45,7 @@ const Canvas = ({
       const newCanvas = { ...oldCanvas };
       // insert pixel at x position starting at row base (y*width)
       newCanvas.pixels[x + y * newCanvas.width] = color;
-      console.log("returning from setCanvas with ", newCanvas);
+      // console.log("returning from setCanvas with ", newCanvas);
       return newCanvas;
     });
   };
@@ -78,7 +78,7 @@ const Canvas = ({
   // it is "try" because the loaded data can be tampered with by the user
   // or be incompatible due to updates
   const tryLoadCanvas = (canvasData, storeOnLoad = false) => {
-    console.info("loading canvas state with object: ", canvasData);
+    // console.info("loading canvas state with object: ", canvasData);
     try {
       // catch some bad inputs
       if (!canvasData) {
@@ -117,7 +117,7 @@ const Canvas = ({
         }
         const x = i % canvasData.width;
         const y = Math.floor(i / canvasData.width);
-        console.log(`drawing ${pixel} at ${x} ${y}`);
+        // console.log(`drawing ${pixel} at ${x} ${y}`);
         drawPixelAt(x, y, pixel);
         // optionally, store to react state on load as well
         if (storeOnLoad) {
@@ -171,7 +171,7 @@ const Canvas = ({
     context.fillRect(0, 0, canvas.width, canvas.height);
 
     tryLoadCanvas(canvasData);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Todo: Handle resize
