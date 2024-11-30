@@ -32,6 +32,7 @@ const NewImagePopup = ({ onClose, onCreate }) => {
           />
           <div className="popup-preview-wrapper">
             <div className="popup-preview">
+            <img src= "" alt="Image Preview" className="popup-preview-image" />
               <div alt="Preview" className="" />
             </div>
             <div className="popup-canvas-size">
