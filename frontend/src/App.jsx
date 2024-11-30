@@ -3,8 +3,9 @@ import Gallery from "./pages/Gallery.jsx";
 import PopupTest from "./pages/PopupTest.jsx";
 import Layout from "./pages/Layout.jsx";
 import Editor from "./pages/Editor.jsx";
+import Menu from "./components/Menu.jsx"
+import ColorPickerToolbar from "./components/\bColorPickerToolbar.jsx";
 import ImageDetailsOverlay from "./components/GalleryPageComponents/ImageDetailsOverlay.jsx";
-import Menu from "./components/Menu.jsx";
 
 import './css/App.css';
 
@@ -25,7 +26,8 @@ function App() {
         <Route path="/" element={<Layout />}>
           <Route path="gallery/*" element={<Gallery images={testingImages} />} />
           <Route path="popuptest" element={<PopupTest />} />
-          <Route path="menu" element={<Menu />} />
+          <Route path="menu" element={<Menu/>}/>
+          <Route path="colorpicker" element={<ColorPickerToolbar/>}/>
         </Route>
         <Route path="/editor" element={<Editor />} />
         {/* Route for detail info overlay window of a image */}
