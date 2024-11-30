@@ -1,6 +1,6 @@
 import { useRef, useEffect } from "react";
 import { useLocalStorage } from "../hooks/useLocalStorage";
-import "./Canvas.css";
+import "../css/Canvas.css";
 
 const Canvas = ({
   pixelDrawingWidth = 16, // determines the amount of pixels a user can draw per row
@@ -181,7 +181,7 @@ const Canvas = ({
   return (
     <>
       <canvas
-        className="pixel-canvas"
+        className="editor-canvas"
         ref={canvasRef}
         width={canvasRenderWidth}
         height={canvasRenderHeight}

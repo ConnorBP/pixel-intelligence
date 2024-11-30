@@ -1,32 +1,16 @@
-import { useNavigate } from "react-router-dom";
-import { useState } from "react";
 import Canvas from "../components/Canvas";
-import NewImagePopup from "../components/NewImagePopup";
+import EditorLeftToolBar from "../components/EditorLeftToolBar";
+import EditorTopBar from "../components/EditorTopBar";
+import '../css/EditorPageCSS/Editor.css';
 
 const Editor = () => {
-  const [showPopup, setShowPopup] = useState(false); 
-  const navigate = useNavigate(); 
-
-  const handleCreateNewImage = (newImage) => {
-    console.log("New Canvas Created:", newImage);
-  };
   return (
-    <div className="editor_container">
-      {/* Toolbar */}
-      <div className="toolbar">
-        <button onClick={() => setShowPopup(true)}>Create New Image</button>
-        <button onClick={() => navigate("/")}>Back to Gallery</button>
+    <div className="editor-container">
+      <EditorTopBar />
+      <EditorLeftToolBar />
+      <div className="canvas-container">
+        <Canvas />
       </div>
-      {showPopup && (
-        <NewImagePopup
-          onClose={() => setShowPopup(false)}
-          onCreate={(newImage) => {
-            handleCreateNewImage(newImage);
-            setShowPopup(false);
-          }}
-        />
-      )}
-      <Canvas /> 
     </div>
   );
 };

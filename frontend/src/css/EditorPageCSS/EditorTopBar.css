@@ -1,0 +1,10 @@
+:root {
+    --top-toolbar-size: 4em;
+}
+
+.top-toolbar {
+    /* padding-left: var(--left-toolbar-size); */
+    background-color: rgba(100,100,100,0.6);
+    width:100%;
+    height: var(--top-toolbar-size);
+}

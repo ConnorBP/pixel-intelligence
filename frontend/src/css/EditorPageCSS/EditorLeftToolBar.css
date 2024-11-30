@@ -1,0 +1,15 @@
+:root {
+    --left-toolbar-size: 8em;
+}
+
+.left-toolbar {
+    height: 100%;
+    width: var(--left-toolbar-size);
+    position: fixed;
+    top:var(--top-toolbar-size);
+    left:0;
+    background-color: rgba(100,100,100,0.6);
+    overflow-x:hidden;
+    display:inline-block;
+    
+}

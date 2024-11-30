@@ -1,0 +1,12 @@
+:root {
+    width: 100vw;
+}
+
+.editor-container {
+    width: 100%;
+}
+
+.canvas-container {
+    /* add padding room for toolbar */
+    padding-left: var(--left-toolbar-size);
+}
