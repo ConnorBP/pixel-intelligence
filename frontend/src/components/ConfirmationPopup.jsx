@@ -10,9 +10,9 @@ function ConfirmationPopup({ isOpen, title, message1, message2,onCancel, onConfi
         <p className="title">{title}</p>
         <p className="message1">{message1}</p>
         <p className="message2">{message2}</p>
-        <div className='button'>
-        <button onClick={onCancel} className="cancel-button">Cancel</button>
-        <button onClick={onConfirm} className="confirm-button">Ok</button>
+        <div className='popup-button-container'>
+          <button onClick={onCancel} className="popup-button cancel-button">Cancel</button>
+          <button onClick={onConfirm} className="popup-button confirm-button">Ok</button>
         </div>
       </div>
     </div>
