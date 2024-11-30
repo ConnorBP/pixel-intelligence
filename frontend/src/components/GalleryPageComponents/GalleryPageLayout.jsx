@@ -9,7 +9,7 @@ function GalleryPageLayout({ images }) {
         <div className="gallery_container">
             {/* Title centered at the top */}
             <h1 className="gallery_title">Gallery</h1>
-            {images.length === 0 ? (
+            {!images || images.length === 0 ? (
                 <p>No images available</p>
             ) : (
                 <div className="gallery">
