@@ -1,0 +1,108 @@
+/* ImageDetailsOverlay.css */
+.image_details {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7); /* Dark background overlay */
+    z-index: 1000;
+}
+
+.content {
+    display: flex;
+    max-width: 1000px;
+    width: 80%;
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.image_section {
+    flex: 1;
+    padding-right: 20px;
+}
+
+.image_section img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+
+.details_section {
+    flex: 1.5;
+    padding-left: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.details_section p {
+    margin: 10px 0;
+}
+
+.details_section input {
+    width: 95%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.details_section button {
+    padding: 8px 15px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.details_section button:hover {
+    background-color: #45a049;
+}
+
+.share_links {
+    display: flex;
+    gap: 15px;
+}
+
+.share_links a {
+    font-size: 24px;
+    color: #0077b5;
+    text-decoration: none;
+}
+
+.share_links a:hover {
+    color: #005f8a;
+}
+
+.download_btn {
+    margin-top: 20px;
+    padding: 8px 15px;
+    background-color: #0077b5;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.download_btn:hover {
+    background-color: #005f8a;
+}
+
+.close_icon {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    color: white;
+    cursor: pointer;
+    font-size: 30px;
+    z-index: 2000;
+}
