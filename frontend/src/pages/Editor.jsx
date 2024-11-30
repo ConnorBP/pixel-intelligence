@@ -1,32 +1,25 @@
-import { useNavigate } from "react-router-dom";
-import { useState } from "react";
 import Canvas from "../components/Canvas";
-import NewImagePopup from "../components/NewImagePopup";
+import EditorLeftToolBar from "../components/EditorLeftToolBar";
+import EditorTopBar from "../components/EditorTopBar";
+import "../css/EditorPageCSS/Editor.css";
+import { useLocalStorage } from "../hooks/useLocalStorage";
 
 const Editor = () => {
-  const [showPopup, setShowPopup] = useState(false); 
-  const navigate = useNavigate(); 
+  const [brushColor, setBrushColor] = useLocalStorage("primaryBrushColor", "#000000");
+  const [secondaryBrushColor, setSecondaryBrushColor] = useLocalStorage("secondaryBrushColor", "#FFFFFF");
 
-  const handleCreateNewImage = (newImage) => {
-    console.log("New Canvas Created:", newImage);
-  };
   return (
-    <div className="editor_container">
-      {/* Toolbar */}
-      <div className="toolbar">
-        <button onClick={() => setShowPopup(true)}>Create New Image</button>
-        <button onClick={() => navigate("/")}>Back to Gallery</button>
+    <div className="editor-container">
+      <EditorTopBar />
+      <EditorLeftToolBar
+        selectedColor={brushColor}
+        setSelectedColor={setBrushColor}
+        secondaryColor={secondaryBrushColor}
+        setSecondaryColor={setSecondaryBrushColor}
+      />
+      <div className="canvas-container">
+        <Canvas brushColor={brushColor}/>
       </div>
-      {showPopup && (
-        <NewImagePopup
-          onClose={() => setShowPopup(false)}
-          onCreate={(newImage) => {
-            handleCreateNewImage(newImage);
-            setShowPopup(false);
-          }}
-        />
-      )}
-      <Canvas /> 
     </div>
   );
 };

@@ -1,82 +1,69 @@
-.color-container{
-    position: relative; 
-    width: 120px; 
-    height: 120px; 
-    margin-left: 30px;
-
-   
-}
-.color-picker-input-box{
-   
-
-    border-color: 'none';
-  
+:root {
+  --color-box-size: 55px;
 }
 
+.color-container {
+  display: inline-block;
+}
+.color-picker-input-box {
+  border-color: "none";
+}
 
-.color-pcik-first{
-    position: relative;
-    display: block;
-    width: 55px;
-    height: 55px;
-    top: 0;
-    left: 0;
-    border: transparent;
-    z-index: 1000;
-    appearance: none;
-    background-color: transparent;
-    
+.color-pcik-first {
+  position: relative;
+  display: block;
+  width: var(--color-box-size);
+  height: var(--color-box-size);
+  top: 6px;
+  left: 30px;
+  border: transparent;
+  z-index: 1000;
+  appearance: none;
+  background-color: transparent;
 }
-.color-pcik-second{
-    position: absolute;
-    top: 25px;
-    left: 30px;
-    width: 55px;
-    height: 55px;
-    border:  transparent;
-    appearance: none;
-    background-color: transparent;
-
+.color-pcik-second {
+  position: relative;
+  top: calc(0px - var(--color-box-size) / 2);
+  left: 58px;
+  width: 55px;
+  height: 55px;
+  border: transparent;
+  appearance: none;
+  background-color: transparent;
 }
-.btn-color-change{
- 
-    bottom: 0;
-    left: 20%; 
-    background-color: transparent;
-    border: transparent;
-    cursor: pointer;
-    font-size: 16px;
-    z-index: 1000;
-    display:block;
-    margin-left: 0;
-    margin-top: 0;
-     
+.btn-color-change {
+  position: relative;
+  top: -38px;
+  left: 30px;
+  background-color: transparent;
+  border: transparent;
+  cursor: pointer;
+  font-size: 16px;
+  z-index: 1000;
+  display: block;
 }
-.color-display-box{
-
-    position: absolute; /* 부모 요소를 기준으로 배치 */
-    display: flex;
-   top:0;
-   right: 0;
-   
+.color-display-box {
+  position: relative; /* 부모 요소를 기준으로 배치 */
+  display: flex;
+  top: -128px;
+  left: 90px;
 }
-.color-display-first{
-    position: relative;
-    border: 1px solid white;
-    width: 10px;
-    height: 10px;
-    margin-top: 5px;
-    z-index: 10;
-   
- 
+.color-display-first {
+  position: relative;
+  border: 1px solid white;
+  width: 10px;
+  height: 10px;
+  top: 0px;
+  /* margin-top: 5px; */
+  z-index: 10;
 }
-.color-display-second{
-    position: relative;
-    display: flex;
-    border: 1px solid white;
-    width: 10px;
-    height: 10px;
-    margin-right: 37px;
-    margin-top: 11px;
-    margin-left: -5px; 
+.color-display-second {
+  position: relative;
+  right: 0px;
+  top: 6px;
+  right: 6px;
+  /* display: flex; */
+  border: 1px solid white;
+  width: 10px;
+  height: 10px;
 }

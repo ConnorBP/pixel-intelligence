@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import "../css/NewImagePopup.css";
 
 const NewImagePopup = ({ onClose, onCreate }) => {
@@ -50,10 +50,10 @@ const NewImagePopup = ({ onClose, onCreate }) => {
             </div>
           </div>
           <div className="flex flex-end">
-            <button onClick={onClose} className="button cancel-button">
+            <button onClick={onClose} className="button popup-button cancel-button">
               Cancel
             </button>
-            <button onClick={handleCreate} className="button create-button">
+            <button onClick={handleCreate} className="button popup-button create-button">
               Create
             </button>
           </div>

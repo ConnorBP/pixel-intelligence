@@ -1,0 +1,18 @@
+:root {
+    --editor-canvas-padding: 8px;
+    --editor-canvas-scale: calc(100vh - var(--top-toolbar-size) - var(--editor-canvas-padding));
+}
+
+.editor-canvas {
+    border: 1px solid black;
+    cursor: pointer;
+    /* fill page with size of height first */
+    width: var(--editor-canvas-scale);
+    height: var(--editor-canvas-scale);
+    /* disable aliasing on the canvas for pixel art style */
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}

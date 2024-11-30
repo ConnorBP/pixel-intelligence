@@ -57,7 +57,8 @@
   padding-left: 15%;
 }
 
-button {
+/* display style for buttons in a popup window */
+.popup-button  {
   margin: 5px;
   padding: 5px 10px;
   border: none;
@@ -65,7 +66,9 @@ button {
   cursor: pointer;
   border-radius: 20px;
 }
-.button {
+
+/* wraps the buttons in the popup */
+.popup-button-container {
   display: flex;
   justify-content: flex-end;
   font-size: 0.9rem;
