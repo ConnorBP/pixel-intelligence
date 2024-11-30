@@ -5,9 +5,11 @@ import { MdOutlineAddBox } from "react-icons/md";
 import { RiArrowGoBackLine, RiSave3Line } from "react-icons/ri";
 import "../css/EditorPageCSS/EditorTopBar.css";
 import Menu from "./Menu";
+import ConfirmationPopup from "./ConfirmationPopup";
 
 const EditorTopBar = () => {
-  const [showPopup, setShowPopup] = useState(false);
+  const [showNewImagePrompt, setShowNewImagePrompt] = useState(false);
+  const [showSaveNotYetImplemented, setShowSaveNotYetImplemented] = useState(false);
   const navigate = useNavigate();
 
   const handleCreateNewImage = (newImage) => {
@@ -15,25 +17,35 @@ const EditorTopBar = () => {
   };
   return (
     <>
-      {showPopup && (
+      <ConfirmationPopup
+        isOpen={showSaveNotYetImplemented}
+        title="Info"
+        message1="This action has not yet been implemented."
+        message2=""
+        onCancel={()=>setShowSaveNotYetImplemented(false)}
+        onConfirm={() => {
+          console.log("Confirmed!");
+          setShowSaveNotYetImplemented(false);
+        }}
+      />
+      {showNewImagePrompt && (
         <NewImagePopup
-          onClose={() => setShowPopup(false)}
+          onClose={() => setShowNewImagePrompt(false)}
           onCreate={(newImage) => {
             handleCreateNewImage(newImage);
-            setShowPopup(false);
+            setShowNewImagePrompt(false);
           }}
         />
       )}
       <div className="top-toolbar">
         <Menu />
         <button onClick={() => navigate("/")}>
-          <RiArrowGoBackLine className="icon" />
-          {" "}Back to Gallery
+          <RiArrowGoBackLine className="icon" /> Back to Gallery
         </button>
-        <button onClick={()=>{}} >
-            <RiSave3Line className="icon"/>
+        <button onClick={() => {setShowSaveNotYetImplemented(true)}}>
+          <RiSave3Line className="icon" />
         </button>
-        <button onClick={() => setShowPopup(true)}>
+        <button onClick={() => setShowNewImagePrompt(true)}>
           <MdOutlineAddBox className="icon" />
         </button>
       </div>
