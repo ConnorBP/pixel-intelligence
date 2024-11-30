@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import GalleryPageLayout from "../components/GalleryPageComponents/GalleryPageLayout";
 
 function Gallery({ images }) {
