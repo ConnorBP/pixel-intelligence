@@ -19,22 +19,16 @@ const Canvas = ({
     pixels: [],
   };
 
+  //
+  // State
+  //
+
   // reference to the canvas object for us to draw to
   const canvasRef = useRef(null);
   // automatically keeps track of canvas state on the browser storage
   const [canvasData, setCanvasData] = useLocalStorage("canvas", defaultCanvas);
   // how big a single pixel is on the actual rendering canvas:
   const pixelSize = canvasRenderWidth / pixelDrawingWidth;
-
-  // onload
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    const context = canvas.getContext("2d");
-
-    // Set up initial canvas properties (optional)
-    context.fillStyle = "#f0f0f0";
-    context.fillRect(0, 0, canvas.width, canvas.height);
-  }, []);
 
   // updates the state of a pixel at specific coordinate
   // in the react context and browser localstorage
@@ -58,6 +52,11 @@ const Canvas = ({
 
   // outputs a pixel to the display canvas (does not save)
   const drawPixelAt = (x, y, color) => {
+    // don't run on empty pixels
+    if (color == null) {
+      return;
+    }
+
     const canvasX = x * pixelSize;
     const canvasY = y * pixelSize;
 
@@ -75,6 +74,67 @@ const Canvas = ({
     context.fill();
   };
 
+  // attempt to load a provided canvas json representation
+  // it is "try" because the loaded data can be tampered with by the user
+  // or be incompatible due to updates
+  const tryLoadCanvas = (canvasData, storeOnLoad = false) => {
+    console.info("loading canvas state with object: ", canvasData);
+    try {
+      // catch some bad inputs
+      if (!canvasData) {
+        console.error("cannot load a null canvas document ", canvasData);
+        return false;
+      }
+      // check for valid canvas size
+      // todo: this should check against a set list of our presets
+      if (
+        !canvasData.width ||
+        !canvasData.height ||
+        canvasData.width < 16 ||
+        canvasData.height < 16 ||
+        canvasData.width != canvasData.height // only accept square canvas
+      ) {
+        console.error(
+          "got invalid canvas size while trying to load canvas document ",
+          canvasData
+        );
+        return false;
+      }
+
+      if (
+        !canvasData.pixels ||
+        !canvasData.pixels.length ||
+        canvasData.pixels.length <= 0
+      ) {
+        console.error("cannot load an empty pixels array ", canvasData);
+        return false;
+      }
+
+      canvasData.pixels.forEach((pixel, i) => {
+        if (i > canvasData.width * canvasData.height) {
+          console.error("pixels array was larger than the canvas resolution");
+          return false;
+        }
+        const x = i % canvasData.width;
+        const y = Math.floor(i / canvasData.width);
+        console.log(`drawing ${pixel} at ${x} ${y}`);
+        drawPixelAt(x, y, pixel);
+        // optionally, store to react state on load as well
+        if (storeOnLoad) {
+          updatePixelAt;
+        }
+      });
+    } catch (err) {
+      // in case of pesky bugs from errors or malicious input
+      console.error("Failed to load canvas data. Unexpected Error: ", err);
+      return false;
+    }
+    // if nothing failed by here, it was a great success :)
+    return true;
+  };
+
+  // Handles the event of someone clicking on the canvas area
+  // Currently only supports single click drawing
   const handleCanvasClick = (event) => {
     const canvas = canvasRef.current;
 
@@ -97,6 +157,23 @@ const Canvas = ({
     drawPixelAt(pixelX, pixelY, "blue");
   };
 
+  //
+  // Hooks
+  //
+
+  // On Load
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    const context = canvas.getContext("2d");
+
+    // Set up initial canvas properties (optional)
+    context.fillStyle = "#f0f0f0";
+    context.fillRect(0, 0, canvas.width, canvas.height);
+
+    tryLoadCanvas(canvasData);
+  }, []);
+
+  // Todo: Handle resize
   useEffect(() => {
     console.log("canvas resized");
   }, [pixelDrawingWidth, pixelDrawingHeight]);
