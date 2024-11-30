@@ -94,7 +94,7 @@ const Canvas = ({
     updatePixelAt(pixelX, pixelY, "blue");
 
     // draw to the pixel on the canvas for display
-    drawPixelAt(pixelX, pixelY);
+    drawPixelAt(pixelX, pixelY, "blue");
   };
 
   useEffect(() => {
