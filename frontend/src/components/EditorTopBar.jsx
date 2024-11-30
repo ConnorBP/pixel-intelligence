@@ -1,7 +1,9 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import NewImagePopup from "../components/NewImagePopup";
-import '../css/EditorPageCSS/EditorTopBar.css';
+import { MdOutlineAddBox } from "react-icons/md";
+import { RiArrowGoBackLine, RiSave3Line } from "react-icons/ri";
+import "../css/EditorPageCSS/EditorTopBar.css";
 import Menu from "./Menu";
 
 const EditorTopBar = () => {
@@ -24,8 +26,16 @@ const EditorTopBar = () => {
       )}
       <div className="top-toolbar">
         <Menu />
-        <button onClick={() => setShowPopup(true)}>Create New Image</button>
-        <button onClick={() => navigate("/")}>Back to Gallery</button>
+        <button onClick={() => navigate("/")}>
+          <RiArrowGoBackLine className="icon" />
+          {" "}Back to Gallery
+        </button>
+        <button onClick={()=>{}} >
+            <RiSave3Line className="icon"/>
+        </button>
+        <button onClick={() => setShowPopup(true)}>
+          <MdOutlineAddBox className="icon" />
+        </button>
       </div>
     </>
   );
