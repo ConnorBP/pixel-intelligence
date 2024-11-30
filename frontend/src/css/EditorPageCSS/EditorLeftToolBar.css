@@ -1,15 +1,30 @@
 :root {
-    --left-toolbar-size: 8em;
+  --left-toolbar-size: 8em;
+  --left-toolbar-height: calc(100% - (var(--top-toolbar-size)));
 }
 
 .left-toolbar {
-    height: 100%;
-    width: var(--left-toolbar-size);
-    position: fixed;
-    top:var(--top-toolbar-size);
-    left:0;
-    background-color: rgba(100,100,100,0.6);
-    overflow-x:hidden;
-    display:inline-block;
-    
+  height: var(--left-toolbar-height);
+  width: var(--left-toolbar-size);
+  position: fixed;
+  top: var(--top-toolbar-size);
+  left: 0;
+  background-color: rgba(100, 100, 100, 0.6);
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  
+  justify-content: space-between;
+  /* fix flex end calc */
+  padding-bottom: var(--top-toolbar-size);
+}
+
+.left-toolbar .align-bottom {
+  
+  align-self: flex-end;
+}
+
+.left-toolbar .toolbar-square {
+  width: var(--left-toolbar-size);
+  height: var(--left-toolbar-size);
 }

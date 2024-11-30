@@ -19,7 +19,7 @@ function ColorPickerToolbar() {
   };
   return (
     <div className="color-container">
-      <div className="cokor-picker-input-box">
+      
         <input
           className="color-pcik-first"
           type="color"
@@ -35,7 +35,7 @@ function ColorPickerToolbar() {
         <button className="btn-color-change" onClick={handleChange}>
           <FaExchangeAlt />
         </button>
-      </div>
+      
       <div className="color-display-box">
         <div
           className="color-display-first"
