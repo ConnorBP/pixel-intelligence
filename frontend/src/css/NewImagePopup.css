@@ -110,6 +110,9 @@
 
 /* Dark mode styles */
 @media (prefers-color-scheme: dark) {
+  :root {
+    --popup-bg: #3c3c3c;
+  }
   .popup-overlay {
     background: var(--overlay-bg-dark);
   }
