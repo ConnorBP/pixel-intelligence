@@ -16,8 +16,11 @@ todo. Write a reflection here on how the project is going so far, what adjustmen
 ### sanjeev-cs
 todo. Write a reflection here on how the project is going so far, what adjustments you think we should make to our expected use-cases, implementations, design, workflow, etc
 
-### Chauhan
+### superYM222
 todo. Write a reflection here on how the project is going so far, what adjustments you think we should make to our expected use-cases, implementations, design, workflow, etc
+
+Connor announced the issues, we can choose the tasks.
+I decided to Menu, ColorPickerToolbar, ConfirmationPopup parts and focused to following the initially designed UI and use cases. Firstly, Menu part, when user click menu button, it's toggle menu. However, I faced challenges two parts  ColorPickerToolbar , and custom colour picker part.  The CSS for the ColorPickerToolbar part was challenging. I needed to adjust it within the div box, but it wasn’t as easy as I expected. Moreover, There is an error in the onChange part of the custom color picker, and I am still working on resolving it.
 
 ### Parmilashams
 todo. Write a reflection here on how the project is going so far, what adjustments you think we should make to our expected use-cases, implementations, design, workflow, etc             
