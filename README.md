@@ -17,6 +17,8 @@ A Pixel Art Editor with generative AI functionality, image downscale processing,
 
 [part 2 submission document](./Part2Reflections.md)
 
+## Example polinations.ai image:
+![ai image of knight](https://image.pollinations.ai/prompt/create%20a%20pixel-art%20design%20of%20a%20small%20knight%20character%20in%2016bit?width=512&height=512&seed=69&enhance=true&nologo=true,true&model=flux-anime)
 
 # Design / Wireframes
 *Original Figma mockups may be viewed here:*
