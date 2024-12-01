@@ -9,9 +9,9 @@
  - Sanjeevkumar "[sanjeev-cs](https://github.com/sanjeev-cs)" Chauhan (301480021)
  - Parmila "[Parmilashams](https://github.com/Parmilashams)" Shams (301426195)
 
-## [Issue Tracker](\> Latest live demo can be viewed on [Netlify](https://229-pixelai.netlify.app))
+## [Issue Tracker](https://github.com/ConnorBP/pixel-intelligence/issues)
 
-> View the past and current tasks on our [Github](https://229-pixelai.netlify.app).
+> View the past and current tasks on our [Github](https://github.com/ConnorBP/pixel-intelligence/issues).
 
 ## [Live Demo](https://229-pixelai.netlify.app)
 > Latest live demo can be viewed on [Netlify](https://229-pixelai.netlify.app).
