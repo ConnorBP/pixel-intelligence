@@ -21,7 +21,7 @@ function Menu({ menuOptions = testingItems }) {
 
   const listItems = menuOptions.map(({text, onClick}, idx) => {
     // console.log(`mapping item ${idx} ${text}`);
-    return <ContextMenuItem onClick={onClick} key={`${text} ${idx}`}>{text}</ContextMenuItem>;
+    return <ContextMenuItem onClick={()=>{toggle();onClick();}} key={`${text} ${idx}`}>{text}</ContextMenuItem>;
   });
   // console.log(listItems);
 
