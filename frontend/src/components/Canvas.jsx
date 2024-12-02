@@ -24,6 +24,8 @@ const Canvas = forwardRef(({
 
   // updates the state of a pixel at specific coordinate
   // in the react context and browser localstorage
+  // this fetches current state, modifies it, and sets it again
+  // not the most efficient for batch operations
   const updatePixelAt = (x, y, color) => {
     setCanvasData((oldCanvas) => {
       // console.log("setCanvas called with ", oldCanvas);
@@ -97,7 +99,8 @@ const Canvas = forwardRef(({
         drawPixelAt(x, y, pixel);
         // optionally, store to react state on load as well
         if (storeOnLoad) {
-          updatePixelAt;
+          // warning: not very efficient
+          updatePixelAt(x,y,pixel);
         }
       });
     } catch (err) {

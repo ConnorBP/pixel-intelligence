@@ -7,8 +7,8 @@ import Prando from 'prando';
 
 let rng = new Prando(1);
 
-
-const resizeNN = () => {
+// Nearest neighbor based on https://gist.github.com/GoToLoop/2e12acf577506fd53267e1d186624d7c
+const resizeNN = (image, w, h) => {
 
 };
 
@@ -18,20 +18,24 @@ const resizeNN = () => {
 // the number of colors to select out of the image / centroid count. Recommended 2-16
 // accuracy factor Recommended 1-20
 const kCenter = (sourceImage, newWidth, newHeight, colors, accuracy) => {
-    const tiles = [];
     const newImg = new SimpleImage({ width: sourceImage.width, height: sourceImage.height });
     const newImg2 = new SimpleImage({ width: newWidth, height: newHeight });
 
     const wFactor = sourceImage.width / newWidth;
     const hFactor = sourceImage.height / newHeight;
 
-    // Process image into tiles and apply kMeans clustering
     for (let x = 0; x < newWidth; x++) {
         for (let y = 0; y < newHeight; y++) {
-            const tileImg = extractTile(sourceImage, x * wFactor, y * hFactor, wFactor, hFactor);
+            // Calculate exact bounds for each tile
+            const startX = Math.round(x * wFactor);
+            const endX = Math.round((x + 1) * wFactor);
+            const startY = Math.round(y * hFactor);
+            const endY = Math.round((y + 1) * hFactor);
+
+            const tileImg = extractTile(sourceImage, startX, startY, endX - startX, endY - startY);
             const kMeansResult = kMeans(tileImg, colors, accuracy);
 
-            newImg.drawImage(kMeansResult[0], x * wFactor, y * hFactor);
+            newImg.drawImage(kMeansResult[0], startX, startY);
             newImg2.drawPixel(x, y, kMeansResult[1]);
         }
     }
@@ -39,15 +43,22 @@ const kCenter = (sourceImage, newWidth, newHeight, colors, accuracy) => {
     return { kTiles: newImg, kCentroid: newImg2 };
 };
 
+
+
+
 const extractTile = (image, startX, startY, width, height) => {
     const tile = new SimpleImage({ width, height });
     for (let x = 0; x < width; x++) {
         for (let y = 0; y < height; y++) {
-            tile.drawPixel(x, y, image.getPixel(startX + x, startY + y));
+            const srcX = Math.min(image.width - 1, startX + x);
+            const srcY = Math.min(image.height - 1, startY + y);
+            tile.drawPixel(x, y, image.getPixel(srcX, srcY));
         }
     }
     return tile;
-}
+};
+
+
 
 const kMeans = (image, k, accuracy) => {
     const pixels = [];
@@ -112,17 +123,20 @@ const applyCentroids = (image, centroids) => {
             const pixel = image.getPixel(x, y);
             let minDist = Infinity;
             let nearestCentroid = null;
-            centroids.forEach(centroid => {
+            centroids.forEach((centroid) => {
                 const dist = distance(pixel, centroid);
                 if (dist < minDist) {
                     minDist = dist;
                     nearestCentroid = centroid;
                 }
             });
-            image.drawPixel(x, y, nearestCentroid);
+            if (nearestCentroid) {
+                image.drawPixel(x, y, nearestCentroid);
+            }
         }
     }
-}
+};
+
 // Calculates the euclidean distance between two colors (squared)
 const distance = (color1, color2) => {
     const dr = color1.r - color2.r;
@@ -132,6 +146,7 @@ const distance = (color1, color2) => {
 }
 
 const DownScaler = {
+    resizeNN,
     kCenter,
     extractTile,
     kMeans,

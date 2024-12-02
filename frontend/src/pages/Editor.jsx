@@ -66,24 +66,20 @@ const Editor = () => {
         // might throw
         console.log(`new canvas width and height ${tmpCanvas.width}, ${tmpCanvas.height}`);
         const simp = new SimpleImage({ imageData: ctx.getImageData(0, 0, tmpCanvas.width, tmpCanvas.height) });
-        let { kCentroid, kTiles } = DownScaler.kCenter(simp, canvasData.width, canvasData.height, 16, 20);
+        let { kCentroid } = DownScaler.kCenter(simp, canvasData.width, canvasData.height, 16, 16);
 
-
-        setCanvasData({
+        const newCanvasData = {
           pixels: kCentroid.pixels.map(({ r, g, b, a }) => { 
             console.log(`${r} ${g} ${b} ${a}`);
             return RGBAToHex(r, g, b, a) 
           }),
           width: canvasData.width,
           height: canvasData.height,
-        });
+        };
+        setCanvasData(newCanvasData);
 
         if (pixelCanvasRef.current) {
-          pixelCanvasRef.current.tryLoadCanvas(canvasData);
-          // if(pixelCanvasRef.current.canvasRef.current) {
-          //   const ctx2 = pixelCanvasRef.current.canvasRef.current.getContext("2d");
-          //   ctx2.drawImage(img, 0, 0);
-          // }
+          pixelCanvasRef.current.tryLoadCanvas(newCanvasData);
         }
 
         console.log('import complete');
