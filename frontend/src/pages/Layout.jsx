@@ -8,14 +8,14 @@ const Layout = () => {
       <nav>
         <ul>
           <li>
-            <Link to="/">Home / Gallery</Link>
+            <Link to="/">Gallery</Link>
           </li>
           <li>
             <Link to="/editor">Editor</Link>
           </li>
         </ul>
       </nav>
-      <Outlet />
+      <Outlet /> {/* the actual page goes in place of outlet */}
     </>
   )
 };

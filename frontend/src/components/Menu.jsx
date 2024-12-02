@@ -2,15 +2,28 @@ import { useState } from "react";
 import { IoMdMenu } from "react-icons/io";
 import "../css/Menu.css";
 import ContextMenuItem from "./ContextMenuItem";
-import { useNavigate } from "react-router-dom";
 
-function Menu({ onNewDrawing }) {
+const testingItems= [
+  { text: "New Todo", onClick: ()=> alert('todo') },
+  { text: "DEMO OPTION", onClick: ()=> alert('todo') },
+  { text: "TODO#3", onClick: ()=> alert('todo') },
+];
+
+console.log(testingItems);
+
+function Menu({ menuOptions = testingItems }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const toggle = () => {
     setMenuOpen((v) => !v);
   };
 
-  const nav = useNavigate();
+
+
+  const listItems = menuOptions.map(({text, onClick}, idx) => {
+    // console.log(`mapping item ${idx} ${text}`);
+    return <ContextMenuItem onClick={onClick} key={`${text} ${idx}`}>{text}</ContextMenuItem>;
+  });
+  console.log(listItems);
 
   return (
     <div className="menu-container">
@@ -19,15 +32,7 @@ function Menu({ onNewDrawing }) {
       </button>
       {menuOpen && (
         <ul className="menuBox">
-          {/* todo insert these menu items from a map please */}
-          <ContextMenuItem>New Drawing</ContextMenuItem>
-          <ContextMenuItem onClick={onNewDrawing}>Open</ContextMenuItem>
-          <ContextMenuItem onClick={() => nav("/")}>
-            View Gallery
-          </ContextMenuItem>
-          <ContextMenuItem>Download</ContextMenuItem>
-          <ContextMenuItem>Share Drawing</ContextMenuItem>
-          <ContextMenuItem>Save Drawing</ContextMenuItem>
+          {listItems}
         </ul>
       )}
     </div>

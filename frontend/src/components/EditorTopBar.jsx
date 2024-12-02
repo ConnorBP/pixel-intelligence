@@ -7,7 +7,7 @@ import "../css/EditorPageCSS/EditorTopBar.css";
 import Menu from "./Menu";
 import ConfirmationPopup from "./ConfirmationPopup";
 
-const EditorTopBar = () => {
+const EditorTopBar = ({contextMenuOptions}) => {
   const [showNewImagePrompt, setShowNewImagePrompt] = useState(false);
   const [showSaveNotYetImplemented, setShowSaveNotYetImplemented] = useState(false);
   const navigate = useNavigate();
@@ -38,7 +38,7 @@ const EditorTopBar = () => {
         />
       )}
       <div className="top-toolbar">
-        <Menu />
+        <Menu menuOptions={contextMenuOptions}/>
         <button onClick={() => navigate("/")}>
           <RiArrowGoBackLine className="icon" /> Back to Gallery
         </button>
