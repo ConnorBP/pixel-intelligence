@@ -1,24 +1,15 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, forwardRef, useImperativeHandle } from "react";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 import "../css/Canvas.css";
 
-const Canvas = ({
-  pixelDrawingWidth = 16, // determines the amount of pixels a user can draw per row
-  pixelDrawingHeight = 16,
+const Canvas = forwardRef(({
+  canvasData,
+  setCanvasData,
   canvasRenderWidth = 128, // determines the actual rendering of the pixels to the screen (including editor lines)
   canvasRenderHeight = 128,
   brushColor = "blue",
-}) => {
-  // default canvas storage object
-  // NOTE: once we deploy, we cannot change this without breaking users localstorage
-  // so keep this consistent
-  const defaultCanvas = {
-    width: pixelDrawingWidth,
-    height: pixelDrawingHeight,
-    // pixels are stored in one array.
-    // pixels are stored left to right then top down
-    pixels: [],
-  };
+}, ref) => {
+
 
   //
   // State
@@ -27,9 +18,9 @@ const Canvas = ({
   // reference to the canvas object for us to draw to
   const canvasRef = useRef(null);
   // automatically keeps track of canvas state on the browser storage
-  const [canvasData, setCanvasData] = useLocalStorage("canvas", defaultCanvas);
+
   // how big a single pixel is on the actual rendering canvas:
-  const pixelSize = canvasRenderWidth / pixelDrawingWidth;
+  const pixelSize = canvasRenderWidth / canvasData.width;
 
   // updates the state of a pixel at specific coordinate
   // in the react context and browser localstorage
@@ -51,35 +42,13 @@ const Canvas = ({
     });
   };
 
-  // outputs a pixel to the display canvas (does not save)
-  const drawPixelAt = (x, y, color) => {
-    // don't run on empty pixels
-    if (color == null) {
-      return;
-    }
 
-    const canvasX = x * pixelSize;
-    const canvasY = y * pixelSize;
-
-    // reference the canvas context for drawing to
-    const canvas = canvasRef.current;
-    const context = canvas.getContext("2d");
-    // const centerX = x + pixelSize / 2;
-    // const centerY = y + pixelSize / 2;
-
-    // Draw a pixel at the clicked position
-    context.fillStyle = color;
-    context.beginPath();
-    // context.arc(centerX, centerY, pixelSize/2, 0, 2 * Math.PI); // Draw a circle with radius 10
-    context.fillRect(canvasX, canvasY, pixelSize, pixelSize);
-    context.fill();
-  };
 
   // attempt to load a provided canvas json representation
   // it is "try" because the loaded data can be tampered with by the user
   // or be incompatible due to updates
   const tryLoadCanvas = (canvasData, storeOnLoad = false) => {
-    // console.info("loading canvas state with object: ", canvasData);
+    console.info("loading canvas state with object: ", canvasData);
     try {
       // catch some bad inputs
       if (!canvasData) {
@@ -111,11 +80,17 @@ const Canvas = ({
         return false;
       }
 
+      if (canvasData.pixels.length > canvasData.width * canvasData.height) {
+        console.error("pixels array was larger than the canvas resolution");
+        return false;
+      }
+
+      // for (let i = 0; i<canvasData.pixels.length; i++ ) {
+      //   const pixel = canvasData.pixels[i];
+      // }
+
       canvasData.pixels.forEach((pixel, i) => {
-        if (i > canvasData.width * canvasData.height) {
-          console.error("pixels array was larger than the canvas resolution");
-          return false;
-        }
+        
         const x = i % canvasData.width;
         const y = Math.floor(i / canvasData.width);
         // console.log(`drawing ${pixel} at ${x} ${y}`);
@@ -132,6 +107,30 @@ const Canvas = ({
     }
     // if nothing failed by here, it was a great success :)
     return true;
+  };
+
+  // outputs a pixel to the display canvas (does not save)
+  const drawPixelAt = (x, y, color) => {
+    // don't run on empty pixels
+    if (color == null) {
+      return;
+    }
+
+    const canvasX = x * pixelSize;
+    const canvasY = y * pixelSize;
+
+    // reference the canvas context for drawing to
+    const canvas = canvasRef.current;
+    const context = canvas.getContext("2d");
+    // const centerX = x + pixelSize / 2;
+    // const centerY = y + pixelSize / 2;
+
+    // Draw a pixel at the clicked position
+    context.fillStyle = color;
+    context.beginPath();
+    // context.arc(centerX, centerY, pixelSize/2, 0, 2 * Math.PI); // Draw a circle with radius 10
+    context.fillRect(canvasX, canvasY, pixelSize, pixelSize);
+    context.fill();
   };
 
   // Handles the event of someone clicking on the canvas area
@@ -158,6 +157,16 @@ const Canvas = ({
     drawPixelAt(pixelX, pixelY, brushColor);
   };
 
+  // forward the draw single pixel function for efficiency
+  useImperativeHandle(ref, () => {
+    return {
+      drawPixelAt,
+      tryLoadCanvas,
+      canvasRef
+    }
+  }, [canvasRef]);
+
+
   //
   // Hooks
   //
@@ -177,8 +186,9 @@ const Canvas = ({
 
   // Todo: Handle resize
   useEffect(() => {
-    console.log("canvas resized");
-  }, [pixelDrawingWidth, pixelDrawingHeight]);
+    console.log("canvas contents resized or changed");
+    // tryLoadCanvas(canvasData);
+  }, [canvasData]);
 
   return (
     <>
@@ -191,6 +201,6 @@ const Canvas = ({
       ></canvas>
     </>
   );
-};
+});
 
 export default Canvas;

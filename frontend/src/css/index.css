@@ -36,6 +36,10 @@ h1 {
   line-height: 1.1;
 }
 
+.hidden {
+  display:none;
+}
+
 /* we should not dirty styling of all usages of button across the board
 button {
   border-radius: 8px;

@@ -9,7 +9,7 @@ const testingItems= [
   { text: "TODO#3", onClick: ()=> alert('todo') },
 ];
 
-console.log(testingItems);
+// console.log(testingItems);
 
 function Menu({ menuOptions = testingItems }) {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -23,7 +23,7 @@ function Menu({ menuOptions = testingItems }) {
     // console.log(`mapping item ${idx} ${text}`);
     return <ContextMenuItem onClick={onClick} key={`${text} ${idx}`}>{text}</ContextMenuItem>;
   });
-  console.log(listItems);
+  // console.log(listItems);
 
   return (
     <div className="menu-container">
