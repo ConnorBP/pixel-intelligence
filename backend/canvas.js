@@ -1,5 +1,6 @@
-const {MongoClient}  = require("mongodb");
-require("dotenv").config();
+import { MongoClient } from "mongodb";
+import dotenv from "dotenv"; 
+dotenv.config();
 
 const dbStringURL = process.env.MONGO_DB_STRING; // Database connection string
 const dbName = process.env.DATABASE_NAME; // Database Name
@@ -12,8 +13,8 @@ const connectToDB = async () => {
         await client.connect();
         console.log("Connected to database");
         return client.db(dbName); // Return the connected database instance
-    } catch (error) {
-        console.error("Failed to connect to the database:", error);
+    } catch (e) {
+        console.error("Failed to connect to the database:", e.stack || e);
         throw new Error("Database connection failed");
     }
 };
@@ -29,8 +30,8 @@ const saveCanvasData = async (canvasData) => {
         const result = await collection.insertOne(canvasData);
         console.log("Canvas data inserted.", result.insertedId);
         return result; 
-    } catch (error) {
-        console.error("Error inserting canvas data:", error);
+    } catch (e) {
+        console.error("Error inserting canvas data:", e.stack || e);
         throw new Error("Failed to insert canvas data");
     } finally {
         if (db) db.client.close(); // Close the database connection
@@ -46,12 +47,13 @@ const getAllCanvases = async () => {
         // Retrieve all canvases from the collection
         const canvases = await collection.find().toArray();
         return canvases; // Return the array of canvases
-    } catch (error) {
-        console.error("Error retrieving canvases:", error);
+    } catch (e) {
+        console.error("Error retrieving canvases:", e.stack || e);
         throw new Error("Failed to retrieve canvases");
     } finally {
         if (db) db.client.close();
     }
 };
 
-module.exports = { saveCanvasData, getAllCanvases};
+// Export the functions as ES modules
+export { saveCanvasData, getAllCanvases };
