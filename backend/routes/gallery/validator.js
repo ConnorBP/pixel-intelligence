@@ -13,7 +13,7 @@ const validateCanvasData = (canvasData) => {
     }
 
     // Check if pixels is an array and not empty
-    if(!Array.isArray*(canvasData.pixels) || canvasData.pixels.length === 0) {
+    if(!Array.isArray(canvasData.pixels) || canvasData.pixels.length === 0) {
         errors.push('Pixels array is required and cannot be empty.');
     }
 
