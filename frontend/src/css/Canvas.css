@@ -2,6 +2,14 @@
     --editor-canvas-padding: 8px;
     --editor-canvas-scale: calc(100vh - var(--top-toolbar-size) - var(--editor-canvas-padding));
 }
+/* ensure that the editor canvas scales properly on portrait orientation */
+/* currently limited by the lack of calculation ability in media queries */
+/* when the browser is reaching square resolution a scrollbar appears for a bit */
+@media all and (orientation:portrait)  {
+    :root {
+        --editor-canvas-scale: calc(100vw - var(--left-toolbar-size) - var(--editor-canvas-padding));
+    }
+}
 
 .editor-canvas {
     border: 1px solid black;
