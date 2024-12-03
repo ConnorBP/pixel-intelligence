@@ -1,15 +1,48 @@
+// this is a simple generic image interface for all our scaling code to use.
+// acts as a go between from png image format in a canvas element to our css color code buffer format
+
+import parseColor from "./parseColor";
 
 class SimpleImage {
-    // takes in an ImageData
+    // pseudo-overloaded constructor
+    // takes in an ImageData, OR canvasData OR width and height
     // can throw if invalid data is supplied
-    constructor({imageData, width, height}) {
-        if(!imageData && width && height) {
+    constructor({ imageData, fromCanvasData, width, height }) {
+        // console.log(imageData,fromCanvasData,width,height);
+        if (!imageData && !fromCanvasData && width != null && height != null) {
             this.width = width;
             this.height = height;
-            this.pixels = new Array(width * height).fill({ r: 0, g: 0, b: 0, a: 255 });
+            this.pixels = new Array(width * height).fill({ r: 0, g: 0, b: 0, a: 0 });
             return;
         }
 
+        // handle loading canvas data (html color codes) into this simple image proxy format
+        if (fromCanvasData) {
+            if (!fromCanvasData.width || !fromCanvasData.height || fromCanvasData.width < 0 || fromCanvasData.height < 0) {
+                throw new Error("canvas data input dimensions were invalid");
+            }
+            if (!fromCanvasData.pixels || fromCanvasData.pixels.length <= 0) {
+                throw new Error("canvas data input pixels array was invalid");
+            }
+
+            this.width = fromCanvasData.width;
+            this.height = fromCanvasData.height;
+
+            // allocate pixels array and convert pixel datatype from css color code
+            this.pixels = fromCanvasData.pixels.map((pixelColor) => {
+                // handle null pixels
+                if(pixelColor==null || pixelColor == undefined || pixelColor == "") {
+                    return { r: 0, g: 0, b: 0, a: 0 };
+                }
+                const parsed = parseColor(pixelColor);
+                const hasAlpha = (parsed.length > 3 && parsed[3] != null);
+                return { r: parsed[0], g: parsed[1], b: parsed[2], a: hasAlpha ? parsed[3] : 255 };
+            });
+
+            return;
+        }
+
+        // otherwise we try and load an srgb image
         if (!imageData || imageData.colorSpace != "srgb") {
             throw new Error(`must provide a valid srgb ImageData to SimpleImage. Tried ${imageData}`);
         }
@@ -26,9 +59,9 @@ class SimpleImage {
 
         // iterate over four bytes at a time (r,g,b,a)
         // but counted in singles cause maybe multiply is faster than divide?
-        for (let i = 0; i < imageData.data.length/4; i++) {
+        for (let i = 0; i < imageData.data.length / 4; i++) {
             // get the starting point of the current pixel in the data buffer
-            let dataIndex = i*4;
+            let dataIndex = i * 4;
             // get the 4 bytes of r g b a
             const r = imageData.data[dataIndex];
             const g = imageData.data[dataIndex + 1];
@@ -39,6 +72,25 @@ class SimpleImage {
             this.pixels[i] = { r, g, b, a };
         }
 
+    }
+
+    // replaces all null pixels with transparent pixels
+    cleanPixels() {
+        if(this.width <= 0 || this.height <= 0) {
+            throw new Error("invalid image object. Width and height invalid.");
+        }
+        // create the buffer if missing
+        if(this.pixels == null) {
+            this.pixels = new Array(this.width * this.height).fill({ r: 0, g: 0, b: 0, a: 0 });
+            return;
+        }
+        // sanitize all null pixels
+        for(let i = 0;i<this.pixels.length;i++) {
+            if(this.pixels[i]==null) {
+                this.pixels[i] = { r: 0, g: 0, b: 0, a: 0 };
+            }
+        }
+        return this;
     }
 
     getPixel(x, y) {

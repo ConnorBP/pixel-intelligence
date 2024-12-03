@@ -1,6 +1,7 @@
 import { useRef, useEffect, forwardRef, useImperativeHandle } from "react";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 import "../css/Canvas.css";
+import { drawCheckeredBackground } from "../utils";
 
 const Canvas = forwardRef(({
   canvasData,
@@ -42,6 +43,15 @@ const Canvas = forwardRef(({
   };
 
 
+  // clears the canvas with a background grid
+  const clearCanvas = (canvas, editorPixelsW, editorPixelsH) => {
+    const context = canvas.getContext("2d");
+    context.fillStyle = "#2c2f33";
+    context.fillRect(0, 0, canvas.width, canvas.height);
+    context.fillStyle = "#1e2124";
+    drawCheckeredBackground(context, editorPixelsW*2, editorPixelsH*2, canvas.width, canvas.height);
+    // context.fill();
+  };
 
   // attempt to load a provided canvas json representation
   // it is "try" because the loaded data can be tampered with by the user
@@ -70,20 +80,34 @@ const Canvas = forwardRef(({
         return false;
       }
 
+      // at this point we can initialize the checkered bg
+      const canvas = canvasRef.current;
+      if(canvas) {
+        clearCanvas(canvas,canvasData.width,canvasData.height);
+      } else {
+        console.error("html rendering canvas component was null in tryLoadCanvas");
+        return false;
+      }
+
       if (
         !canvasData.pixels ||
         !canvasData.pixels.length ||
         canvasData.pixels.length <= 0
       ) {
-        console.error("cannot load an empty pixels array ", canvasData);
-        return false;
+        console.info("loaded empty canvas");
+        // console.error("cannot load an empty pixels array ", canvasData);
+        return true;
       }
 
       if (canvasData.pixels.length > canvasData.width * canvasData.height) {
-        console.error("pixels array was larger than the canvas resolution");
-        return false;
+        console.warn("pixels array was larger than the canvas resolution. Truncating pixel data");
+        // return false;
+        // we will truncate the array and try anyways
+        canvasData.pixels.length = canvasData.width * canvasData.height;
       }
 
+      
+      
       // for (let i = 0; i<canvasData.pixels.length; i++ ) {
       //   const pixel = canvasData.pixels[i];
       // }
@@ -130,10 +154,10 @@ const Canvas = forwardRef(({
 
     // Draw a pixel at the clicked position
     context.fillStyle = color;
-    context.beginPath();
+    // context.beginPath();
     // context.arc(centerX, centerY, pixelSize/2, 0, 2 * Math.PI); // Draw a circle with radius 10
     context.fillRect(canvasX, canvasY, pixelSize, pixelSize);
-    context.fill();
+    // context.fill();
   };
 
   // Handles the event of someone clicking on the canvas area
@@ -180,22 +204,14 @@ const Canvas = forwardRef(({
 
   // On Load
   useEffect(() => {
-    const canvas = canvasRef.current;
-    const context = canvas.getContext("2d");
-
-    // Set up initial canvas properties (optional)
-    context.fillStyle = "#f0f0f0";
-    context.fillRect(0, 0, canvas.width, canvas.height);
-
     tryLoadCanvas(canvasData);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Todo: Handle resize
-  useEffect(() => {
-    console.log("canvas contents resized or changed");
-    // tryLoadCanvas(canvasData);
-  }, [canvasData]);
+  // useEffect(() => {
+  //   console.log("canvas contents resized or changed");
+  //   // tryLoadCanvas(canvasData);
+  // }, [canvasData]);
 
   return (
     <>
