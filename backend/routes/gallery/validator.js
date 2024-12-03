@@ -1,4 +1,4 @@
-const validateCanvasData = (canvasData) => {
+export const validateCanvasData = (canvasData) => {
 
     const errors = [];
   
