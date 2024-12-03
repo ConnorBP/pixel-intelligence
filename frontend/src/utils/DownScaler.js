@@ -25,6 +25,8 @@ const resizeNN = (image, w, h) => {
     const img = new SimpleImage({width: w, height: h}); // temp image buf
     const sx = w / width, sy = h / height; // scaled coords for old image
 
+    console.log(`scaling with nearest neighbor w ${w} h ${h} sx ${sx} sy ${sy}`);
+
     // Transfer current to temporary pixels[] by 4 bytes (32-bit) at once:
     for (var x = 0, y = 0; y < h; x = 0) {
         // row is width times floored(y div scaled y);
@@ -36,7 +38,7 @@ const resizeNN = (image, w, h) => {
             img.pixels[tgtIdx] = image.pixels[curIdx];
         }
     }
-    return img;
+    return img.cleanPixels();
 };
 
 // Scales an images with k means clustering for better pixel art results
@@ -49,18 +51,24 @@ const kCenter = (sourceImage, newWidth, newHeight, colors, accuracy) => {
     const newImg = new SimpleImage({ width: sourceImage.width, height: sourceImage.height });
     const newImg2 = new SimpleImage({ width: newWidth, height: newHeight });
 
-    const wFactor = sourceImage.width / newWidth;
-    const hFactor = sourceImage.height / newHeight;
+    const wFactor = 0.000001 + sourceImage.width / newWidth;
+    const hFactor = 0.000001 + sourceImage.height / newHeight;
+
+    // make sure we don't pull in any null pixels
+    const cleaned = sourceImage.cleanPixels();
 
     for (let x = 0; x < newWidth; x++) {
         for (let y = 0; y < newHeight; y++) {
             // Calculate exact bounds for each tile
             const startX = Math.round(x * wFactor);
-            const endX = Math.round((x + 1) * wFactor);
+            const endX = Math.round(startX + Math.max(1*wFactor,1));
             const startY = Math.round(y * hFactor);
-            const endY = Math.round((y + 1) * hFactor);
+            const endY = Math.round(startY + Math.max(1*hFactor,1));
 
-            const tileImg = extractTile(sourceImage, startX, startY, endX - startX, endY - startY);
+            // console.log(wFactor, cleaned, startX,startY,endX,endY);
+            var tileImg = extractTile(cleaned, startX, startY, endX - startX, endY - startY);
+            // console.log(tileImg);
+            tileImg = tileImg.cleanPixels();
             const kMeansResult = kMeans(tileImg, colors, accuracy);
 
             newImg.drawImage(kMeansResult[0], startX, startY);
@@ -92,7 +100,12 @@ const kMeans = (image, k, accuracy) => {
     const pixels = [];
     for (let y = 0; y < image.height; y++) {
         for (let x = 0; x < image.width; x++) {
-            pixels.push(image.getPixel(x, y));
+            const got = image.getPixel(x, y);
+            if(got==null) {
+                console.warn(`Failed to get pixel at ${x} ${y} on image `, image);
+                got =  { r:0,g:0,b:0,a:0};
+            }
+            pixels.push(got);
         }
     }
 
@@ -167,6 +180,7 @@ const applyCentroids = (image, centroids) => {
 
 // Calculates the euclidean distance between two colors (squared)
 const distance = (color1, color2) => {
+    // console.log(`getting dist ${color1} ${color2}`);
     const dr = color1.r - color2.r;
     const dg = color1.g - color2.g;
     const db = color1.b - color2.b;

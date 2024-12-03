@@ -12,7 +12,7 @@ class SimpleImage {
         if (!imageData && !fromCanvasData && width != null && height != null) {
             this.width = width;
             this.height = height;
-            this.pixels = new Array(width * height).fill({ r: 0, g: 0, b: 0, a: 255 });
+            this.pixels = new Array(width * height).fill({ r: 0, g: 0, b: 0, a: 0 });
             return;
         }
 
@@ -29,10 +29,14 @@ class SimpleImage {
             this.height = fromCanvasData.height;
 
             // allocate pixels array and convert pixel datatype from css color code
-            this.pixels = fromCanvasData.pixels.map((pixleColor) => {
-                const parsed = parseColor(pixleColor);
+            this.pixels = fromCanvasData.pixels.map((pixelColor) => {
+                // handle null pixels
+                if(pixelColor==null || pixelColor == undefined || pixelColor == "") {
+                    return { r: 0, g: 0, b: 0, a: 0 };
+                }
+                const parsed = parseColor(pixelColor);
                 const hasAlpha = (parsed.length > 3 && parsed[3] != null);
-                return { r: parsed[0], g: parsed[1], b: parsed[2], a: hasAlpha ? parsed[3] : 255 }
+                return { r: parsed[0], g: parsed[1], b: parsed[2], a: hasAlpha ? parsed[3] : 255 };
             });
 
             return;
@@ -68,6 +72,25 @@ class SimpleImage {
             this.pixels[i] = { r, g, b, a };
         }
 
+    }
+
+    // replaces all null pixels with transparent pixels
+    cleanPixels() {
+        if(this.width <= 0 || this.height <= 0) {
+            throw new Error("invalid image object. Width and height invalid.");
+        }
+        // create the buffer if missing
+        if(this.pixels == null) {
+            this.pixels = new Array(this.width * this.height).fill({ r: 0, g: 0, b: 0, a: 0 });
+            return;
+        }
+        // sanitize all null pixels
+        for(let i = 0;i<this.pixels.length;i++) {
+            if(this.pixels[i]==null) {
+                this.pixels[i] = { r: 0, g: 0, b: 0, a: 0 };
+            }
+        }
+        return this;
     }
 
     getPixel(x, y) {

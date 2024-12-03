@@ -97,7 +97,7 @@ const Editor = () => {
   };
 
   // takes in a new square resolution and scales the current canvas data to it
-  const handleResize = (newSize) => {
+  function handleResize (newSize) {
     if (newSize == canvasData.width) {
       // no need to waste resources if its the same size already
       // this assumes square canvas only mode
@@ -116,9 +116,13 @@ const Editor = () => {
 
         let pixels;
         // use a different algorithm for up-scaling
-        if (newSize > canvasData.width) {
+        // this stupid ass thing does a string comparison half the time without parse int
+        // and this is why javascript is a stupid language
+        if (parseInt(newSize) > parseInt(canvasData.width)) {
+          console.log(`up-scaling from ${canvasData.width} to ${newSize}`);
           pixels = DownScaler.resizeNN(simp, newSize, newSize).pixels;
         } else {
+          console.log(`down-scaling from ${canvasData.width} to ${newSize}`);
           let { kCentroid } = DownScaler.kCenter(simp, newSize, newSize, 16, 16);
           pixels = kCentroid.pixels;
         }
@@ -137,7 +141,7 @@ const Editor = () => {
         console.error('resize canvas failed', err);
       }
     }
-  };
+  }
 
   const onImportImageClicked = () => {
     if (imageFileInputRef.current) {
