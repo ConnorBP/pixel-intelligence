@@ -3,7 +3,7 @@ const { validateCanvasData } = require("./validator");
 const {saveCanvasData, getAllCanvases} = require("../../canvas");
 const router = express.Router();
 
-// Post Route to upload canvas Data
+// POST Route to upload canvas Data
 router.post("/", async(req, res) => {
   try{
     const canvasData = req.body;
@@ -28,10 +28,24 @@ router.post("/", async(req, res) => {
       }
     );
     
+    // Returning success code if there is no error
     return res.status(200).json({success: true, message:"Canvas uploaded successfully."})
 
   } catch(e){
-    console.error('Error uploading canvas data to the database:', error);
+    console.error('Error uploading canvas data to the database:', e);
     res.status(500).json({ success: false, error: 'Internal Server Error' });
   }
 });
+
+// GET route to retrieve all canvases
+router.get("/", async(req, res) => {
+  try{
+    const canvases = await getAllCanvases();
+    res.status(200).json(canvases);
+  } catch(e) {
+    console.error('Error retrieving canvases:', e);
+    res.status(500).json({success: false, error: "Internal server error"});
+  }
+});
+
+module.exports = router;
