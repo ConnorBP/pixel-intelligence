@@ -2,8 +2,8 @@ const {MongoClient}  = require("mongodb");
 require("dotenv").config();
 
 const dbStringURL = process.env.MONGO_DB_STRING; // Database connection string
-const dbName = "pixel-adventure"; // Database Name
-const collectionName = "canvases"; // Collection Name
+const dbName = process.env.DATABASE_NAME; // Database Name
+const collectionName = process.env.COLLECTION_NAME; // Collection Name
 
 // Database connection
 const connectToDB = async () => {
