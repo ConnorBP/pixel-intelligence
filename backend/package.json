@@ -23,7 +23,9 @@
   },
   "homepage": "https://github.com/ConnorBP/pixel-intelligence#readme",
   "dependencies": {
-    "express": "^5.0.1"
+    "dotenv": "^16.4.7",
+    "express": "^5.0.1",
+    "mongodb": "^6.11.0"
   },
   "devDependencies": {
     "nodemon": "^3.1.7"
