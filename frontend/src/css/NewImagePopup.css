@@ -78,6 +78,11 @@
   margin-bottom: 20px;
 }
 
+.popup-canvas-size {
+  margin-left: auto;
+  margin-right: auto;
+}
+
 .popup-preview {
   width: 80px;
   height: 80px;

@@ -15,6 +15,8 @@ const Editor = () => {
   // const [canvasSize, setCanvasSize] = useLocalStorage("canvasSize", { width: 16, height: 16 });
   const nav = useNavigate();
   const pixelCanvasRef = useRef(null);
+  // how many pixels can actually be used on the screen to render the canvas object (for grid lines between pixels etc)
+  const CANVAS_RENDER_WIDTH = 256;
 
   // default canvas storage object
   // NOTE: once we deploy, we cannot change this without breaking users localstorage
@@ -69,9 +71,9 @@ const Editor = () => {
         let { kCentroid } = DownScaler.kCenter(simp, canvasData.width, canvasData.height, 16, 16);
 
         const newCanvasData = {
-          pixels: kCentroid.pixels.map(({ r, g, b, a }) => { 
-            console.log(`${r} ${g} ${b} ${a}`);
-            return RGBAToHex(r, g, b, a) 
+          pixels: kCentroid.pixels.map(({ r, g, b, a }) => {
+            // console.log(`${r} ${g} ${b} ${a}`);
+            return RGBAToHex(r, g, b, a)
           }),
           width: canvasData.width,
           height: canvasData.height,
@@ -94,24 +96,57 @@ const Editor = () => {
     img.src = base64;
   };
 
+  const handleResize = (newSize) => {
+    if (newSize == canvasData.width) {
+      // no need to waste resources if its the same size already
+      // this assumes square canvas only mode
+      return;
+    }
+    // check the ref to the canvas ref (this looks silly i know)
+    if (pixelCanvasRef.current && pixelCanvasRef.current.canvasRef.current) {
+      try {
+        const ctx = pixelCanvasRef.current.canvasRef.current.getContext("2d");
+        const simp = new SimpleImage({ imageData: ctx.getImageData(0, 0, CANVAS_RENDER_WIDTH, CANVAS_RENDER_WIDTH) });
+        let { kCentroid } = DownScaler.kCenter(simp, newSize, newSize, 16, 16);
+        const newCanvasData = {
+          pixels: kCentroid.pixels.map(({ r, g, b, a }) => {
+            // console.log(`${r} ${g} ${b} ${a}`);
+            return RGBAToHex(r, g, b, a);
+          }),
+          width: newSize,
+          height: newSize,
+        };
+        // setCanvasData(newCanvasData);
+        pixelCanvasRef.current.tryLoadCanvas(newCanvasData, true);
+      } catch (err) {
+        console.error('resize canvas failed', err);
+      }
+    }
+  };
+
+  const onImportImageClicked = () => {
+    if (imageFileInputRef.current) {
+      imageFileInputRef.current.click();
+    }
+  };
+
   const contextMenuOptions = [
     { text: "New Drawing", onClick: () => alert('todo') },
     { text: "Open", onClick: () => alert('todo: open a json document') },
     { text: "View Gallery", onClick: () => nav("/") },
     { text: "Share", onClick: () => alert('todo') },
-    {
-      text: "Import Image", onClick: () => {
-        if (imageFileInputRef.current) {
-          imageFileInputRef.current.click();
-        }
-      }
-    },
+    { text: "Import Image", onClick: onImportImageClicked },
     { text: "Download", onClick: () => alert('todo') },
   ];
 
   return (
     <div className="editor-container">
-      <EditorTopBar contextMenuOptions={contextMenuOptions} />
+      <EditorTopBar
+        contextMenuOptions={contextMenuOptions}
+        onImportImageClicked={onImportImageClicked}
+        currentCanvasSize={canvasData.width}
+        onResizeImageRequested={handleResize}
+      />
       <EditorLeftToolBar
         selectedColor={brushColor}
         setSelectedColor={setBrushColor}
@@ -119,7 +154,7 @@ const Editor = () => {
         setSecondaryColor={setSecondaryBrushColor}
       />
       <div className="canvas-container">
-        <Canvas brushColor={brushColor} canvasData={canvasData} setCanvasData={setCanvasData} ref={pixelCanvasRef} canvasRenderWidth={256} canvasRenderHeight={256} />
+        <Canvas brushColor={brushColor} canvasData={canvasData} setCanvasData={setCanvasData} ref={pixelCanvasRef} canvasRenderWidth={CANVAS_RENDER_WIDTH} canvasRenderHeight={CANVAS_RENDER_WIDTH} />
       </div>
       <input
         type="file"

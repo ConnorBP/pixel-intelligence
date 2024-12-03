@@ -17,8 +17,6 @@ function Menu({ menuOptions = testingItems }) {
     setMenuOpen((v) => !v);
   };
 
-
-
   const listItems = menuOptions.map(({text, onClick}, idx) => {
     // console.log(`mapping item ${idx} ${text}`);
     return <ContextMenuItem onClick={()=>{toggle();onClick();}} key={`${text} ${idx}`}>{text}</ContextMenuItem>;

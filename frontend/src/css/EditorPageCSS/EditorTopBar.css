@@ -8,6 +8,8 @@
     width:100%;
     height: var(--top-toolbar-size);
     display: flex;
+    /* justify-content: left; */
+    flex-direction: row;
 }
 
 /* clear base button styles first of all */
@@ -15,6 +17,12 @@
     background-color: transparent;
     border-style: none;
     display: block;
+}
+
+.top-toolbar .align-end {
+  /* justify-self: right; */
+  /* justify-self: flex-end; */
+  margin-left: auto;
 }
 
 .top-toolbar button {

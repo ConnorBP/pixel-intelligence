@@ -1,15 +1,18 @@
 import { useState } from "react";
 import "../css/NewImagePopup.css";
 
-const NewImagePopup = ({ onClose, onCreate }) => {
+const NewImagePopup = ({ isOpen, onClose, onCreate }) => {
+
+  if (!isOpen) { return (<></>); }
+
   const [description, setDescription] = useState("");
   const [canvasSize, setCanvasSize] = useState("16x16");
 
   const handleCreate = () => {
-    if (description.trim()) {
-      onCreate({ description, canvasSize });
-      onClose();
-    }
+    // call the create image callback
+    onCreate({ description, canvasSize });
+    // then call the close window callback
+    onClose();
   };
 
   const updatePreview = (size) => {
@@ -32,7 +35,7 @@ const NewImagePopup = ({ onClose, onCreate }) => {
           />
           <div className="popup-preview-wrapper">
             <div className="popup-preview">
-            <img src= "" alt="Image Preview" className="popup-preview-image" />
+              {/* <img src="" alt="Image Preview" className="popup-preview-image" /> */}
               <div alt="Preview" className="" />
             </div>
             <div className="popup-canvas-size">

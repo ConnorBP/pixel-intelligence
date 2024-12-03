@@ -20,28 +20,25 @@ const Canvas = forwardRef(({
   // automatically keeps track of canvas state on the browser storage
 
   // how big a single pixel is on the actual rendering canvas:
-  const pixelSize = canvasRenderWidth / canvasData.width;
+  // this should be calculated on demand
+  // const pixelSize = canvasRenderWidth / canvasData.width;
 
   // updates the state of a pixel at specific coordinate
-  // in the react context and browser localstorage
-  // this fetches current state, modifies it, and sets it again
-  // not the most efficient for batch operations
-  const updatePixelAt = (x, y, color) => {
-    setCanvasData((oldCanvas) => {
-      // console.log("setCanvas called with ", oldCanvas);
-      // don't allow out of bounds access
-      if (x >= oldCanvas.width || y >= oldCanvas.height) {
-        console.error(
-          `X ${x} Y ${y} is out of bounds in canvas of size: {${x}, ${y}}`
-        );
-        return oldCanvas;
-      }
-      const newCanvas = { ...oldCanvas };
-      // insert pixel at x position starting at row base (y*width)
-      newCanvas.pixels[x + y * newCanvas.width] = color;
-      // console.log("returning from setCanvas with ", newCanvas);
-      return newCanvas;
-    });
+  // on the provided canvas data and returns it
+  const updatePixelAt = (oldCanvas, x, y, color,) => {
+    // console.log("setCanvas called with ", oldCanvas);
+    // don't allow out of bounds access
+    if (x >= oldCanvas.width || y >= oldCanvas.height) {
+      console.error(
+        `X ${x} Y ${y} is out of bounds in canvas of size: {${x}, ${y}}`
+      );
+      return oldCanvas;
+    }
+    const newCanvas = { ...oldCanvas };
+    // insert pixel at x position starting at row base (y*width)
+    newCanvas.pixels[x + y * newCanvas.width] = color;
+    // console.log("returning from setCanvas with ", newCanvas);
+    return newCanvas;
   };
 
 
@@ -62,8 +59,8 @@ const Canvas = forwardRef(({
       if (
         !canvasData.width ||
         !canvasData.height ||
-        canvasData.width < 16 ||
-        canvasData.height < 16 ||
+        canvasData.width < 8 ||
+        canvasData.height < 8 ||
         canvasData.width != canvasData.height // only accept square canvas
       ) {
         console.error(
@@ -92,17 +89,18 @@ const Canvas = forwardRef(({
       // }
 
       canvasData.pixels.forEach((pixel, i) => {
-        
+
         const x = i % canvasData.width;
         const y = Math.floor(i / canvasData.width);
         // console.log(`drawing ${pixel} at ${x} ${y}`);
-        drawPixelAt(x, y, pixel);
-        // optionally, store to react state on load as well
-        if (storeOnLoad) {
-          // warning: not very efficient
-          updatePixelAt(x,y,pixel);
-        }
+        drawPixelAt(x, y, pixel, canvasData.width);
       });
+
+      // optionally, store to react state on load as well
+      if (storeOnLoad) {
+        // warning: not very efficient
+        setCanvasData(canvasData);
+      }
     } catch (err) {
       // in case of pesky bugs from errors or malicious input
       console.error("Failed to load canvas data. Unexpected Error: ", err);
@@ -113,11 +111,13 @@ const Canvas = forwardRef(({
   };
 
   // outputs a pixel to the display canvas (does not save)
-  const drawPixelAt = (x, y, color) => {
+  const drawPixelAt = (x, y, color, drawingPixelsWidth) => {
     // don't run on empty pixels
     if (color == null) {
       return;
     }
+
+    const pixelSize = canvasRenderWidth / drawingPixelsWidth;
 
     const canvasX = x * pixelSize;
     const canvasY = y * pixelSize;
@@ -144,6 +144,8 @@ const Canvas = forwardRef(({
     // Get the bounding rectangle of the canvas
     const rect = canvas.getBoundingClientRect();
 
+    const pixelSize = canvasRenderWidth / canvasData.width;
+
     // Get the position of the pixel that was clicked on
     const pixelX = Math.floor(
       (((event.clientX - rect.left) / rect.width) * canvas.width) / pixelSize
@@ -154,10 +156,12 @@ const Canvas = forwardRef(({
     );
 
     // update the pixel in local storage
-    updatePixelAt(pixelX, pixelY, brushColor);
+    setCanvasData((oldCanvas) => {
+      return updatePixelAt(oldCanvas, pixelX, pixelY, brushColor);
+    });
 
     // draw to the pixel on the canvas for display
-    drawPixelAt(pixelX, pixelY, brushColor);
+    drawPixelAt(pixelX, pixelY, brushColor, canvasData.width);
   };
 
   // forward the draw single pixel function for efficiency
