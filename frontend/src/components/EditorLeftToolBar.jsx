@@ -5,7 +5,15 @@ const EditorLeftToolBar = ({selectedColor, setSelectedColor, secondaryColor, set
   return (
     <div className="left-toolbar">
       <p>TODO TOOLBAR</p>
-      <div className="align-bottom toolbar-square">
+      <div>
+        {/* editor buttons go here */}
+        <button>1</button>
+        <button>2</button>
+        <button>3</button>
+        <button>4</button>
+        <button>5</button>
+      </div>
+      <div className="align-end toolbar-square">
         <ColorPickerToolbar  primaryColor={selectedColor} setPrimaryColor={setSelectedColor} secondaryColor={secondaryColor} setSecondaryColor={setSecondaryColor} />
       </div>
     </div>

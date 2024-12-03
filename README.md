@@ -79,6 +79,7 @@ The application must:
 - extended color palette presets
 - additional file export formats (popular sprite editor formats, JSON, WebP, etc)
 - login page (user login system)
+- transaction support / undo-redo
 
 # User Stories and Use Cases 
 ### User Stories
