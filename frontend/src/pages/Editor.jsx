@@ -96,6 +96,7 @@ const Editor = () => {
     img.src = base64;
   };
 
+  // takes in a new square resolution and scales the current canvas data to it
   const handleResize = (newSize) => {
     if (newSize == canvasData.width) {
       // no need to waste resources if its the same size already

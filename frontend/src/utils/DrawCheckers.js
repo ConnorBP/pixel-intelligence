@@ -1,6 +1,6 @@
 
 // draw a single checkered pixel
-export function drawCheckeredPixel(can, px, py, pixelsW, pixelsH, squaresPerPixel) {
+export const drawCheckeredPixel = (can, px, py, pixelsW, pixelsH, squaresPerPixel) => {
     var ctx = can.getContext("2d");
     var w = can.width;
     var h = can.height;
@@ -26,11 +26,9 @@ export function drawCheckeredPixel(can, px, py, pixelsW, pixelsH, squaresPerPixe
 }
 
 // https://stackoverflow.com/questions/27666936/html5-canvas-checkered-pattern
-export function drawCheckeredBackground(can, nCol, nRow) {
-    var ctx = can.getContext("2d");
-    var w = can.width;
-    var h = can.height;
-
+export const drawCheckeredBackground = (ctx, nCol, nRow, w, h) => {
+    // ctx.fillStyle = "#0c0c0c";
+    ctx.beginPath()
     nRow = nRow || 8;    // default number of rows
     nCol = nCol || 8;    // default number of columns
 
@@ -42,6 +40,6 @@ export function drawCheckeredBackground(can, nCol, nRow) {
             ctx.rect(2 * j * w + (i % 2 ? 0 : w), i * h, w, h);
         }
     }
-
+    ctx.closePath()
     ctx.fill();
 }
