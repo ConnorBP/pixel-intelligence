@@ -9,14 +9,42 @@ let rng = new Prando(1);
 
 // Nearest neighbor based on https://gist.github.com/GoToLoop/2e12acf577506fd53267e1d186624d7c
 const resizeNN = (image, w, h) => {
+    const {width, height} = image;
 
+    // Sanitize dimension parameters:
+    // see this for ~~ explanation https://stackoverflow.com/questions/5971645/what-is-the-double-tilde-operator-in-javascript
+    w = ~~Math.abs(w), h = ~~Math.abs(h);
+
+    // Quit prematurely if both dimensions are equal or parameters are both 0:
+    if (w === width && h === height || !(w | h)) return image;
+
+    // Scale dimension parameters:
+    if (!w) w = h * width / height | 0; // only when parameter w is 0
+    if (!h) h = w * height / width | 0; // only when parameter h is 0
+
+    const img = new SimpleImage({width: w, height: h}); // temp image buf
+    const sx = w / width, sy = h / height; // scaled coords for old image
+
+    // Transfer current to temporary pixels[] by 4 bytes (32-bit) at once:
+    for (var x = 0, y = 0; y < h; x = 0) {
+        // row is width times floored(y div scaled y);
+        // tgtRow is targetWidth times y;
+        const curRow = width * ~~(y / sy), tgtRow = w * y++;
+
+        while (x < w) {
+            const curIdx = curRow + ~~(x / sx), tgtIdx = tgtRow + x++;
+            img.pixels[tgtIdx] = image.pixels[curIdx];
+        }
+    }
+    return img;
 };
 
+// Scales an images with k means clustering for better pixel art results
 // takes in:
 // a source image (SimpleImage)
 // new width and height to scale to,
-// the number of colors to select out of the image / centroid count. Recommended 2-16
-// accuracy factor Recommended 1-20
+// the number of colors to select out of the image / centroid count to analyze with. Recommended 2-16
+// accuracy factor Recommended 1-20 (also known as rounds or iterations)
 const kCenter = (sourceImage, newWidth, newHeight, colors, accuracy) => {
     const newImg = new SimpleImage({ width: sourceImage.width, height: sourceImage.height });
     const newImg2 = new SimpleImage({ width: newWidth, height: newHeight });

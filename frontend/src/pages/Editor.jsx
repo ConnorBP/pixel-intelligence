@@ -103,14 +103,28 @@ const Editor = () => {
       // this assumes square canvas only mode
       return;
     }
+
     // check the ref to the canvas ref (this looks silly i know)
-    if (pixelCanvasRef.current && pixelCanvasRef.current.canvasRef.current) {
+    if (pixelCanvasRef.current) {
       try {
-        const ctx = pixelCanvasRef.current.canvasRef.current.getContext("2d");
-        const simp = new SimpleImage({ imageData: ctx.getImageData(0, 0, CANVAS_RENDER_WIDTH, CANVAS_RENDER_WIDTH) });
-        let { kCentroid } = DownScaler.kCenter(simp, newSize, newSize, 16, 16);
+        // const ctx = pixelCanvasRef.current.canvasRef.current.getContext("2d");
+        // this feeds the resize data with the current canvas output (not ideal when you have grid lines):
+        // const simp = new SimpleImage({ imageData: ctx.getImageData(0, 0, CANVAS_RENDER_WIDTH, CANVAS_RENDER_WIDTH) });
+        // instead we initialize a simple image from our orignal document pixels data
+        const simp = new SimpleImage({ fromCanvasData: canvasData });
+        
+
+        let pixels;
+        // use a different algorithm for up-scaling
+        if (newSize > canvasData.width) {
+          pixels = DownScaler.resizeNN(simp, newSize, newSize).pixels;
+        } else {
+          let { kCentroid } = DownScaler.kCenter(simp, newSize, newSize, 16, 16);
+          pixels = kCentroid.pixels;
+        }
+
         const newCanvasData = {
-          pixels: kCentroid.pixels.map(({ r, g, b, a }) => {
+          pixels: pixels.map(({ r, g, b, a }) => {
             // console.log(`${r} ${g} ${b} ${a}`);
             return RGBAToHex(r, g, b, a);
           }),
