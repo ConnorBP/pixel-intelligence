@@ -1,0 +1,116 @@
+/* Variables for Light and Dark Modes */
+:root {
+    --light-bg: #ffffff;
+    --light-text: #333333;
+    --dark-bg: #1a1a1a;
+    --dark-text: #ffffff00;
+    --primary-color: #95544f;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+body.dark-mode {
+    background-color: var(--dark-bg);
+    color: var(--dark-text);
+}
+
+/* Navbar Styles */
+.navbar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background-color: var(--primary-color);
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 1000;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.navbar.light {
+    background-color: var(--light-bg);
+    color: var(--light-text);
+}
+
+.navbar.dark {
+    background-color: var(--dark-bg);
+    color: var(--dark-text);
+}
+
+.navbar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.navbar-brand {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #95544f;
+}
+
+.navbar-links {
+    display: flex;
+    gap: 20px;
+}
+
+.navbar-links a {
+    text-decoration: none;
+    color: #95544f;
+    transition: color 0.2s;
+}
+
+.navbar-links a:hover {
+    color: #C5622D;
+}
+
+.menu-toggle {
+    display: none;
+    font-size: 1.5rem;
+    color: white;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+.theme-toggle {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-left: auto; 
+    padding-right: 5px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .menu-toggle {
+        display: block;
+    }
+
+    .navbar-links {
+        display: none;
+        flex-direction: column;
+        background-color: var(--primary-color);
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        padding: 10px 0;
+    }
+
+    .navbar-links.show {
+        display: flex;
+    }
+
+    .theme-toggle {
+        font-size: 1rem; 
+        margin-left: 5px; 
+    }
+}
