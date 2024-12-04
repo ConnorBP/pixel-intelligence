@@ -13,6 +13,8 @@ const Editor = () => {
   const [secondaryBrushColor, setSecondaryBrushColor] = useLocalStorage("secondaryBrushColor", "#FFFFFF");
   // we will store the canvas size as an object of width and height in case we decide to remove the square restriction
   // const [canvasSize, setCanvasSize] = useLocalStorage("canvasSize", { width: 16, height: 16 });
+  const [tool, setTool] = useLocalStorage("tool", "pencil");
+
   const nav = useNavigate();
   const pixelCanvasRef = useRef(null);
   // how many pixels can actually be used on the screen to render the canvas object (for grid lines between pixels etc)
@@ -160,7 +162,7 @@ const Editor = () => {
 
   return (
     <div className="editor-container">
-      <EditorTopBar
+    <EditorTopBar
         contextMenuOptions={contextMenuOptions}
         onImportImageClicked={onImportImageClicked}
         currentCanvasSize={canvasData.width}
@@ -171,9 +173,17 @@ const Editor = () => {
         setSelectedColor={setBrushColor}
         secondaryColor={secondaryBrushColor}
         setSecondaryColor={setSecondaryBrushColor}
+        tool={tool}
+        setTool={setTool} 
       />
       <div className="canvas-container">
-        <Canvas brushColor={brushColor} canvasData={canvasData} setCanvasData={setCanvasData} ref={pixelCanvasRef} canvasRenderWidth={CANVAS_RENDER_WIDTH} canvasRenderHeight={CANVAS_RENDER_WIDTH} />
+      <Canvas brushColor={brushColor} 
+      canvasData={canvasData}
+      setCanvasData={setCanvasData} ref={pixelCanvasRef}
+       canvasRenderWidth={CANVAS_RENDER_WIDTH} 
+       canvasRenderHeight={CANVAS_RENDER_WIDTH} 
+       tool={tool}  
+       />
       </div>
       <input
         type="file"
@@ -189,3 +199,4 @@ const Editor = () => {
 };
 
 export default Editor;
+
