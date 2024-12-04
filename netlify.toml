@@ -1,0 +1,6 @@
+#Configure some settings for the netlify deployment
+
+# netlify functions config
+[functions]
+# configure where netlify looks for functions isntead of basedir/netlify/functions
+directory="/backend/routes"
