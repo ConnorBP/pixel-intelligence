@@ -1,5 +1,5 @@
-const express = require('express');
-const galleryRoutes = require("./gallery/gallery");
+import express from "express";
+import galleryRoutes from "./gallery/gallery.js";
 
 const router = express.Router();
 
@@ -11,4 +11,4 @@ router.get('/', (req, res) => {
 // Gallery routes for the "/gallery" endpoint
 router.use("/gallery", galleryRoutes);
 
-module.exports = router;
+export default router;
