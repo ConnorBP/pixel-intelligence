@@ -1,6 +1,6 @@
-const express  = requires("express");
-const { validateCanvasData } = require("./validator");
-const {saveCanvasData, getAllCanvases} = require("../../canvas");
+import express from "express";
+import { validateCanvasData } from "./validator.js";
+import {saveCanvasData, getAllCanvases} from "../../canvas.js";
 const router = express.Router();
 
 // POST Route to upload canvas Data
@@ -48,4 +48,4 @@ router.get("/", async(req, res) => {
   }
 });
 
-module.exports = router;
+export default router;
