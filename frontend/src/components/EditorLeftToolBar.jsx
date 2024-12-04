@@ -12,7 +12,6 @@ const EditorLeftToolBar = ({ selectedColor, setSelectedColor, secondaryColor, se
         <button 
           className={`icon ${tool === "eraser" ? "active" : ""}`}
           onClick={() => {
-            console.log("Setting tool to eraser");
             setTool("eraser");
           }}><FaEraser /></button>
                <button
