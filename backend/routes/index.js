@@ -13,8 +13,3 @@ router.use("/gallery", galleryRoutes);
 
 
 export default router;
-// Gallery routes for the "/gallery" endpoint
-router.use("/gallery", galleryRoutes);
-
-
-export default router;
