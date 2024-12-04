@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch": "nodemon ./start.js",
-    "build": "esbuild app.js --bundle --platform=node --target=node20.17  --outfile=dist/out.js"
+    "build": "esbuild app.js --bundle --platform=node --target=node20.17 --minify --outfile=dist/app.js",
+    "builddev": "esbuild app.js --bundle --platform=node --target=node20.17 --sourcemap --outfile=dev/app.js"
   },
   "repository": {
     "type": "git",
