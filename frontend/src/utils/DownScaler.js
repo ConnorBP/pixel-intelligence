@@ -100,7 +100,7 @@ const kMeans = (image, k, accuracy) => {
     const pixels = [];
     for (let y = 0; y < image.height; y++) {
         for (let x = 0; x < image.width; x++) {
-            const got = image.getPixel(x, y);
+            var got = image.getPixel(x, y);
             if(got==null) {
                 console.warn(`Failed to get pixel at ${x} ${y} on image `, image);
                 got =  { r:0,g:0,b:0,a:0};
