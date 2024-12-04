@@ -46,5 +46,4 @@ router.get("/all", async (req, res) => {
   }
 });
 
-// Export the router as the default export
-export default router; // This changes to ES module export
+export default router;
