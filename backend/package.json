@@ -3,9 +3,12 @@
   "version": "0.1.0",
   "description": "the bridge between the website and the database",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "watch": "nodemon ./start.js"
+    "watch": "nodemon ./start.js",
+    "build": "esbuild app.js --bundle --platform=node --target=node20.17 --minify --outfile=dist/app.js",
+    "builddev": "esbuild app.js --bundle --platform=node --target=node20.17 --sourcemap --outfile=dev/app.js"
   },
   "repository": {
     "type": "git",
@@ -24,8 +27,10 @@
   "homepage": "https://github.com/ConnorBP/pixel-intelligence#readme",
   "dependencies": {
     "dotenv": "^16.4.7",
+    "esbuild": "^0.24.0",
     "express": "^5.0.1",
-    "mongodb": "^6.11.0"
+    "mongodb": "^6.11.0",
+    "serverless-http": "^3.2.0"
   },
   "devDependencies": {
     "nodemon": "^3.1.7"
