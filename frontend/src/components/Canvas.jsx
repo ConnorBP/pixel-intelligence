@@ -3,6 +3,7 @@ import { useLocalStorage } from "../hooks/useLocalStorage";
 import "../css/Canvas.css";
 import { drawCheckeredBackground } from "../utils";
 
+// eslint-disable-next-line react/display-name
 const Canvas = forwardRef(
   (
     {
