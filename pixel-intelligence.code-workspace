@@ -1,0 +1,18 @@
+// code workspace for vscode
+{
+    "folders": [
+      {
+        "path": "./",
+        "name": "project-root"
+      },
+      {
+        "path": "./backend",
+        "name": "backend"
+      },
+      {
+        "path": "./frontend",
+        "name": "frontend"
+      }
+    ]
+    // you can add other settings here
+  }
