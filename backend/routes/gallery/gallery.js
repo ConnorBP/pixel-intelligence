@@ -22,7 +22,7 @@ router.post("/upload", async (req, res) => {
     // code here
 
     // Save canvas data to the database
-    const result = await saveCanvasData({
+    await saveCanvasData({
       ...canvasData,
       creation_date: new Date(),
     });
