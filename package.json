@@ -1,0 +1,37 @@
+{
+  "name": "pixel-intelligence",
+  "version": "1.0.0",
+  "description": "A pixel art editor full-stack application",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "backend": "npm run watch -w backend",
+    "frontend": "npm run dev -w frontend",
+    "start": "concurrently \"npm run backend\" \"npm run frontend\"",
+    "dev": "npm run start",
+    "watch": "npm run start",
+    "build": "npm run build -w backend && cd frontend && npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ConnorBP/pixel-intelligence.git"
+  },
+  "keywords": [
+    "art",
+    "application",
+    "design"
+  ],
+  "author": "ConnorBP, sanjeev-cs, superYM222, Parmilashams",
+  "license": "MIT",
+  "workspaces": [
+    "backend",
+    "frontend"
+  ],
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "bugs": {
+    "url": "https://github.com/ConnorBP/pixel-intelligence/issues"
+  },
+  "homepage": "https://github.com/ConnorBP/pixel-intelligence#readme"
+}
