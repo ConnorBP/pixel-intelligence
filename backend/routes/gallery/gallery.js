@@ -1,10 +1,10 @@
-import express from "express";
-import { validateCanvasData } from "./validator.js";
-import {saveCanvasData, getAllCanvases} from "../../canvas.js";
+const express  = require("express");
+const { validateCanvasData } = require("./validator");
+const {saveCanvasData, getAllCanvases} = require("../../canvas");
 const router = express.Router();
 
 // POST Route to upload canvas Data
-router.post("/", async(req, res) => {
+router.post("/upload", async(req, res) => {
   try{
     const canvasData = req.body;
     
@@ -32,20 +32,20 @@ router.post("/", async(req, res) => {
     return res.status(200).json({success: true, message:"Canvas uploaded successfully."})
 
   } catch(e){
-    console.error('Error uploading canvas data to the database:', e);
-    res.status(500).json({ success: false, error: 'Internal Server Error' });
+    console.error('Error uploading canvas data to the database:', e.stack || e);
+    res.status(500).json({ success: false, error: 'Internal Server Error in upload route' });
   }
 });
 
 // GET route to retrieve all canvases
-router.get("/", async(req, res) => {
+router.get("/all", async(req, res) => {
   try{
     const canvases = await getAllCanvases();
     res.status(200).json(canvases);
   } catch(e) {
-    console.error('Error retrieving canvases:', e);
-    res.status(500).json({success: false, error: "Internal server error"});
+    console.error('Error retrieving canvases:', e.stack || e);
+    res.status(500).json({success: false, error: "Internal server error in /all route"});
   }
 });
 
-export default router;
+module.exports = router;
