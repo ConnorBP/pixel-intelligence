@@ -1,12 +1,11 @@
-const express = require('express');
-const routes = require('./routes/index');
+import express from "express";
+import routes from "./routes/index.js";
 
 const app = express();
 
 // Middleware to parse JSON
 app.use(express.json());
 
-app.use('/', routes);
+app.use('/api/', routes);
 
-
-module.exports = app;
+export default app;

@@ -1,12 +1,14 @@
-const {MongoClient}  = require("mongodb");
-require("dotenv").config();
+import { MongoClient } from "mongodb";
+// require("dotenv").config();
+// using es6
+import "dotenv/config";
 
 const dbStringURL = process.env.MONGO_DB_STRING; // Database connection string
 const dbName = process.env.DATABASE_NAME; // Database Name
 const collectionName = process.env.COLLECTION_NAME; // Collection Name
 
 // Database connection
-const connectToDB = async () => {
+export const connectToDB = async () => {
     const client = new MongoClient(dbStringURL);
     try {
         await client.connect();
@@ -19,7 +21,7 @@ const connectToDB = async () => {
 };
 
 // Saving the canvas into the database
-const saveCanvasData = async (canvasData) => {
+export const saveCanvasData = async (canvasData) => {
     let db;
     try {
         db = await connectToDB();
@@ -37,7 +39,7 @@ const saveCanvasData = async (canvasData) => {
     }
 };
 
-const getAllCanvases = async () => {
+export const getAllCanvases = async () => {
     let db;
     try {
         db = await connectToDB();
@@ -53,5 +55,3 @@ const getAllCanvases = async () => {
         if (db) db.client.close();
     }
 };
-
-module.exports = { saveCanvasData, getAllCanvases};
