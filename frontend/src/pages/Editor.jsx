@@ -167,11 +167,12 @@ const Editor = () => {
 
   const contextMenuOptions = [
     { text: "New Drawing", onClick: () => alert('todo') },
+    { text: "Save", onClick: () => alert('todo') },
     { text: "Open", onClick: () => alert('todo: open a json document') },
     { text: "View Gallery", onClick: () => nav("/") },
     { text: "Share", onClick: () => alert('todo') },
     { text: "Import Image", onClick: onImportImageClicked },
-    { text: "Download", onClick: onExportDownloadClicked },
+    { text: "Export Image", onClick: onExportDownloadClicked },
   ];
 
   return (
