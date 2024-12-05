@@ -1,10 +1,14 @@
 import express from "express";
 import { validateCanvasData } from './validator.js';
 import {saveCanvasData, getAllCanvases} from "../../canvas.js";
+import { authenticate } from "./authentication.js";
+import dotenv from "dotenv";
+dotenv.config();
+
 const router = express.Router();
 
 // POST Route to upload canvas Data
-router.post("/upload", async(req, res) => {
+router.post("/upload", authenticate, async(req, res) => {
   try{
     const canvasData = req.body;
     
@@ -30,7 +34,6 @@ router.post("/upload", async(req, res) => {
     
     // Returning success code if there is no error
     return res.status(200).json({success: true, message:"Canvas uploaded successfully."})
-
   } catch(e){
     console.error('Error uploading canvas data to the database:', e.stack || e);
     res.status(500).json({ success: false, error: 'Internal Server Error in upload route' });
@@ -38,7 +41,7 @@ router.post("/upload", async(req, res) => {
 });
 
 // GET route to retrieve all canvases
-router.get("/all", async(req, res) => {
+router.get("/all", authenticate, async(req, res) => {
   try{
     const canvases = await getAllCanvases();
     res.status(200).json(canvases);
