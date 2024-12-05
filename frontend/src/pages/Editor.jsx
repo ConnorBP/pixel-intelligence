@@ -63,7 +63,7 @@ const Editor = () => {
       tmpCanvas.height = img.height;
       const ctx = tmpCanvas.getContext("2d");
       ctx.drawImage(img, 0, 0);
-      // console.log(ctx.getImageData(0, 0, tmpCanvas.width, tmpCanvas.height));
+      // console.log('loading image data:', ctx.getImageData(0, 0, tmpCanvas.width, tmpCanvas.height));
       try {
         // might throw
         console.log(`new canvas width and height ${tmpCanvas.width}, ${tmpCanvas.height}`);
@@ -98,6 +98,8 @@ const Editor = () => {
   };
 
   // takes in a new square resolution and scales the current canvas data to it
+  // warning: must be a function, and not a const closure
+  // or else react will be stupid and not update canvasData state for it
   function handleResize (newSize) {
     if (newSize == canvasData.width) {
       // no need to waste resources if its the same size already
@@ -146,6 +148,10 @@ const Editor = () => {
 
   const onImportImageClicked = () => {
     if (imageFileInputRef.current) {
+      // reset the file input before prompting for file selection
+      // so we don't get old input
+      imageFileInputRef.current.value = null;
+      // simulate a click to the hidden file input component to prompt for an image file selection
       imageFileInputRef.current.click();
     }
   };
