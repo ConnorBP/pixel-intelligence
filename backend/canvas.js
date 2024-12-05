@@ -4,7 +4,7 @@ dotenv.config();
 
 const dbStringURL = process.env.MONGO_DB_STRING; // Database connection string
 const dbName = process.env.DATABASE_NAME; // Database Name
-const canvasCollectionName = process.env.CANVAS_COLLECTION_NAME; // Collection Name
+const collectionName = process.env.COLLECTION_NAME; // Collection Name
 
 // Database connection
 export const connectToDB = async () => {
@@ -24,7 +24,7 @@ export const saveCanvasData = async (canvasData) => {
     let db;
     try {
         db = await connectToDB();
-        const collection = db.collection(canvasCollectionName);
+        const collection = db.collection(collectionName);
 
         // Insert canvas data into the collection
         const result = await collection.insertOne(canvasData);
@@ -42,7 +42,7 @@ export const getAllCanvases = async () => {
     let db;
     try {
         db = await connectToDB();
-        const collection = db.collection(canvasCollectionName);
+        const collection = db.collection(collectionName);
 
         // Retrieve all canvases from the collection
         const canvases = await collection.find().toArray();
