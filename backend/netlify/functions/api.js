@@ -1,7 +1,7 @@
 // YOUR_BASE_DIRECTORY/netlify/functions/api.ts
 import express from "express";
 import serverless from "serverless-http";
-import routes from './api/index.js';
+import routes from '../../../dist/api/index.js';
 
 const api = express();
 
