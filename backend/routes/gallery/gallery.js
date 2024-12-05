@@ -3,7 +3,8 @@ import { validateCanvasData } from './validator.js';
 import {saveCanvasData, getAllCanvases} from "../../canvas.js";
 import { authenticate } from "./authentication.js";
 import dotenv from "dotenv";
-dotenv.config();
+dotenv.config({ path: '../../.env' });
+
 
 const router = express.Router();
 

@@ -26,6 +26,7 @@
   },
   "homepage": "https://github.com/ConnorBP/pixel-intelligence#readme",
   "dependencies": {
+    "cookie-parser": "^1.4.7",
     "dotenv": "^16.4.7",
     "esbuild": "^0.24.0",
     "express": "^5.0.1",

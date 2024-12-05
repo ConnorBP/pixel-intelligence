@@ -1,7 +1,7 @@
   import express from "express";
   import jwt from "jsonwebtoken";
   import dotenv from "dotenv";
-  dotenv.config();
+  dotenv.config({ path: '../../.env' });
 
   const router = express.Router();
 
@@ -11,8 +11,23 @@
       const userIP = req.ip;
       // Create a token with user IP
       const token = jwt.sign({ ip: userIP }, process.env.SECRET_KEY, { expiresIn: "1h" });
-      console.log("token: " + token);
-      res.status(200).json({ success: true, token });
+      console.log("ip: "+ userIP);
+      console.log("access token: " + token);
+
+      // Set the token as a cookie
+      try{
+        res.cookie("access_token", token, {
+          httpOnly: true,
+          secure: false,
+          maxAge: 360000,  // 1 hr
+          path: "/"
+        });
+        console.log("Cookie Generated");
+      } catch(e) {
+        console.log("Cookie not generated: " +  e.stack || e);
+      }
+
+      res.status(200).json({ success: true, message: "Token generated." });
     } catch (e) {
       console.error("Error generating token:", e.stack || e);
       res.status(500).json({ success: false, error: "Failed to generate token" });

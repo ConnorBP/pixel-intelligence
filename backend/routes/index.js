@@ -8,7 +8,7 @@ router.get('/', (req, res) => {
     res.send('It works!'); // Default root route of the API
 });
 
-// Add public routes for auth.
+// Routes for auth.
 router.use("/auth", authRoute); // All routes starting with "/auth" will be handled by the authRoute
 
 // Gallery routes for the "/gallery" endpoint
