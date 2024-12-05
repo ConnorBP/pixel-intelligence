@@ -1,4 +1,10 @@
 #Configure some settings for the netlify deployment
+[build]
+base = "/"
+package = "/"
+publish = "/dist"
+command = "npm run build"
+
 
 # netlify functions config
 [functions]
@@ -6,7 +12,7 @@
 directory = "backend/netlify/functions"
 
 # Flags "express" as an external node module for all functions
-external_node_modules = ["express"]
+external_node_modules = ["express","mongodb"]
 
 # Specifies `esbuild` for functions bundling
 node_bundler = "esbuild"
