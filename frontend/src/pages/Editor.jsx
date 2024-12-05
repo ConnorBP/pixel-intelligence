@@ -5,7 +5,7 @@ import EditorTopBar from "../components/EditorTopBar";
 import "../css/EditorPageCSS/Editor.css";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 import { useNavigate } from "react-router-dom";
-import { SimpleImage, DownScaler, RGBAToHex } from "../utils/index";
+import { SimpleImage, DownScaler, RGBAToHex, ExportPng, DownloadJson } from "../utils/index";
 
 const Editor = () => {
   // brush colors are stored as html color codes
@@ -63,12 +63,13 @@ const Editor = () => {
       tmpCanvas.height = img.height;
       const ctx = tmpCanvas.getContext("2d");
       ctx.drawImage(img, 0, 0);
-      // console.log(ctx.getImageData(0, 0, tmpCanvas.width, tmpCanvas.height));
+      // console.log('loading image data:', ctx.getImageData(0, 0, tmpCanvas.width, tmpCanvas.height));
       try {
         // might throw
         console.log(`new canvas width and height ${tmpCanvas.width}, ${tmpCanvas.height}`);
         const simp = new SimpleImage({ imageData: ctx.getImageData(0, 0, tmpCanvas.width, tmpCanvas.height) });
-        let { kCentroid } = DownScaler.kCenter(simp, canvasData.width, canvasData.height, 16, 16);
+        // this applies the k-means clustering centroid based downscaling algorithm to the image with 4 buckets and 10 iterations
+        let { kCentroid } = DownScaler.kCenter(simp, canvasData.width, canvasData.height, 4, 10);
 
         const newCanvasData = {
           pixels: kCentroid.pixels.map(({ r, g, b, a }) => {
@@ -97,7 +98,9 @@ const Editor = () => {
   };
 
   // takes in a new square resolution and scales the current canvas data to it
-  function handleResize (newSize) {
+  // warning: must be a function, and not a const closure
+  // or else react will be stupid and not update canvasData state for it
+  function handleResize(newSize) {
     if (newSize == canvasData.width) {
       // no need to waste resources if its the same size already
       // this assumes square canvas only mode
@@ -112,7 +115,7 @@ const Editor = () => {
         // const simp = new SimpleImage({ imageData: ctx.getImageData(0, 0, CANVAS_RENDER_WIDTH, CANVAS_RENDER_WIDTH) });
         // instead we initialize a simple image from our orignal document pixels data
         const simp = new SimpleImage({ fromCanvasData: canvasData });
-        
+
 
         let pixels;
         // use a different algorithm for up-scaling
@@ -145,17 +148,39 @@ const Editor = () => {
 
   const onImportImageClicked = () => {
     if (imageFileInputRef.current) {
+      // reset the file input before prompting for file selection
+      // so we don't get old input
+      imageFileInputRef.current.value = null;
+      // simulate a click to the hidden file input component to prompt for an image file selection
       imageFileInputRef.current.click();
     }
   };
 
+  // warning: must be a function, and not a const closure
+  // or else react will be stupid and not update canvasData state for it
+  function onExportDownloadClicked() {
+    if(!ExportPng(canvasData)) {
+      console.log('image export failed');
+      alert('image export failed');
+    }
+  };
+
+  // download the latest canvas data json
+  function onSaveClicked() {
+    if(!DownloadJson(canvasData)) {
+      console.log('project download failed');
+      alert('project download failed');
+    }
+  }
+
   const contextMenuOptions = [
     { text: "New Drawing", onClick: () => alert('todo') },
+    { text: "Save", onClick: onSaveClicked },
     { text: "Open", onClick: () => alert('todo: open a json document') },
     { text: "View Gallery", onClick: () => nav("/") },
     { text: "Share", onClick: () => alert('todo') },
     { text: "Import Image", onClick: onImportImageClicked },
-    { text: "Download", onClick: () => alert('todo') },
+    { text: "Export Image", onClick: onExportDownloadClicked },
   ];
 
   return (
@@ -165,6 +190,8 @@ const Editor = () => {
         onImportImageClicked={onImportImageClicked}
         currentCanvasSize={canvasData.width}
         onResizeImageRequested={handleResize}
+        onImageExportClicked={onExportDownloadClicked}
+        onSaveClicked={onSaveClicked}
       />
       <EditorLeftToolBar
         selectedColor={brushColor}
