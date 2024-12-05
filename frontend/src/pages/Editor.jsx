@@ -5,7 +5,7 @@ import EditorTopBar from "../components/EditorTopBar";
 import "../css/EditorPageCSS/Editor.css";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 import { useNavigate } from "react-router-dom";
-import { SimpleImage, DownScaler, RGBAToHex } from "../utils/index";
+import { SimpleImage, DownScaler, RGBAToHex, ExportPng } from "../utils/index";
 
 const Editor = () => {
   // brush colors are stored as html color codes
@@ -156,13 +156,22 @@ const Editor = () => {
     }
   };
 
+  // warning: must be a function, and not a const closure
+  // or else react will be stupid and not update canvasData state for it
+  function onExportDownloadClicked() {
+    if(!ExportPng(canvasData)) {
+      console.log('image export failed');
+      alert('image export failed');
+    }
+  };
+
   const contextMenuOptions = [
     { text: "New Drawing", onClick: () => alert('todo') },
     { text: "Open", onClick: () => alert('todo: open a json document') },
     { text: "View Gallery", onClick: () => nav("/") },
     { text: "Share", onClick: () => alert('todo') },
     { text: "Import Image", onClick: onImportImageClicked },
-    { text: "Download", onClick: () => alert('todo') },
+    { text: "Download", onClick: onExportDownloadClicked },
   ];
 
   return (
@@ -172,6 +181,7 @@ const Editor = () => {
         onImportImageClicked={onImportImageClicked}
         currentCanvasSize={canvasData.width}
         onResizeImageRequested={handleResize}
+        onImageExportClicked={onExportDownloadClicked}
       />
       <EditorLeftToolBar
         selectedColor={brushColor}

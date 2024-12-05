@@ -11,7 +11,7 @@ import Menu from "./Menu";
 import ConfirmationPopup from "./ConfirmationPopup";
 import ScaleImagePopup from "./ScaleImagePopup";
 
-const EditorTopBar = ({ contextMenuOptions, onResizeImageRequested, onImportImageClicked, currentCanvasSize }) => {
+const EditorTopBar = ({ contextMenuOptions, onResizeImageRequested, onImportImageClicked, onImageExportClicked, currentCanvasSize }) => {
   const [showNewImagePrompt, setShowNewImagePrompt] = useState(false);
   const [showSaveNotYetImplemented, setShowSaveNotYetImplemented] = useState(false);
   const [showResizePrompt, setShowResizePrompt] = useState(false);
@@ -61,7 +61,7 @@ const EditorTopBar = ({ contextMenuOptions, onResizeImageRequested, onImportImag
         <button onClick={() => setShowResizePrompt(true)}>
           <GiResize className="icon" />
         </button>
-        <button onClick={() => setShowResizePrompt(true)}>
+        <button onClick={onImageExportClicked}>
           <IoIosDownload className="icon" />
         </button>
 
