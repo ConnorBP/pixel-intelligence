@@ -100,7 +100,7 @@ const Editor = () => {
   // takes in a new square resolution and scales the current canvas data to it
   // warning: must be a function, and not a const closure
   // or else react will be stupid and not update canvasData state for it
-  function handleResize (newSize) {
+  function handleResize(newSize) {
     if (newSize == canvasData.width) {
       // no need to waste resources if its the same size already
       // this assumes square canvas only mode
@@ -115,7 +115,7 @@ const Editor = () => {
         // const simp = new SimpleImage({ imageData: ctx.getImageData(0, 0, CANVAS_RENDER_WIDTH, CANVAS_RENDER_WIDTH) });
         // instead we initialize a simple image from our orignal document pixels data
         const simp = new SimpleImage({ fromCanvasData: canvasData });
-        
+
 
         let pixels;
         // use a different algorithm for up-scaling
