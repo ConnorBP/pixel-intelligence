@@ -1,5 +1,4 @@
 import { useRef, useEffect, forwardRef, useImperativeHandle } from "react";
-import { useLocalStorage } from "../hooks/useLocalStorage";
 import "../css/Canvas.css";
 import { drawCheckeredBackground, drawPixelToCtx } from "../utils";
 
@@ -9,8 +8,10 @@ const Canvas = forwardRef(({
   canvasRenderWidth = 128, // determines the actual rendering of the pixels to the screen (including editor lines)
   canvasRenderHeight = 128,
   brushColor = "blue",
+  drawGridLines = true,
+  gridLineWidth = 1,
+  gridLineColor = "#000000"
 }, ref) => {
-
 
   //
   // State
@@ -18,7 +19,6 @@ const Canvas = forwardRef(({
 
   // reference to the canvas object for us to draw to
   const canvasRef = useRef(null);
-  // automatically keeps track of canvas state on the browser storage
 
   // how big a single pixel is on the actual rendering canvas:
   // this should be calculated on demand
@@ -42,6 +42,28 @@ const Canvas = forwardRef(({
     return newCanvas;
   };
 
+  function drawAllGridLines(canvas, editorPixelsW, editorPixelsH) {
+    // draw all grid lines on the canvas
+    const context = canvas.getContext("2d");
+
+    const gridSpacing = canvas.width / editorPixelsW;
+
+    context.lineWidth = gridLineWidth;
+    console.log('drawing grid lines');
+    for(let x = 0;x<editorPixelsW;x++) {
+      context.beginPath();
+      context.strokeStyle = gridLineColor;
+      context.moveTo(-0.5 + x * gridSpacing, 0);
+      context.lineTo(-0.5 + x * gridSpacing, canvas.height);
+      context.stroke();
+    }
+    for(let y = 0;y<editorPixelsH;y++) {
+      context.beginPath();
+      context.moveTo(0, -0.5 + y * gridSpacing);
+      context.lineTo(canvas.width, -0.5 + y * gridSpacing);
+      context.stroke();
+    }
+  }
 
   // clears the canvas with a background grid
   const clearCanvas = (canvas, editorPixelsW, editorPixelsH) => {
@@ -49,7 +71,12 @@ const Canvas = forwardRef(({
     context.fillStyle = "#2c2f33";
     context.fillRect(0, 0, canvas.width, canvas.height);
     context.fillStyle = "#1e2124";
-    drawCheckeredBackground(context, editorPixelsW*2, editorPixelsH*2, canvas.width, canvas.height);
+    drawCheckeredBackground(context, editorPixelsW * 2, editorPixelsH * 2, canvas.width, canvas.height);
+
+    if (drawGridLines) {
+      // draw all grid lines on the canvas
+      drawAllGridLines(canvas, editorPixelsW, editorPixelsH);
+    }
     // context.fill();
   };
 
@@ -82,8 +109,8 @@ const Canvas = forwardRef(({
 
       // at this point we can initialize the checkered bg
       const canvas = canvasRef.current;
-      if(canvas) {
-        clearCanvas(canvas,canvasData.width,canvasData.height);
+      if (canvas) {
+        clearCanvas(canvas, canvasData.width, canvasData.height);
       } else {
         console.error("html rendering canvas component was null in tryLoadCanvas");
         return false;
@@ -106,8 +133,8 @@ const Canvas = forwardRef(({
         canvasData.pixels.length = canvasData.width * canvasData.height;
       }
 
-      
-      
+
+
       // for (let i = 0; i<canvasData.pixels.length; i++ ) {
       //   const pixel = canvasData.pixels[i];
       // }
@@ -124,6 +151,11 @@ const Canvas = forwardRef(({
       if (storeOnLoad) {
         // warning: not very efficient
         setCanvasData(canvasData);
+      }
+
+      if (drawGridLines) {
+        // draw all grid lines on the canvas
+        drawAllGridLines(canvas, canvasData.width, canvasData.height);
       }
     } catch (err) {
       // in case of pesky bugs from errors or malicious input
