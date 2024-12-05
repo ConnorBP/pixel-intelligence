@@ -1,0 +1,119 @@
+/* Default Variables for Light Mode */
+:root {
+    --bg-color: #ffffff;
+    --text-color: #333333;
+    --primary-color: #95544f;
+    --link-color: #333333;
+    --link-hover-color:White;
+}
+
+/* Dark Mode Variables */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg-color: #1a1a1a;
+        --text-color: #ffffff;
+        --primary-color: #95544f;
+        --link-color: #ffffff;
+        --link-hover-color: #C5622D;
+    }
+}
+
+/* General Body Styles */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    transition: background-color 0.3s, color 0.3s;
+}
+
+/* Navbar Styles */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw; 
+    height: 50px;
+    margin: 0;
+    background-color: var(--primary-color);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+}
+
+.navbar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px; 
+}
+
+.navbar-brand {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--link-color);
+}
+
+.navbar-links {
+    display: flex;
+    gap: 20px;
+}
+
+.navbar-links a {
+    text-decoration: none;
+    color: var(--link-color);
+    transition: color 0.2s;
+}
+
+.navbar-links a:hover {
+    color: var(--link-hover-color);
+}
+
+/* Menu Toggle Button */
+.menu-toggle {
+    display: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--text-color);
+    background: none;
+    border: none;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .menu-toggle {
+        display: block;
+    }
+
+    .navbar-links {
+        display: none;
+        flex-direction: column;
+        background-color: var(--primary-color);
+        position: absolute;
+        top: 50px;
+        left: 0;
+        width: 100%;
+        padding: 10px 0;
+    }
+
+    .navbar-links.show {
+        display: flex;
+    }
+}
+
+/* Logo Styles */
+.navbar-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px; 
+}
+
+.logo {
+    width: 40px; 
+    height: 40px;
+    object-fit: contain; 
+}
