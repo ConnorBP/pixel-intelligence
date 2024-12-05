@@ -68,7 +68,8 @@ const Editor = () => {
         // might throw
         console.log(`new canvas width and height ${tmpCanvas.width}, ${tmpCanvas.height}`);
         const simp = new SimpleImage({ imageData: ctx.getImageData(0, 0, tmpCanvas.width, tmpCanvas.height) });
-        let { kCentroid } = DownScaler.kCenter(simp, canvasData.width, canvasData.height, 16, 16);
+        // this applies the k-means clustering centroid based downscaling algorithm to the image with 16 buckets and 16 iterations
+        let { kCentroid } = DownScaler.kCenter(simp, canvasData.width, canvasData.height, 4, 4);
 
         const newCanvasData = {
           pixels: kCentroid.pixels.map(({ r, g, b, a }) => {
