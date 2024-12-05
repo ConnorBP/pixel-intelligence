@@ -11,7 +11,7 @@
   --bg-color: #ffffff;
   --primary-color: #95544f;
   --link-color: #333333;
-  --link-hover-color:White;
+  --link-hover-color: White;
 
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -51,7 +51,7 @@ h1 {
 }
 
 .hidden {
-  display:none;
+  display: none;
 }
 
 /* we should not dirty styling of all usages of button across the board
@@ -89,12 +89,16 @@ button:focus-visible {
   }
 }
 
-
 /* Dark mode styles */
 @media (prefers-color-scheme: dark) {
   :root {
     --popup-bg: #3c3c3c;
     --text-color: #fff;
+    --bg-color: #1a1a1a;
+    --text-color: #ffffff;
+    --primary-color: #95544f;
+    --link-color: #ffffff;
+    --link-hover-color: #c5622d;
   }
   .popup-overlay {
     background: var(--overlay-bg-dark);
