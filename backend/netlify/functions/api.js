@@ -1,13 +1,6 @@
 // YOUR_BASE_DIRECTORY/netlify/functions/api.ts
-
 import express from "express";
 import serverless from "serverless-http";
-// import path from "path";
-// Import routes
-// Using path.resolve to get absolute path to routes
-// const routes = require(path.resolve(__dirname, '../../routes/index.js'));
-// const routes = require(path.resolve(__dirname, ));
-
 import routes from '../../../dist/api/index.js';
 
 const api = express();
@@ -15,16 +8,23 @@ const api = express();
 // Middleware to parse JSON
 api.use(express.json());
 
-// const router = express.Router();
+// Verify routes is a valid middleware
+if (typeof routes !== 'function') {
+    console.error('Invalid routes object:', typeof routes);
+    // Create fallback router
+    const fallbackRouter = express.Router();
+    fallbackRouter.all('*', (req, res) => {
+        res.status(500).json({ error: 'API routes not properly configured' });
+    });
+    api.use('/api/', fallbackRouter);
+} else {
+    api.use("/api/", routes);
+}
 
-// router.get('/', (req, res) => {
-//     res.send('It (sort of) works!');
-// });
+// Error handling middleware
+api.use((err, req, res, next) => {
+    console.error('API Error:', err);
+    res.status(500).json({ error: 'Internal Server Error' });
+});
 
-// api.use("/api/", router);
-
-// add the api routes
-api.use("/api/", routes);
-
-// export the handler to netlify
 export const handler = serverless(api);
