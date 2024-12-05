@@ -5,7 +5,7 @@ import EditorTopBar from "../components/EditorTopBar";
 import "../css/EditorPageCSS/Editor.css";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 import { useNavigate } from "react-router-dom";
-import { SimpleImage, DownScaler, RGBAToHex, ExportPng } from "../utils/index";
+import { SimpleImage, DownScaler, RGBAToHex, ExportPng, DownloadJson } from "../utils/index";
 
 const Editor = () => {
   // brush colors are stored as html color codes
@@ -165,9 +165,17 @@ const Editor = () => {
     }
   };
 
+  // download the latest canvas data json
+  function onSaveClicked() {
+    if(!DownloadJson(canvasData)) {
+      console.log('project download failed');
+      alert('project download failed');
+    }
+  }
+
   const contextMenuOptions = [
     { text: "New Drawing", onClick: () => alert('todo') },
-    { text: "Save", onClick: () => alert('todo') },
+    { text: "Save", onClick: onSaveClicked },
     { text: "Open", onClick: () => alert('todo: open a json document') },
     { text: "View Gallery", onClick: () => nav("/") },
     { text: "Share", onClick: () => alert('todo') },
@@ -183,6 +191,7 @@ const Editor = () => {
         currentCanvasSize={canvasData.width}
         onResizeImageRequested={handleResize}
         onImageExportClicked={onExportDownloadClicked}
+        onSaveClicked={onSaveClicked}
       />
       <EditorLeftToolBar
         selectedColor={brushColor}

@@ -11,7 +11,7 @@ import Menu from "./Menu";
 import ConfirmationPopup from "./ConfirmationPopup";
 import ScaleImagePopup from "./ScaleImagePopup";
 
-const EditorTopBar = ({ contextMenuOptions, onResizeImageRequested, onImportImageClicked, onImageExportClicked, currentCanvasSize }) => {
+const EditorTopBar = ({ contextMenuOptions, onResizeImageRequested, onImportImageClicked, onImageExportClicked, currentCanvasSize, onSaveClicked }) => {
   const [showNewImagePrompt, setShowNewImagePrompt] = useState(false);
   const [showSaveNotYetImplemented, setShowSaveNotYetImplemented] = useState(false);
   const [showResizePrompt, setShowResizePrompt] = useState(false);
@@ -50,7 +50,7 @@ const EditorTopBar = ({ contextMenuOptions, onResizeImageRequested, onImportImag
         <Menu menuOptions={contextMenuOptions} />
 
         {/* save json file to disc */}
-        <button onClick={() => { setShowSaveNotYetImplemented(true) }}>
+        <button onClick={onSaveClicked}>
           <RiSave3Line className="icon" />
         </button>
         {/* import a canvas data json from disc */}
