@@ -1,13 +1,4 @@
-:root {
-  --overlay-bg-light: rgba(0, 0, 0, 0.5);
-  --overlay-bg-dark: rgba(255, 255, 255, 0.25);
-  --popup-bg: rgb(220, 220, 220);
-  --button-bg: #95544f;
-  --text-color: #333;
-  --border-color: #ccc;
-  --border-radius: 5px;
-  --shadow-color: rgba(0, 0, 0, 0.2);
-}
+/* root color scheme in index css */
 
 .popup-overlay {
   position: fixed;
@@ -126,6 +117,7 @@
 @media (prefers-color-scheme: dark) {
   :root {
     --popup-bg: #3c3c3c;
+    --text-color: #fff;
   }
   .popup-overlay {
     background: var(--overlay-bg-dark);
