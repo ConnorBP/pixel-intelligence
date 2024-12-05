@@ -2,12 +2,13 @@
 
 import express from "express";
 import serverless from "serverless-http";
-import path from "path";
-
+// import path from "path";
 // Import routes
 // Using path.resolve to get absolute path to routes
 // const routes = require(path.resolve(__dirname, '../../routes/index.js'));
-const routes = require(path.resolve(__dirname, '../../../dist/api/index.js'));
+// const routes = require(path.resolve(__dirname, ));
+
+import routes from '../../../dist/api/index.js';
 
 const api = express();
 
