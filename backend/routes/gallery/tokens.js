@@ -17,8 +17,8 @@
       try{
         res.cookie("access_token", token, {
           httpOnly: true,
-          secure: false,
-          maxAge: 360000,  // 1 hr
+          secure: process.env.NODE_ENV === "production",
+          maxAge: 86400000,  // 1 day
           path: "/"
         });
         console.log("Cookie Generated");
