@@ -6,7 +6,8 @@ import path from "path";
 
 // Import routes
 // Using path.resolve to get absolute path to routes
-const routes = require(path.resolve(__dirname, '../../routes/index.js'));
+// const routes = require(path.resolve(__dirname, '../../routes/index.js'));
+const routes = require(path.resolve(__dirname, '../../../dist/api/index.js'));
 
 const api = express();
 
