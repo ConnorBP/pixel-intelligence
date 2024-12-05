@@ -42,6 +42,28 @@ const Canvas = forwardRef(({
     return newCanvas;
   };
 
+  function drawGridLineX(context, x, gridSpacing, canvasH) {
+    context.beginPath();
+    context.strokeStyle = gridLineColor;
+    context.moveTo(-0.5 + x * gridSpacing, 0);
+    context.lineTo(-0.5 + x * gridSpacing, canvasH);
+    context.stroke();
+  }
+  function drawGridLineY(context, y, gridSpacing, canvasW) {
+    context.beginPath();
+    context.moveTo(0, -0.5 + y * gridSpacing);
+    context.lineTo(canvasW, -0.5 + y * gridSpacing);
+    context.stroke();
+  }
+
+  // fixes the grid lines on all four sides at a specific pixel coordinate
+  function fixGridLinesAt(context, x, y, gridSpacing, canvasW, canvasH) {
+    drawGridLineX(context, x, gridSpacing, canvasH);
+    drawGridLineY(context, y, gridSpacing, canvasW);
+    drawGridLineX(context, x + 1, gridSpacing, canvasH);
+    drawGridLineY(context, y + 1, gridSpacing, canvasW);
+  }
+
   function drawAllGridLines(canvas, editorPixelsW, editorPixelsH) {
     // draw all grid lines on the canvas
     const context = canvas.getContext("2d");
@@ -50,18 +72,11 @@ const Canvas = forwardRef(({
 
     context.lineWidth = gridLineWidth;
     console.log('drawing grid lines');
-    for(let x = 0;x<editorPixelsW;x++) {
-      context.beginPath();
-      context.strokeStyle = gridLineColor;
-      context.moveTo(-0.5 + x * gridSpacing, 0);
-      context.lineTo(-0.5 + x * gridSpacing, canvas.height);
-      context.stroke();
+    for (let x = 0; x < editorPixelsW; x++) {
+      drawGridLineX(context, x, gridSpacing, canvas.height);
     }
-    for(let y = 0;y<editorPixelsH;y++) {
-      context.beginPath();
-      context.moveTo(0, -0.5 + y * gridSpacing);
-      context.lineTo(canvas.width, -0.5 + y * gridSpacing);
-      context.stroke();
+    for (let y = 0; y < editorPixelsH; y++) {
+      drawGridLineY(context, y, gridSpacing, canvas.width);
     }
   }
 
@@ -182,6 +197,10 @@ const Canvas = forwardRef(({
 
     // Draw a pixel at the clicked position
     drawPixelToCtx(context, x, y, color, pixelSize);
+
+    if (drawGridLines) {
+      fixGridLinesAt(context, x, y, pixelSize, canvas.width, canvas.height);
+    }
   };
 
   // Handles the event of someone clicking on the canvas area
