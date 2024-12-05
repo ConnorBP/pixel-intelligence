@@ -42,8 +42,16 @@ node_bundler = "esbuild"
 # inside "images/" or any of its subdirectories.
 # included_files = ["!files/post-2.md", "package.json", "images/**"]
 
+# redirect all calls to api to the netlify functions
 [[redirects]]
-  force = true
-  from = "/api/*"
-  status = 200
-  to = "/.netlify/functions/api/:splat"
+force = true
+from = "/api/*"
+status = 200
+to = "/.netlify/functions/api/:splat"
+
+# /* /index.html 200
+# redirect everything else thats not api to the react router
+[[redirects]]
+from = "/*"
+to = "/index.html"
+status = 200

@@ -1,7 +1,7 @@
 import { useRef, useEffect, forwardRef, useImperativeHandle } from "react";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 import "../css/Canvas.css";
-import { drawCheckeredBackground } from "../utils";
+import { drawCheckeredBackground, drawPixelToCtx } from "../utils";
 
 const Canvas = forwardRef(({
   canvasData,
@@ -141,23 +141,15 @@ const Canvas = forwardRef(({
       return;
     }
 
+    // calculate how big our "virtual pixels" are on the actual screen canvas pixel resolution
     const pixelSize = canvasRenderWidth / drawingPixelsWidth;
-
-    const canvasX = x * pixelSize;
-    const canvasY = y * pixelSize;
 
     // reference the canvas context for drawing to
     const canvas = canvasRef.current;
     const context = canvas.getContext("2d");
-    // const centerX = x + pixelSize / 2;
-    // const centerY = y + pixelSize / 2;
 
     // Draw a pixel at the clicked position
-    context.fillStyle = color;
-    // context.beginPath();
-    // context.arc(centerX, centerY, pixelSize/2, 0, 2 * Math.PI); // Draw a circle with radius 10
-    context.fillRect(canvasX, canvasY, pixelSize, pixelSize);
-    // context.fill();
+    drawPixelToCtx(context, x, y, color, pixelSize);
   };
 
   // Handles the event of someone clicking on the canvas area
