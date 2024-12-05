@@ -1,6 +1,6 @@
 import express from "express";
 import { validateCanvasData } from './validator.js';
-import {saveCanvasData, getAllCanvases} from "../../canvas.js";
+import {saveCanvasData, getAllCanvases} from "./canvas.js";
 const router = express.Router();
 
 // POST Route to upload canvas Data
