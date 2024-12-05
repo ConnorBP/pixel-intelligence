@@ -14,7 +14,7 @@ if (typeof routes !== 'function') {
     // Create fallback router
     const fallbackRouter = express.Router();
     fallbackRouter.all('*', (req, res) => {
-        res.status(500).json({ error: 'API routes not properly configured' });
+        res.status(500).json({ error: `API routes not properly configured/ Found ${typeof routes}` });
     });
     api.use('/api/', fallbackRouter);
 } else {
