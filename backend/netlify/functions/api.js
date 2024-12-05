@@ -2,7 +2,7 @@
 
 import express from "express";
 import serverless from "serverless-http";
-import routes from '../routes/index';
+import routes from '../routes/index.js';
 
 const api = express();
 

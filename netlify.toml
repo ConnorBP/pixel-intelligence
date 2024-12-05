@@ -14,6 +14,10 @@ node_bundler = "esbuild"
 # Includes all Markdown files inside the "files/" directory.
 # included_files = ["files/*.md"]
 
+# include all of the routes with the api
+[functions."api"]
+included_files = ["/backend/routes/**"]
+
 [functions."api_*"]
 # Flags "package-2" as an external node module for functions
 # with a name beginning with "api_". Functions matching this
