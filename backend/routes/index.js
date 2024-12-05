@@ -11,5 +11,5 @@ router.get('/', (req, res) => {
 // Gallery routes for the "/gallery" endpoint
 router.use("/gallery", galleryRoutes);
 
-
+export { router };
 export default router;
