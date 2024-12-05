@@ -1,45 +1,45 @@
-/* Variables for Light and Dark Modes */
+/* Default Variables for Light Mode */
 :root {
-    --light-bg: #ffffff;
-    --light-text: #333333;
-    --dark-bg: #1a1a1a;
-    --dark-text: #ffffff00;
+    --bg-color: #ffffff;
+    --text-color: #333333;
     --primary-color: #95544f;
+    --link-color: #333333;
+    --link-hover-color:White;
 }
 
+/* Dark Mode Variables */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg-color: #1a1a1a;
+        --text-color: #ffffff;
+        --primary-color: #95544f;
+        --link-color: #ffffff;
+        --link-hover-color: #C5622D;
+    }
+}
+
+/* General Body Styles */
 body {
     margin: 0;
     font-family: Arial, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
     transition: background-color 0.3s, color 0.3s;
-}
-
-body.dark-mode {
-    background-color: var(--dark-bg);
-    color: var(--dark-text);
 }
 
 /* Navbar Styles */
 .navbar {
     position: fixed;
     top: 0;
-    width: 100%;
+    left: 0;
+    width: 100vw; 
+    height: 50px;
+    margin: 0;
     background-color: var(--primary-color);
-    padding: 10px 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    z-index: 1000;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.navbar.light {
-    background-color: var(--light-bg);
-    color: var(--light-text);
-}
-
-.navbar.dark {
-    background-color: var(--dark-bg);
-    color: var(--dark-text);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
 }
 
 .navbar-container {
@@ -47,12 +47,15 @@ body.dark-mode {
     justify-content: space-between;
     align-items: center;
     width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px; 
 }
 
 .navbar-brand {
     font-size: 1.5rem;
     font-weight: bold;
-    color: #95544f;
+    color: var(--link-color);
 }
 
 .navbar-links {
@@ -62,30 +65,22 @@ body.dark-mode {
 
 .navbar-links a {
     text-decoration: none;
-    color: #95544f;
+    color: var(--link-color);
     transition: color 0.2s;
 }
 
 .navbar-links a:hover {
-    color: #C5622D;
+    color: var(--link-hover-color);
 }
 
+/* Menu Toggle Button */
 .menu-toggle {
     display: none;
     font-size: 1.5rem;
-    color: white;
+    cursor: pointer;
+    color: var(--text-color);
     background: none;
     border: none;
-    cursor: pointer;
-}
-.theme-toggle {
-    background: none;
-    border: none;
-    color: white;
-    font-size: 1rem;
-    cursor: pointer;
-    margin-left: auto; 
-    padding-right: 5px;
 }
 
 /* Responsive Design */
@@ -99,7 +94,7 @@ body.dark-mode {
         flex-direction: column;
         background-color: var(--primary-color);
         position: absolute;
-        top: 100%;
+        top: 50px;
         left: 0;
         width: 100%;
         padding: 10px 0;
@@ -108,9 +103,17 @@ body.dark-mode {
     .navbar-links.show {
         display: flex;
     }
+}
 
-    .theme-toggle {
-        font-size: 1rem; 
-        margin-left: 5px; 
-    }
+/* Logo Styles */
+.navbar-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px; 
+}
+
+.logo {
+    width: 40px; 
+    height: 40px;
+    object-fit: contain; 
 }
