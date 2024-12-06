@@ -1,7 +1,5 @@
 import { GalleryHeader } from "./GalleryHeader";
-import GalleryList from "./GalleryList";
-
-
+import { GalleryList } from "./GalleryList";
 import "../../css/GalleryPageCSS/Gallery.css";
 
 // Component to render the gallery layout

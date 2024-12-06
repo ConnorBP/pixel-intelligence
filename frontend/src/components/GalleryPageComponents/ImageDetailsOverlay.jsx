@@ -7,12 +7,12 @@ import TwitterIcon from '@mui/icons-material/Twitter';
 import "../../css/GalleryPageCSS/ImageDetailsOverlay.css";
 
 function ImageDetailsOverlay({ images }) {
-    const { imageId } = useParams(); // Extracting the `imageId` from the route parameters
-    const navigate = useNavigate(); // Navigation hook for programmatic navigation
-    const [copied, setCopied] = useState(false); // State to manage the "Copied" status for the URL
-    const image = images.find((img) => img.id === parseInt(imageId)); // Finding the specific image based on the `imageId`
+    const { imageId } = useParams();
+    const navigate = useNavigate(); 
+    const [copied, setCopied] = useState(false);
+    const image = images.find((img) => img.id === parseInt(imageId)); 
 
-    if (!image) return <div>Image not found</div>; // If no matching image is found, display a fallback message
+    if (!image) return <div>Image not found</div>; 
 
     // Copy the image link to the clipboard
     const copyToClipboard = () => {
@@ -25,7 +25,7 @@ function ImageDetailsOverlay({ images }) {
     const downloadImage = () => {
         const link = document.createElement('a');
         link.href = image.imgSrc;
-        link.download = `image-${image.id}.jpg`; // Filename for the download
+        link.download = `image-${image.id}.jpg`; 
         link.click();
     };
 
