@@ -1,6 +1,6 @@
 import express from "express";
 import { validateCanvasData } from './validator.js';
-import {saveCanvasData, getAllCanvases} from "./canvas.js";
+import { saveCanvasData, getDBConnection } from "./canvas.js";
 import { authenticate } from "../auth/authentication.js";
 import { paginatedResults } from "./paginatedResults.js";
 
@@ -46,12 +46,15 @@ router.post("/upload", authenticate, async(req, res) => {
 
 // GET route to retrieve all canvases with pagination
 router.get("/all", authenticate, async (req, res, next) => {
+  let db;
   try {
-      const collection = await getAllCanvases();
-
+      // Save the database connection from canvas.js getDBConnection() function
+      db = await getDBConnection();
+  
       // Using paginatedResults middleware to apply pagination on the collection
-      await paginatedResults(collection)(req, res, next);
+      await paginatedResults(db)(req, res, next);
 
+      // Return the paginated response
       return res.status(200).json(res.paginatedResults);
   } catch (e) {
       console.error('Error retrieving canvases:', e.stack || e);

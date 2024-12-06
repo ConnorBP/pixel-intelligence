@@ -1,4 +1,6 @@
-export const paginatedResults = (collection) => {   
+const collectionName = process.env.COLLECTION_NAME; 
+
+export const paginatedResults = (db) => {   
     return async (req, res, next) => {
 
         // Get the 'page' and 'limit' query parameters from the request
@@ -10,6 +12,7 @@ export const paginatedResults = (collection) => {
         const endIndex = page * limit;
 
         const results = {};
+        const collection = db.collection(collectionName);  // Get the collection from db connection
 
         try {
             // Count the total number of canvases in the collection.
@@ -41,6 +44,8 @@ export const paginatedResults = (collection) => {
         } catch (e) {
             console.error('Error in paginated API:', e.stack || e);
             res.status(500).json({ success: false, error: 'Error fetching paginated results' });
+        }finally {
+            if (db) db.client.close();  // Ensure that the connection is closed after pagination
         }
     };
 };
