@@ -12,6 +12,7 @@ A Pixel Art Editor with generative AI functionality, image downscale processing,
  - Parmila "[Parmilashams](https://github.com/Parmilashams)" Shams (301426195)
 
 [TOC]
+netlify sucks
 
 # Milestone 1: Part 2 Submission
 
