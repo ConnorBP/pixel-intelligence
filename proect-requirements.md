@@ -2,7 +2,7 @@
 A Pixel Art Editor with generative AI functionality, image downscale processing, image export, and a showcase gallery. Comp229 Group Project (Fall 2024).
 
 
- > Latest live demo can be viewed on [Netlify](https://229-pixelai.netlify.app)
+ > This document's original contents can be viewed in PDF form [here](./COMP229_Group21_ProjectRequirementsDocument.pdf)
 
 
  **Group Members:**
