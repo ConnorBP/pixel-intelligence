@@ -4,6 +4,7 @@ import serverless from "serverless-http";
 import routes from '../../routes/index.js';
 
 const api = express();
+api.set('trust proxy', true);
 
 // Middleware to parse JSON
 api.use(express.json());
