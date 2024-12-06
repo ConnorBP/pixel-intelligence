@@ -1,6 +1,6 @@
 import express from "express";
 import galleryRoutes from "./gallery/gallery.js"; // Gallery routes
-import authRoute from "./gallery/tokens.js"; // Authentication routes
+import authRoute from "./auth/tokens.js"; // Authentication routes
 
 const router = express.Router();
 
