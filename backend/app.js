@@ -18,6 +18,15 @@ app.use(cookieParser());
 // Middleware to parse JSON
 app.use(express.json());
 
+// intercept json syntax error responses and return them as json instead of html
+app.use((err, req, res, next) => {
+    if (err instanceof SyntaxError && err.status === 400 && 'body' in err) {
+        console.error(err);
+        return res.status(400).send({ success: false, status: 400, message: err.message });
+    }
+    next();
+});
+
 
  // All routes will be prefixed with "/api"
 app.use('/api/', routes);
