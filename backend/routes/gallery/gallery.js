@@ -20,13 +20,18 @@ router.post("/upload", authenticate, async (req, res) => {
     // code here
 
     // Convert canvas to image
-    // code here
+    // code here (if we decide to add that. TBH the frontend is already capable of this)
 
     // Save canvas data to the database
     const result = await saveCanvasData(
       {
-        ...canvasData,
-        creation_date: new Date()
+        // manually destructured for security purposes
+        name: canvasData.name,
+        description: canvasData.description,
+        pixels: canvasData.pixels,
+        width: canvasData.width,
+        height: canvasData.height,
+        creation_date: new Date().getUTCDate() // get date time in UTC format for timezone consistency
       }
     );
 
