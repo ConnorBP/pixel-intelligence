@@ -29,9 +29,6 @@ const EditorLeftToolBar = ({  selectedColor, setSelectedColor, secondaryColor, s
           className={`icon ${tool === "pencil" ? "active" : ""}`}
           onClick={() =>{ setTool("pencil") ;console.log(tool); }}
         ><FaPencilAlt /></button>
-
-        <button className={`icon ${tool === "clear" ? "active" : ""}`}
-          onClick={() => setTool("clear")}>clear</button>
       </div>
       <div className="align-end toolbar-square">
         <ColorPickerToolbar primaryColor={selectedColor} setPrimaryColor={setSelectedColor} secondaryColor={secondaryColor} setSecondaryColor={setSecondaryColor} />

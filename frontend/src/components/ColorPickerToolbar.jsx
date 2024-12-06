@@ -1,10 +1,15 @@
 import "../css/ColorPickerToolbar.css";
 import { FaExchangeAlt } from "react-icons/fa";
 
-function ColorPickerToolbar({primaryColor, setPrimaryColor, secondaryColor, setSecondaryColor}) {
+function ColorPickerToolbar({primaryColor, setPrimaryColor, secondaryColor, setSecondaryColor, handleColorPickerInput }) {
   const handleColorPickerFirst = (event) => {
+    if(handleColorPickerInput){
+      setPrimaryColor(handleColorPickerInput)
+
+    }else
     setPrimaryColor(event.target.value);
   };
+
   const handleColorPickerSecond = (event) => {
     setSecondaryColor(event.target.value);
   };
