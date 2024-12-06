@@ -1,5 +1,6 @@
 // YOUR_BASE_DIRECTORY/netlify/functions/api.ts
 import express from "express";
+import cookieParser from "cookie-parser";
 import serverless from "serverless-http";
 import routes from '../../routes/index.js';
 
@@ -8,6 +9,7 @@ api.set('trust proxy', true);
 
 // Middleware to parse JSON
 api.use(express.json());
+app.use(cookieParser());
 
 // Verify routes is a valid middleware
 if (typeof routes !== 'function') {
