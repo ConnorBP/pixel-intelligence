@@ -3,7 +3,10 @@
 base = "/"
 package = "/"
 publish = "/dist"
-command = "npm install && npm run build"
+command = "npm ci && npm run build"
+
+[build.environment]
+NPM_FLAGS = "--no-audit --no-fund"
 
 
 # netlify functions config

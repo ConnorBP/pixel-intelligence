@@ -10,7 +10,7 @@
     "start": "concurrently \"npm run backend\" \"npm run frontend\"",
     "dev": "npm run start",
     "watch": "npm run start",
-    "build": "npm install -w frontend && npm run build -w frontend"
+    "build": "cd frontend && npm install && npm run build"
   },
   "repository": {
     "type": "git",
