@@ -1,18 +1,18 @@
 import express from "express";
 import { validateCanvasData } from './validator.js';
-import {saveCanvasData, getAllCanvases} from "./canvas.js";
+import { saveCanvasData, getAllCanvases } from "./canvas.js";
 import { authenticate } from "../auth/authentication.js";
 
 const router = express.Router();
 
 // POST Route to upload canvas Data
-router.post("/upload", authenticate, async(req, res) => {
-  try{
+router.post("/upload", authenticate, async (req, res) => {
+  try {
     const canvasData = req.body;
-    
+
     // validating the canvas data
     const validationError = validateCanvasData(canvasData);
-    if(validationError){
+    if (validationError) {
       return res.status(400).json({ success: false, error: validationError });
     }
 
@@ -25,27 +25,27 @@ router.post("/upload", authenticate, async(req, res) => {
     // Save canvas data to the database
     const result = await saveCanvasData(
       {
-        ...canvasData, 
+        ...canvasData,
         creation_date: new Date()
       }
     );
-    
+
     // Returning success code if there is no error
-    return res.status(200).json({success: true, message:"Canvas uploaded successfully."})
-  } catch(e){
+    return res.status(200).json({ success: true, message: "Canvas uploaded successfully." })
+  } catch (e) {
     console.error('Error uploading canvas data to the database:', e.stack || e);
     res.status(500).json({ success: false, error: 'Internal Server Error in upload route' });
   }
 });
 
 // GET route to retrieve all canvases
-router.get("/all", authenticate, async(req, res) => {
-  try{
+router.get("/all", authenticate, async (req, res) => {
+  try {
     const canvases = await getAllCanvases();
     res.status(200).json(canvases);
-  } catch(e) {
+  } catch (e) {
     console.error('Error retrieving canvases:', e.stack || e);
-    res.status(500).json({success: false, error: "Internal server error in /all route"});
+    res.status(500).json({ success: false, error: "Internal server error in /all route" });
   }
 });
 

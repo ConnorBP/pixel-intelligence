@@ -1,4 +1,9 @@
-// YOUR_BASE_DIRECTORY/netlify/functions/api.ts
+// THIS IS THE SERVERLESS ENDPOINT FOR DEPLOYMENT ON NETLIFY
+
+// FUNCTIONALLY THIS SHOULD BE IMPLEMENTED ALMOST IDENTICALLY TO THE APP.JS FILE
+// except: it exports const handler = serverless(api); from "serverless-http"
+
+
 import express from "express";
 import cookieParser from "cookie-parser";
 import serverless from "serverless-http";
@@ -17,6 +22,8 @@ if (typeof routes !== 'function') {
     // Create fallback router
     const fallbackRouter = express.Router();
     fallbackRouter.all('*', (req, res) => {
+        // this will give a helpful error message when the routes object is invalid
+        // this can happen if the netlify bundle settings are incorrect or if the routes object is not exported correctly
         res.status(500).json({ error: `API routes not properly configured. Found ${typeof routes}: ${JSON. stringify(routes)}` });
     });
     api.use('/api/', fallbackRouter);
