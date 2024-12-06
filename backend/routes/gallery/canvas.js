@@ -10,7 +10,7 @@ export const connectToDB = async () => {
     try {
         await client.connect();
         console.log("Connected to database");
-        return client.db(dbName); // Return the connected database instance
+        return client.db(dbName);
     } catch (e) {
         console.error("Failed to connect to the database:", e.stack || e);
         throw new Error("Database connection failed");
@@ -32,7 +32,7 @@ export const saveCanvasData = async (canvasData) => {
         console.error("Error inserting canvas data:", e.stack || e);
         throw new Error("Failed to insert canvas data");
     } finally {
-        if (db) db.client.close(); // Close the database connection
+        if (db) db.client.close();
     }
 };
 
@@ -44,7 +44,7 @@ export const getAllCanvases = async () => {
 
         // Retrieve all canvases from the collection
         const canvases = await collection.find().toArray();
-        return canvases; // Return the array of canvases
+        return canvases;
     } catch (e) {
         console.error("Error retrieving canvases:", e.stack || e);
         throw new Error("Failed to retrieve canvases");

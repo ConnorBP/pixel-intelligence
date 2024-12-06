@@ -8,7 +8,7 @@ import 'dotenv/config';
 // console.log(process.env.SECRET_KET);
 import express from "express";
 import cookieParser from "cookie-parser";
-import routes from "./routes/index.js"; // Import the routes defined in index.js
+import routes from "./routes/index.js";
 const app = express();
 
 // Cookie Parser for all routes
