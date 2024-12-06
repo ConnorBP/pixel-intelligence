@@ -1,6 +1,10 @@
-import { useRef, useEffect, forwardRef, useImperativeHandle } from "react";
+import { useRef, useEffect, forwardRef, useImperativeHandle, useCallback } from "react";
 import "../css/Canvas.css";
-import { drawCheckeredBackground, drawPixelToCtx } from "../utils";
+import {
+  drawCheckeredBackground,
+  drawPixelToCtx,
+  drawCheckeredPixel,
+} from "../utils";
 
 // eslint-disable-next-line react/display-name
 const Canvas = forwardRef(
@@ -32,7 +36,7 @@ const Canvas = forwardRef(
     // updates the state of a pixel at specific coordinate
     // on the provided canvas data and returns it
     const updatePixelAt = (oldCanvas, x, y, color) => {
-      // console.log("setCanvas called with ", oldCanvas);
+      console.log(`updatePixelAt called with  ${oldCanvas} ${x} ${y} ${color}`);
       // don't allow out of bounds access
       if (x >= oldCanvas.width || y >= oldCanvas.height) {
         console.error(
@@ -87,20 +91,18 @@ const Canvas = forwardRef(
 
     // clears the canvas with a background grid
     // only clears the visual display by default, but you can make it clear the data too
-    const clearCanvas = (
+    const clearCanvas = useCallback((
       canvas,
       editorPixelsW,
       editorPixelsH,
       updateDataOnClear = false
     ) => {
       const context = canvas.getContext("2d");
-      context.fillStyle = "#2c2f33";
-      context.fillRect(0, 0, canvas.width, canvas.height);
-      context.fillStyle = "#1e2124";
+
       drawCheckeredBackground(
         context,
-        editorPixelsW,
-        editorPixelsH,
+        editorPixelsW * 2,
+        editorPixelsH * 2,
         canvas.width,
         canvas.height
       );
@@ -118,7 +120,7 @@ const Canvas = forwardRef(
         });
       }
       // context.fill();
-    };
+    });
 
     // attempt to load a provided canvas json representation
     // it is "try" because the loaded data can be tampered with by the user
@@ -208,7 +210,7 @@ const Canvas = forwardRef(
     };
     let isMouseDown = false;
     // outputs a pixel to the display canvas (does not save)
-    const drawPixelAt = (x, y, color, drawingPixelsWidth) => {
+    const drawPixelAt = useCallback((x, y, color, drawingPixelsWidth) => {
       // don't run on empty pixels
       if (color == null) {
         return;
@@ -227,16 +229,17 @@ const Canvas = forwardRef(
       if (drawGridLines) {
         fixGridLinesAt(context, x, y, pixelSize, canvas.width, canvas.height);
       }
-    };
+    });
 
     // Handles the event of someone clicking on the canvas area
     // Currently only supports single click drawing
-    const handleCanvasClick = (event) => {
+    function handleCanvasClick(event) {
+      console.log('clicked');
       const canvas = canvasRef.current;
 
       // Get the bounding rectangle of the canvas
       const rect = canvas.getBoundingClientRect();
-      if (!isMouseDown) return;
+      
       const pixelSize = canvasRenderWidth / canvasData.width;
 
       // Get the position of the pixel that was clicked on
@@ -248,13 +251,16 @@ const Canvas = forwardRef(
         (((event.clientY - rect.top) / rect.height) * canvas.height) / pixelSize
       );
       let color; // Define the color for the current tool
-
+      console.log(tool);
       if (tool === "pencil") {
         color = brushColor;
       } else if (tool === "eraser") {
-        color = (pixelX + pixelY) % 2 === 0 ? "#2c2f33" : "#1e2124";
-      } else if (tool === "clear") {
-        clearCanvas(canvas, canvasData.width, canvasData.height, true);
+        color = "#00000000";
+        // update the display for that pixel with clearcolor
+
+        drawCheckeredPixel(canvas.getContext("2d"), pixelX, pixelY, pixelSize);
+
+        console.log("erasing");
       } else if (tool === "paint") {
         const targetColor =
           canvasData.pixels[pixelX + pixelY * canvasData.width];
@@ -267,10 +273,16 @@ const Canvas = forwardRef(
       setCanvasData((oldCanvas) => {
         return updatePixelAt(oldCanvas, pixelX, pixelY, color);
       });
+      drawPixelAt(pixelX, pixelY, color, canvasData.width);
 
       // draw to the pixel on the canvas for display
-      drawPixelAt(pixelX, pixelY, color, canvasData.width);
-    };
+      // drawPixelAt(pixelX, pixelY, color, canvasData.width);
+    }
+
+    function handleCanvasDrag(event) {
+      if (!isMouseDown) return;
+      handleCanvasClick(event)
+    }
 
     // Flood Fill Algorithm
     const floodFill = (x, y, targetColor, replacementColor) => {
@@ -323,27 +335,31 @@ const Canvas = forwardRef(
     useEffect(() => {
       console.log("Canvas data updated:", canvasData);
     }, [canvasData]);
-    const setupCanvasEvents = () => {
-      const canvas = canvasRef.current;
-
-      canvas.addEventListener("mousedown", () => {
-        isMouseDown = true;
-      });
-
-      canvas.addEventListener("mouseup", () => {
-        isMouseDown = false;
-      });
-
-      canvas.addEventListener("mousemove", handleCanvasClick);
-    };
 
     useEffect(() => {
+      const setupCanvasEvents = () => {
+        const canvas = canvasRef.current;
+
+        canvas.addEventListener("mousedown", () => {
+          isMouseDown = true;
+        });
+
+        canvas.addEventListener("mouseup", () => {
+          isMouseDown = false;
+        });
+
+        canvas.addEventListener("mousemove", handleCanvasDrag);
+      };
+
       setupCanvasEvents();
       return () => {
+        // destructor
         const canvas = canvasRef.current;
-        canvas.removeEventListener("mousedown", () => {});
-        canvas.removeEventListener("mouseup", () => {});
-        canvas.removeEventListener("mousemove", handleCanvasClick);
+        if (canvasRef) {
+          canvas.removeEventListener("mousedown", () => {});
+          canvas.removeEventListener("mouseup", () => {});
+          canvas.removeEventListener("mousemove", handleCanvasDrag);
+        }
       };
     }, [tool, brushColor, canvasData.width]);
 
@@ -361,7 +377,7 @@ const Canvas = forwardRef(
           canvasRef,
         };
       },
-      [canvasRef]
+      [clearCanvas, drawPixelAt, tryLoadCanvas]
     );
 
     //
