@@ -14,7 +14,7 @@ api.set('trust proxy', true);
 
 // Middleware to parse JSON
 api.use(express.json());
-app.use(cookieParser());
+api.use(cookieParser());
 
 // Verify routes is a valid middleware
 if (typeof routes !== 'function') {
