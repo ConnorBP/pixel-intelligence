@@ -1,7 +1,7 @@
 import express from "express";
 import { validateCanvasData } from './validator.js';
 import {saveCanvasData, getAllCanvases} from "./canvas.js";
-import { authenticate } from "./authentication.js";
+import { authenticate } from "../auth/authentication.js";
 import { paginatedResults } from "./paginatedResults.js";
 
 const router = express.Router();
