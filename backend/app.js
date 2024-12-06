@@ -1,11 +1,3 @@
-// import dotenv only once and very first
-// imports for all files. NOTE: .js extension is important
-// also on the production server dotenv will not be run.
-// Only normal environment variables will be used
-import 'dotenv/config';
-
-// test that it worked by leaking secrets lol
-// console.log(process.env.SECRET_KET);
 import express from "express";
 import cookieParser from "cookie-parser";
 import routes from "./routes/index.js"; // Import the routes defined in index.js

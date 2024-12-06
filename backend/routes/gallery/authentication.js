@@ -1,4 +1,5 @@
 import jwt from "jsonwebtoken";
+import "dotenv/config";
 
 export const authenticate = (req, res, next) => {
     let token;
@@ -13,8 +14,7 @@ export const authenticate = (req, res, next) => {
     }
 
     try {
-        let key = process.env.SECRET_KET;
-        const decoded = jwt.verify(token, key);
+        const decoded = jwt.verify(token, process.env.SECRET_KEY);
         const userIP = req.ip;
 
         // Check if the token IP matches the request IP

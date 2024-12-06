@@ -1,10 +1,6 @@
-// import 'dotenv/config';
-
-// test that it worked by leaking secrets lol
-// console.log(process.env.SECRET_KET);
-
   import express from "express";
   import jwt from "jsonwebtoken";
+  import "dotenv/config";
 
   const router = express.Router();
 
@@ -13,10 +9,7 @@
     try {
       const userIP = req.ip;
       // Create a token with user IP
-      // console.log(process.env.SECRET_KET);
-      let key = process.env.SECRET_KET;
-      let expiresIn = 60 * 60 * 24; // 24 hours
-      const token = jwt.sign({ ip: userIP }, key, { expiresIn: expiresIn  });
+      const token = jwt.sign({ ip: userIP }, process.env.SECRET_KEY, { expiresIn: "1h" });
       console.log("ip: "+ userIP);
       console.log("access token: " + token);
 
