@@ -2,11 +2,11 @@
 [build]
 base = "/"
 package = "/"
-publish = "/dist"
+publish = "dist"
 command = "npm ci && npm run build"
 
 [build.environment]
-NPM_FLAGS = "--no-audit --no-fund"
+NPM_FLAGS = "--no-audit --no-fund --legacy-peer-deps"
 
 
 # netlify functions config
