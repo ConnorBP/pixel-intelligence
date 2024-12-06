@@ -2,7 +2,7 @@
 [build]
 base = "/"
 package = "/"
-publish = "dist"
+publish = "frontend/dist"
 command = "npm ci && npm run build"
 
 [build.environment]
