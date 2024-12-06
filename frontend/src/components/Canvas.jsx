@@ -28,7 +28,7 @@ const Canvas = forwardRef(
     //
     // State
     //
-
+    
     // reference to the canvas object for us to draw to
     const canvasRef = useRef(null);
 
