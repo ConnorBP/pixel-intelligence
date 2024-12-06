@@ -16,6 +16,15 @@ api.set('trust proxy', true);
 api.use(express.json());
 api.use(cookieParser());
 
+// intercept json syntax error responses and return them as json instead of html
+api.use((err, req, res, next) => {
+    if (err instanceof SyntaxError && err.status === 400 && 'body' in err) {
+        console.error(err);
+        return res.status(400).send({ success: false, status: 400, message: err.message });
+    }
+    next();
+});
+
 // Verify routes is a valid middleware
 if (typeof routes !== 'function') {
     console.error('Invalid routes object:', typeof routes);
@@ -24,7 +33,7 @@ if (typeof routes !== 'function') {
     fallbackRouter.all('*', (req, res) => {
         // this will give a helpful error message when the routes object is invalid
         // this can happen if the netlify bundle settings are incorrect or if the routes object is not exported correctly
-        res.status(500).json({ error: `API routes not properly configured. Found ${typeof routes}: ${JSON. stringify(routes)}` });
+        res.status(500).json({ error: `API routes not properly configured. Found ${typeof routes}: ${JSON.stringify(routes)}` });
     });
     api.use('/api/', fallbackRouter);
 } else {
