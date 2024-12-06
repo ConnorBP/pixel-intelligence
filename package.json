@@ -10,7 +10,7 @@
     "start": "concurrently \"npm run backend\" \"npm run frontend\"",
     "dev": "npm run start",
     "watch": "npm run start",
-    "build": "npm run build -w backend && cd frontend && npm run build"
+    "build": "cd frontend && npm install && npm run build"
   },
   "repository": {
     "type": "git",
@@ -28,7 +28,8 @@
     "frontend"
   ],
   "devDependencies": {
-    "concurrently": "^8.2.2"
+    "concurrently": "^8.2.2",
+    "vite": "^6.0.3"
   },
   "bugs": {
     "url": "https://github.com/ConnorBP/pixel-intelligence/issues"

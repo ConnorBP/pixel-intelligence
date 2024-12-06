@@ -1,0 +1,44 @@
+#Configure some settings for the netlify deployment
+[build]
+command = """
+    npm ci &&
+    cd frontend &&
+    npm ci &&
+    npm run build
+"""
+base = "/"
+package = "/"
+publish = "frontend/dist"
+
+[build.environment]
+NPM_FLAGS = "--no-audit --no-fund --legacy-peer-deps"
+NODE_VERSION = "20.17.0"
+
+
+# netlify functions config
+[functions]
+# configure where netlify looks for functions instead of basedir/netlify/functions
+directory = "backend/netlify/functions"
+
+# Flags "express" as an external node module for all functions
+external_node_modules = ["express", "mongodb"]
+
+# Specifies `esbuild` for functions bundling
+node_bundler = "esbuild"
+
+# include all routes for all functions
+included_files = ["backend/routes/**", "backend/routes/**/*"]
+
+# redirect all calls to api to the netlify functions
+[[redirects]]
+force = true
+from = "/api/*"
+status = 200
+to = "/.netlify/functions/api/:splat"
+
+# /* /index.html 200
+# redirect everything else thats not api to the react router
+[[redirects]]
+from = "/*"
+to = "/index.html"
+status = 200

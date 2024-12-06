@@ -7,7 +7,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch": "nodemon ./start.js",
-    "build": "esbuild app.js --bundle --platform=node --target=node20.17 --minify --outfile=dist/app.js",
+    "build": "esbuild routes/index.js --bundle --platform=node --target=node20.17 --minify --outfile=../dist/api/index.js",
     "builddev": "esbuild app.js --bundle --platform=node --target=node20.17 --sourcemap --outfile=dev/app.js"
   },
   "repository": {
@@ -29,7 +29,7 @@
     "cookie-parser": "^1.4.7",
     "dotenv": "^16.4.7",
     "esbuild": "^0.24.0",
-    "express": "^5.0.1",
+    "express": "^4.21.2",
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.11.0",
     "serverless-http": "^3.2.0"

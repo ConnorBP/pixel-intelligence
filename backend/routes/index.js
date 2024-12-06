@@ -14,4 +14,5 @@ router.use("/auth", authRoute); // All routes starting with "/auth" will be hand
 // Gallery routes for the "/gallery" endpoint
 router.use("/gallery", galleryRoutes); // All routes starting with "/gallery" will be handled by galleryRoutes
 
+export { router };
 export default router;

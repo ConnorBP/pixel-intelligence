@@ -37,6 +37,7 @@
 
     .gallery img {
         object-fit: cover;
+        image-rendering: pixelated;
     }
 
     /* Responsive adjustments */

@@ -1,9 +1,7 @@
 import express from "express";
 import { validateCanvasData } from './validator.js';
-import {saveCanvasData, getAllCanvases} from "../../canvas.js";
+import {saveCanvasData, getAllCanvases} from "./canvas.js";
 import { authenticate } from "./authentication.js";
-import "dotenv/config";
-
 
 const router = express.Router();
 
