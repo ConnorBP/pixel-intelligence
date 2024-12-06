@@ -34,7 +34,7 @@ const Editor = () => {
 
   // wether the grid lines are shown or not on the editor canvas
   const [gridLinesVisible, setGridLinesVisible] = useLocalStorage("gridLinesVisible", true);
-
+  const [tool, setTool] = useLocalStorage("tool", "pencil");
   // file picker
   const imageFileInputRef = useRef(null);
 
@@ -88,7 +88,7 @@ const Editor = () => {
         if (pixelCanvasRef.current) {
           pixelCanvasRef.current.tryLoadCanvas(newCanvasData);
         }
-
+ 
         console.log('import complete');
 
 
@@ -142,6 +142,8 @@ const Editor = () => {
           width: newSize,
           height: newSize,
         };
+
+
         // setCanvasData(newCanvasData);
         pixelCanvasRef.current.tryLoadCanvas(newCanvasData, true);
       } catch (err) {
@@ -160,7 +162,7 @@ const Editor = () => {
     }
   };
 
-  // warning: must be a function, and not a const closure
+  // warning: must be a function, and not a const closureß
   // or else react will be stupid and not update canvasData state for it
   function onExportDownloadClicked() {
     if (!ExportPng(canvasData)) {
@@ -169,6 +171,13 @@ const Editor = () => {
     }
   };
 
+  function onTrashClearClicked(){
+    // this is ugly, api should be adjusted
+    if(pixelCanvasRef.current && pixelCanvasRef.current.canvasRef.current) {
+      pixelCanvasRef.current.clearCanvas(pixelCanvasRef.current.canvasRef.current, canvasData.width, canvasData.height,true);
+    }
+   
+  }
   // download the latest canvas data json
   function onSaveClicked() {
     if (!DownloadJson(canvasData)) {
@@ -196,12 +205,16 @@ const Editor = () => {
         onResizeImageRequested={handleResize}
         onImageExportClicked={onExportDownloadClicked}
         onSaveClicked={onSaveClicked}
+        onTrashClearClicked={onTrashClearClicked}// show a popup then run this: clearCanvas(canvas, canvasData.width, canvasData.height, true);
       />
       <EditorLeftToolBar
         selectedColor={brushColor}
         setSelectedColor={setBrushColor}
         secondaryColor={secondaryBrushColor}
         setSecondaryColor={setSecondaryBrushColor}
+        tool={tool}
+        setTool={setTool}
+        
       />
       <div className="canvas-container">
         <Canvas
@@ -212,6 +225,7 @@ const Editor = () => {
           canvasRenderWidth={CANVAS_RENDER_WIDTH}
           canvasRenderHeight={CANVAS_RENDER_WIDTH}
           gridLinesVisible={gridLinesVisible}
+          tool={tool}
         />
       </div>
       <input

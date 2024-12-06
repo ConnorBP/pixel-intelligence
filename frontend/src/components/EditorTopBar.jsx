@@ -11,7 +11,7 @@ import Menu from "./Menu";
 import ConfirmationPopup from "./ConfirmationPopup";
 import ScaleImagePopup from "./ScaleImagePopup";
 
-const EditorTopBar = ({ contextMenuOptions, onResizeImageRequested, onImportImageClicked, onImageExportClicked, currentCanvasSize, onSaveClicked }) => {
+const EditorTopBar = ({ contextMenuOptions, onResizeImageRequested, onImportImageClicked, onImageExportClicked, currentCanvasSize, onSaveClicked, onTrashClearClicked }) => {
   const [showNewImagePrompt, setShowNewImagePrompt] = useState(false);
   const [showSaveNotYetImplemented, setShowSaveNotYetImplemented] = useState(false);
   const [showResizePrompt, setShowResizePrompt] = useState(false);
@@ -25,13 +25,14 @@ const EditorTopBar = ({ contextMenuOptions, onResizeImageRequested, onImportImag
     <>
       <ConfirmationPopup
         isOpen={showSaveNotYetImplemented}
-        title="Info"
-        message1="This action has not yet been implemented."
+        title="WARNING"
+        message1="This action cannot be undone  ."
         message2=""
         onCancel={() => setShowSaveNotYetImplemented(false)}
         onConfirm={() => {
           console.log("Confirmed!");
           setShowSaveNotYetImplemented(false);
+          if(onTrashClearClicked) onTrashClearClicked();
         }}
       />
 
@@ -74,7 +75,7 @@ const EditorTopBar = ({ contextMenuOptions, onResizeImageRequested, onImportImag
           <IoIosDownload className="icon" />
         </button>
         {/* clear canvas */}
-        <button><FaTrashCan /></button>
+        <button onClick={()=> {setShowSaveNotYetImplemented(true)}}><FaTrashCan /></button>
         {/* share */}
         <button><FaShareFromSquare /></button>
 
