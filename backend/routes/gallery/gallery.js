@@ -1,18 +1,19 @@
 import express from "express";
 import { validateCanvasData } from './validator.js';
-import { saveCanvasData, getAllCanvases } from "./canvas.js";
-import { authenticate } from "../auth/authentication.js";
+import {saveCanvasData, getAllCanvases} from "./canvas.js";
+import { authenticate } from "./authentication.js";
+import { paginatedResults } from "./paginatedResults.js";
 
 const router = express.Router();
 
 // POST Route to upload canvas Data
-router.post("/upload", authenticate, async (req, res) => {
-  try {
+router.post("/upload", authenticate, async(req, res) => {
+  try{
     const canvasData = req.body;
-
+    
     // validating the canvas data
     const validationError = validateCanvasData(canvasData);
-    if (validationError) {
+    if(validationError){
       return res.status(400).json({ success: false, error: validationError });
     }
 
@@ -20,37 +21,36 @@ router.post("/upload", authenticate, async (req, res) => {
     // code here
 
     // Convert canvas to image
-    // code here (if we decide to add that. TBH the frontend is already capable of this)
+    // code here
 
     // Save canvas data to the database
     const result = await saveCanvasData(
       {
-        // manually destructured for security purposes
-        name: canvasData.name,
-        description: canvasData.description,
-        pixels: canvasData.pixels,
-        width: canvasData.width,
-        height: canvasData.height,
-        creation_date: new Date().getUTCDate() // get date time in UTC format for timezone consistency
+        ...canvasData, 
+        creation_date: new Date()
       }
     );
-
+    
     // Returning success code if there is no error
-    return res.status(200).json({ success: true, message: "Canvas uploaded successfully." })
-  } catch (e) {
+    return res.status(200).json({success: true, message:"Canvas uploaded successfully."})
+  } catch(e){
     console.error('Error uploading canvas data to the database:', e.stack || e);
     res.status(500).json({ success: false, error: 'Internal Server Error in upload route' });
   }
 });
 
-// GET route to retrieve all canvases
-router.get("/all", authenticate, async (req, res) => {
+// GET route to retrieve all canvases with pagination
+router.get("/all", authenticate, async (req, res, next) => {
   try {
-    const canvases = await getAllCanvases();
-    res.status(200).json(canvases);
+      const collection = await getAllCanvases();
+
+      // Using paginatedResults middleware to apply pagination on the collection
+      await paginatedResults(collection)(req, res, next);
+
+      return res.status(200).json(res.paginatedResults);
   } catch (e) {
-    console.error('Error retrieving canvases:', e.stack || e);
-    res.status(500).json({ success: false, error: "Internal server error in /all route" });
+      console.error('Error retrieving canvases:', e.stack || e);
+      res.status(500).json({ success: false, error: "Internal server error in /all route" });
   }
 });
 

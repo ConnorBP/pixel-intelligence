@@ -36,19 +36,15 @@ export const saveCanvasData = async (canvasData) => {
     }
 };
 
+// Get all canvases collection
 export const getAllCanvases = async () => {
     let db;
     try {
         db = await connectToDB();
-        const collection = db.collection(collectionName);
-
-        // Retrieve all canvases from the collection
-        const canvases = await collection.find().toArray();
-        return canvases;
+        const collection = db.collection(collectionName); 
+        return collection; 
     } catch (e) {
         console.error("Error retrieving canvases:", e.stack || e);
         throw new Error("Failed to retrieve canvases");
-    } finally {
-        if (db) db.client.close();
     }
 };
