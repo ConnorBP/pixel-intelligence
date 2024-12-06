@@ -1,5 +1,4 @@
 import { MongoClient } from "mongodb";
-import "dotenv/config";
 
 const dbStringURL = process.env.MONGO_DB_STRING; // Database connection string
 const dbName = process.env.DATABASE_NAME; // Database Name

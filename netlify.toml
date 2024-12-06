@@ -1,9 +1,18 @@
 #Configure some settings for the netlify deployment
 [build]
+command = """
+    npm ci &&
+    cd frontend &&
+    npm ci &&
+    npm run build
+"""
 base = "/"
 package = "/"
-publish = "/dist"
-command = "npm run build"
+publish = "frontend/dist"
+
+[build.environment]
+NPM_FLAGS = "--no-audit --no-fund --legacy-peer-deps"
+NODE_VERSION = "20.17.0"
 
 
 # netlify functions config
@@ -12,44 +21,13 @@ command = "npm run build"
 directory = "backend/netlify/functions"
 
 # Flags "express" as an external node module for all functions
-external_node_modules = ["express","mongodb"]
+external_node_modules = ["express", "mongodb"]
 
 # Specifies `esbuild` for functions bundling
 node_bundler = "esbuild"
 
 # include all routes for all functions
-included_files = ["backend/routes/**","backend/routes/**/*"]
-
-# Includes all Markdown files inside the "files/" directory.
-# included_files = ["files/*.md"]
-
-[functions."api_*"]
-# Flags "package-2" as an external node module for functions
-# with a name beginning with "api_". Functions matching this
-# pattern have both "package-1" and "package-2" as
-# external modules, because modules from this object
-# are concatenated with any from the top-level object.
-# external_node_modules = ["package-2"]
-
-# Includes all Markdown files previously defined in the
-# top-level object, except for "post-1.md".
-# included_files = ["!files/post-1.md"]
-
-# [functions.api_payment]
-# Flags "package-3" and "package-4" as external node modules
-# for a function named "api_payment".
-# This function has 4 external node modules:
-#  "package-1" from the top-level object
-#  "package-2" from the "api_*" object
-#  "package-3" and "package-4" from this object
-# external_node_modules = ["package-3", "package-4"]
-
-# Includes all Markdown files inside "files/", except for
-# "post-1.md" (excluded in the "api_*" object)
-# and "post-2.md" (excluded in this object).
-# Also includes "package.json" and any files
-# inside "images/" or any of its subdirectories.
-# included_files = ["!files/post-2.md", "package.json", "images/**"]
+included_files = ["backend/routes/**", "backend/routes/**/*"]
 
 # redirect all calls to api to the netlify functions
 [[redirects]]
