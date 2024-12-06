@@ -15,7 +15,7 @@
       // Create a token with user IP
       // console.log(process.env.SECRET_KEY);
       let key = process.env.SECRET_KEY;
-      let expiresIn = 60 * 60 * 24; // 24 hours
+      let expiresIn = 60 * 60 * 24; // 24 hours in seconds
       const token = jwt.sign({ ip: userIP }, key, { expiresIn: expiresIn  });
       console.log("ip: "+ userIP);
       console.log("access token: " + token);
