@@ -16,7 +16,7 @@
     display: flex;
     max-width: 1000px;
     width: 80%;
-    background-color: white;
+    background-color: var(--bg-color);
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
@@ -57,7 +57,7 @@
 .details_section button {
     padding: 8px 15px;
     background-color: #4CAF50;
-    color: white;
+    /* color: white; */
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -87,7 +87,7 @@
     margin-top: 20px;
     padding: 8px 15px;
     background-color: #0077b5;
-    color: white;
+    /* color: white; */
     border: none;
     border-radius: 5px;
     cursor: pointer;

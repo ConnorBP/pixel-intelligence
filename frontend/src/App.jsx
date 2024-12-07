@@ -26,9 +26,14 @@ function App() {
           <Route path="popuptest" element={<PopupTest />} />
           <Route path="menu" element={<Menu />} />
           <Route path="colorpicker" element={<ColorPickerToolbar />} />
-          {/* Move ViewImage route inside Layout */}
-          <Route path="viewImage/:imageId" element={<ImageDetailsOverlay images={testingImages} />} />
           <Route path="*" element={<NotFound />} />
+          {/* Parallel route for overlay */}
+          <Route path="viewImage/:imageId" element={
+            <>
+              <Gallery images={testingImages} />
+              <ImageDetailsOverlay images={testingImages} />
+            </>
+          } />
         </Route>
         <Route path="/editor" element={<Editor />} />
       </Routes>

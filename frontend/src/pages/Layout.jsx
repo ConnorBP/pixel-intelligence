@@ -9,9 +9,10 @@ const Layout = () => {
   return (
     <>
       <Navbar/>
-      <main style={{ marginTop: "80px" }}>
-        <Outlet />
-      </main>
+      {/* This is the main app content outlet */}
+      <Outlet />
+      {/* This outlet is for overlays */}
+      <Outlet context="overlay" /> 
     </>
   );
 };
