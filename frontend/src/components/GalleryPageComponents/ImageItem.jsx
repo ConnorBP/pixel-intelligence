@@ -1,6 +1,6 @@
+import React from "react";
 import { Link } from "react-router-dom";
 
-// Component to render an individual image item
 export const ImageItem = ({ image }) => {
     return (
         <div className="images">

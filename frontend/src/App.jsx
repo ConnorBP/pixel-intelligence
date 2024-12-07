@@ -4,7 +4,7 @@ import PopupTest from "./pages/PopupTest.jsx";
 import Layout from "./pages/Layout.jsx";
 import NotFound from "./pages/NotFound.jsx";
 import Editor from "./pages/Editor.jsx";
-import Menu from "./components/Menu.jsx"
+import Menu from "./components/Menu.jsx";
 import ColorPickerToolbar from "./components/ColorPickerToolbar.jsx";
 import ImageDetailsOverlay from "./components/GalleryPageComponents/ImageDetailsOverlay.jsx";
 
@@ -14,7 +14,6 @@ const baseUrl = '/test_images';
 
 const testingImages = Array.from({ length: 27 }, (_, i) => {
   const imgSrc = `${baseUrl}/testimg${i + 1}.png`;
-  // console.log(`Image ${i + 1}: ${imgSrc}`);
   return { id: i + 1, imgSrc };
 });
 
