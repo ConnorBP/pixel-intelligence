@@ -49,6 +49,10 @@ body {
     gap: 20px;
 }
 
+.navbar-links li {
+    list-style-type: none;
+}
+
 .navbar-links a {
     text-decoration: none;
     color: var(--link-color);
@@ -84,6 +88,7 @@ body {
         left: 0;
         width: 100%;
         padding: 10px 0;
+        text-align: center;
     }
 
     .navbar-links.show {
