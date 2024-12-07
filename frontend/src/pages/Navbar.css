@@ -1,7 +1,11 @@
+:root {
+    --navbar-height: 4em;
+}
+
 /* General Body Styles */
 body {
+    /* margin-top: var(--navbar-height); */
     margin: 0;
-    font-family: Arial, sans-serif;
     background-color: var(--bg-color);
     color: var(--text-color);
     transition: background-color 0.3s, color 0.3s;
@@ -12,8 +16,9 @@ body {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100vw; 
-    height: 50px;
+    width: 100%;
+    box-sizing: border-box;
+    height: var(--navbar-height);
     margin: 0;
     background-color: var(--primary-color);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -30,6 +35,7 @@ body {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 20px; 
+    box-sizing: border-box; /* Add this */
 }
 
 .navbar-brand {
@@ -41,6 +47,10 @@ body {
 .navbar-links {
     display: flex;
     gap: 20px;
+}
+
+.navbar-links li {
+    list-style-type: none;
 }
 
 .navbar-links a {
@@ -78,6 +88,7 @@ body {
         left: 0;
         width: 100%;
         padding: 10px 0;
+        text-align: center;
     }
 
     .navbar-links.show {

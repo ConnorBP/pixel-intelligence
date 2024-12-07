@@ -1,4 +1,4 @@
 #root {
-  /* allow sub components to use the whole screen width */
-  width: 100%;
+    width: 100%;
+    overflow-x: hidden;
 }

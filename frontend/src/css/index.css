@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Asap:ital,wght@0,100..900;1,100..900&family=Karla:ital,wght@0,200..800;1,200..800&family=Outfit:wght@100..900&family=Pixelify+Sans:wght@400..700&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
+
 :root {
   /* theme variables */
   --overlay-bg-light: rgba(0, 0, 0, 0.5);
@@ -13,7 +15,7 @@
   --link-color: #333333;
   --link-hover-color: White;
 
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: "Pixelify Sans", sans-serif, Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
@@ -39,10 +41,10 @@ a:hover {
 body {
   margin: 0;
   padding: 0;
-  /* display: flex; this adds padding at the top of the editor window*/
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  /* overflow-x: hidden; Prevent horizontal overflow */
 }
 
 h1 {
@@ -53,28 +55,6 @@ h1 {
 .hidden {
   display: none;
 }
-
-/* we should not dirty styling of all usages of button across the board
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-*/
 
 @media (prefers-color-scheme: light) {
   :root {

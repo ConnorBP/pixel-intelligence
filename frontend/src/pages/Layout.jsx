@@ -8,11 +8,13 @@ import Navbar from "./Navbar.jsx";
 const Layout = () => {
   return (
     <>
-      <Navbar/>
+      {/*
+        show the navbar on any page that is not editor.
+        for now that is just gallery, but this might extend in the future
+      */}
+      <Navbar />
       {/* This is the main app content outlet */}
       <Outlet />
-      {/* This outlet is for overlays */}
-      <Outlet context="overlay" /> 
     </>
   );
 };
