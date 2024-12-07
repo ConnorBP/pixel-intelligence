@@ -235,7 +235,7 @@ const Editor = () => {
   const onCreateNewImageClicked = () => {
     setShowNewImagePrompt(true);
   };
-  
+
   const onShareCurrentCanvasClicked = () => {
     alert('todo');
   };
@@ -270,6 +270,7 @@ const Editor = () => {
         onTrashClearClicked={onTrashClearClicked}
         onImportProjectClicked={onImportProjectClicked}
         onCreateNewImageClicked={onCreateNewImageClicked}
+        onShareCurrentCanvasClicked={onShareCurrentCanvasClicked}
       />
       <EditorLeftToolBar
         selectedColor={brushColor}
