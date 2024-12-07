@@ -244,10 +244,13 @@ const Editor = () => {
     { text: "New Project", onClick: onCreateNewImageClicked },
     { text: "Save", onClick: onSaveClicked },
     { text: "Open", onClick: onImportProjectClicked },
-    { text: "View Gallery", onClick: () => nav("/") },
-    { text: "Share", onClick: onShareCurrentCanvasClicked },
+
+
     { text: "Import Image", onClick: onImportImageClicked },
     { text: "Export Image", onClick: onExportDownloadClicked },
+
+    { text: "Share", onClick: onShareCurrentCanvasClicked },
+    { text: "View Gallery", onClick: () => nav("/") },
   ];
 
   return (

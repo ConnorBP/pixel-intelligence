@@ -37,32 +37,40 @@ const EditorTopBar = ({ contextMenuOptions, onResizeImageRequested, onImportProj
       <div className="top-toolbar">
         <Menu menuOptions={contextMenuOptions} />
 
-        {/* save json file to disc */}
-        <button onClick={onSaveClicked}>
-          <RiSave3Line className="icon" />
-        </button>
-        {/* import a canvas data json from disc */}
-        <button onClick={onImportProjectClicked}>
-          <FaRegFolderOpen className="icon" />
-        </button>
-        {/* import an image from disc */}
-        <button onClick={onImportImageClicked}>
-          <FaFileImport className="icon" />
-        </button>
         {/* create new image generation and canvas */}
         <button onClick={onCreateNewImageClicked}>
           <MdOutlineAddBox className="icon" />
         </button>
-        {/* resize canvas */}
-        <button onClick={() => setShowResizePrompt(true)}>
-          <GiResize className="icon" />
+
+        {/* save json file to disc */}
+        <button onClick={onSaveClicked}>
+          <RiSave3Line className="icon" />
         </button>
+
+        {/* import a canvas data json from disc */}
+        <button onClick={onImportProjectClicked}>
+          <FaRegFolderOpen className="icon" />
+        </button>
+
+        {/* import an image from disc */}
+        <button onClick={onImportImageClicked}>
+          <FaFileImport className="icon" />
+        </button>
+
+
         {/* export image */}
         <button onClick={onImageExportClicked}>
           <IoIosDownload className="icon" />
         </button>
+
+        {/* resize canvas */}
+        <button onClick={() => setShowResizePrompt(true)}>
+          <GiResize className="icon" />
+        </button>
+
         {/* clear canvas */}
         <button onClick={() => { setShowConfirmClearCanvas(true) }}><FaTrashCan /></button>
+
         {/* share */}
         <button onClick={onShareCurrentCanvasClicked}><FaShareFromSquare /></button>
 
