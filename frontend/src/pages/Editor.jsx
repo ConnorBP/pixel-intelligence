@@ -33,7 +33,6 @@ const Editor = () => {
 
   // canvas pixel data
   const [canvasData, setCanvasData] = useLocalStorage("canvas", defaultCanvas);
-
   // wether the grid lines are shown or not on the editor canvas
   const [gridLinesVisible, setGridLinesVisible] = useLocalStorage("gridLinesVisible", true);
   const [tool, setTool] = useLocalStorage("tool", "pencil");
