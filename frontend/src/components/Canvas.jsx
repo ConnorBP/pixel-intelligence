@@ -268,8 +268,7 @@ const Canvas = forwardRef(
         console.log("erasing");
       } else if (tool === "paint") {
 
-        const targetColor =
-          canvasData.pixels[pixelX + pixelY  * canvasData.width];
+        const targetColor = canvasData.pixels[pixelX + pixelY  * canvasData.width];
         if (targetColor === brushColor) return; // Already filled with the same color
         floodFill(pixelX, pixelY, targetColor, brushColor);
 
