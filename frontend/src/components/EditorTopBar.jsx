@@ -1,6 +1,5 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import NewImagePopup from "../components/NewImagePopup";
 import { MdOutlineAddBox } from "react-icons/md";
 import { RiArrowGoBackLine, RiSave3Line } from "react-icons/ri";
 import { GiResize } from "react-icons/gi";
@@ -11,16 +10,13 @@ import Menu from "./Menu";
 import ConfirmationPopup from "./ConfirmationPopup";
 import ScaleImagePopup from "./ScaleImagePopup";
 
-const EditorTopBar = ({ contextMenuOptions, onResizeImageRequested, onImportImageClicked, onImageExportClicked, currentCanvasSize, onSaveClicked, onTrashClearClicked }) => {
-  const [showNewImagePrompt, setShowNewImagePrompt] = useState(false);
+const EditorTopBar = ({ contextMenuOptions, onResizeImageRequested, onImportProjectClicked, onImportImageClicked, onCreateNewImageClicked, onImageExportClicked, currentCanvasSize, onSaveClicked, onTrashClearClicked }) => {
+  
   const [showConfirmClearCanvas, setShowConfirmClearCanvas] = useState(false);
   const [showResizePrompt, setShowResizePrompt] = useState(false);
 
   const navigate = useNavigate();
 
-  const handleCreateNewImage = (newImage) => {
-    console.log("New Canvas Created:", newImage);
-  };
   return (
     <>
       <ConfirmationPopup
@@ -36,15 +32,6 @@ const EditorTopBar = ({ contextMenuOptions, onResizeImageRequested, onImportImag
         }}
       />
 
-      <NewImagePopup
-        isOpen={showNewImagePrompt}
-        onClose={() => { setShowNewImagePrompt(false) }}
-        onCreate={(newImage) => {
-          handleCreateNewImage(newImage);
-          setShowNewImagePrompt(false);
-        }}
-      />
-
       <ScaleImagePopup isOpen={showResizePrompt} setIsOpen={setShowResizePrompt} onConfirm={onResizeImageRequested} currentCanvasSize={currentCanvasSize} />
 
       <div className="top-toolbar">
@@ -55,7 +42,7 @@ const EditorTopBar = ({ contextMenuOptions, onResizeImageRequested, onImportImag
           <RiSave3Line className="icon" />
         </button>
         {/* import a canvas data json from disc */}
-        <button onClick={() => { setShowConfirmClearCanvas(true) }}>
+        <button onClick={onImportProjectClicked}>
           <FaRegFolderOpen className="icon" />
         </button>
         {/* import an image from disc */}
@@ -63,7 +50,7 @@ const EditorTopBar = ({ contextMenuOptions, onResizeImageRequested, onImportImag
           <FaFileImport className="icon" />
         </button>
         {/* create new image generation and canvas */}
-        <button onClick={() => setShowNewImagePrompt(true)}>
+        <button onClick={onCreateNewImageClicked}>
           <MdOutlineAddBox className="icon" />
         </button>
         {/* resize canvas */}
