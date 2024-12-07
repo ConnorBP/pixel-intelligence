@@ -4,34 +4,34 @@ import { FaEraser, FaPencilAlt, FaEyeDropper } from "react-icons/fa";
 import { PiPaintBucketFill } from "react-icons/pi";
 
 
-const EditorLeftToolBar = ({  selectedColor, setSelectedColor, secondaryColor, setSecondaryColor,tool, setTool }) => {
+const EditorLeftToolBar = ({  selectedColor, setSelectedColor, secondaryColor, setSecondaryColor,tool, setTool,  eyeDropperColor,}) => {
+
   return (
     <div className="left-toolbar">
       <div className = "icon-container">
         {/* editor buttons go here */}
         <button 
       className={`icon ${tool === "eraser" ? "active" : ""}`}
-      onClick={() => {
-        setTool("eraser");
-        console.log(tool); 
-      }}
-      ><FaEraser />
+      onClick={() => {setTool("eraser")}}><FaEraser />
       </button>
         <button
           className={`icon ${tool === "paint" ? "active" : ""}`}
-          onClick={() => setTool("paint")}
-        ><PiPaintBucketFill /></button>
+          onClick={() => setTool("paint")} ><PiPaintBucketFill /></button>
           <button
           className={`icon ${tool === "eyeDropper" ? "active" : ""}`}
-          onClick={() => setTool("eyeDropper")} 
-        ><FaEyeDropper /></button>
-        <button
+          onClick={() => {setTool("eyeDropper")}}><FaEyeDropper /></button>
+          <button
           className={`icon ${tool === "pencil" ? "active" : ""}`}
-          onClick={() =>{ setTool("pencil") ;console.log(tool); }}
-        ><FaPencilAlt /></button>
+          onClick={() =>setTool("pencil")}><FaPencilAlt /></button>
       </div>
       <div className="align-end toolbar-square">
-        <ColorPickerToolbar primaryColor={selectedColor} setPrimaryColor={setSelectedColor} secondaryColor={secondaryColor} setSecondaryColor={setSecondaryColor} />
+      <ColorPickerToolbar
+          primaryColor={selectedColor}
+          setPrimaryColor={setSelectedColor}
+          secondaryColor={secondaryColor}
+          setSecondaryColor={setSecondaryColor}
+          eyeDropperColor={eyeDropperColor} // Pass the selected color to the toolbar
+        />
       </div>
     </div>
   );

@@ -1,18 +1,21 @@
 import "../css/ColorPickerToolbar.css";
 import { FaExchangeAlt } from "react-icons/fa";
 
-function ColorPickerToolbar({primaryColor, setPrimaryColor, secondaryColor, setSecondaryColor, handleColorPickerInput }) {
+function ColorPickerToolbar({primaryColor, setPrimaryColor, secondaryColor, setSecondaryColor,eyeDropperColor}) {
+  
   const handleColorPickerFirst = (event) => {
-    if(handleColorPickerInput){
-      setPrimaryColor(handleColorPickerInput)
-
-    }else
-    setPrimaryColor(event.target.value);
+  if(primaryColor){
+      setPrimaryColor(event.target.value);
+    }else if (eyeDropperColor) {
+      console.log("Using EyeDropper Color:", eyeDropperColor);
+      setPrimaryColor(eyeDropperColor);
+    } 
   };
 
   const handleColorPickerSecond = (event) => {
     setSecondaryColor(event.target.value);
   };
+
   const handleChange = () => {
     const temp = primaryColor;
     setPrimaryColor(secondaryColor);
@@ -24,7 +27,7 @@ function ColorPickerToolbar({primaryColor, setPrimaryColor, secondaryColor, setS
         <input
           className="color-pcik-first"
           type="color"
-          value={primaryColor}
+          value={primaryColor || eyeDropperColor} 
           onChange={handleColorPickerFirst}
         />
         <input
@@ -40,7 +43,7 @@ function ColorPickerToolbar({primaryColor, setPrimaryColor, secondaryColor, setS
       <div className="color-display-box">
         <div
           className="color-display-first"
-          style={{ backgroundColor: primaryColor }}
+          style={{ backgroundColor: primaryColor || eyeDropperColor }}
         >
           <p
             className="color-box-first"

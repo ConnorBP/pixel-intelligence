@@ -37,7 +37,7 @@ const Editor = () => {
   // wether the grid lines are shown or not on the editor canvas
   const [gridLinesVisible, setGridLinesVisible] = useLocalStorage("gridLinesVisible", true);
   const [tool, setTool] = useLocalStorage("tool", "pencil");
-
+  const [eyeDropperColor, setEyeDropperColor] = useState (" ");
   // file pickers
   // actual element is defined at the bottom of the file
   // this ref lets react refer to the element on the dom
@@ -246,7 +246,11 @@ const Editor = () => {
   const onResizeImageClicked = () => {
     setShowResizePrompt(true);
   };
-
+  const handleEyeDropperColor = (color) => {
+    console.log("color from canvas:", color); 
+    setEyeDropperColor(color); 
+    setBrushColor(color); 
+  };
   const contextMenuOptions = [
     { text: "New Project", onClick: onCreateNewImageClicked },
     { text: "Save", onClick: onSaveClicked },
@@ -291,6 +295,7 @@ const Editor = () => {
         setSecondaryColor={setSecondaryBrushColor}
         tool={tool}
         setTool={setTool}
+        eyeDropperColor={eyeDropperColor}
 
       />
       <div className="canvas-container">
@@ -303,6 +308,7 @@ const Editor = () => {
           canvasRenderHeight={CANVAS_RENDER_WIDTH}
           gridLinesVisible={gridLinesVisible}
           tool={tool}
+          onColorSelected={handleEyeDropperColor} 
         />
       </div>
       {/* Hidden file input for opening images */}

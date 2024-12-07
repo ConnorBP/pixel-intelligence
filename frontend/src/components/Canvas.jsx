@@ -1,4 +1,5 @@
-import { useRef, useEffect, forwardRef, useImperativeHandle, useCallback  } from "react";
+import { useRef, useEffect, forwardRef, useImperativeHandle, useCallback } from "react";
+
 import "../css/Canvas.css";
 import {
   drawCheckeredBackground,
@@ -6,8 +7,6 @@ import {
   drawCheckeredPixel,
   handleEyeDropper
 } from "../utils";
-
-
 // eslint-disable-next-line react/display-name
 const Canvas = forwardRef(
   (
@@ -20,7 +19,7 @@ const Canvas = forwardRef(
       drawGridLines = true,
       gridLineWidth = 1,
       gridLineColor = "#000000",
-      tool,
+      tool,     
       onColorSelected,
     },
     ref
@@ -31,13 +30,13 @@ const Canvas = forwardRef(
     
     // reference to the canvas object for us to draw to
     const canvasRef = useRef(null);
-
     // how big a single pixel is on the actual rendering canvas:
     // this should be calculated on demand
     // const pixelSize = canvasRenderWidth / canvasData.width;
 
     // updates the state of a pixel at specific coordinate
     // on the provided canvas data and returns it
+
     const updatePixelAt = (oldCanvas, x, y, color) => {
       console.log(`updatePixelAt called with  ${oldCanvas} ${x} ${y} ${color}`);
       // don't allow out of bounds access
@@ -256,7 +255,7 @@ const Canvas = forwardRef(
         (((event.clientY - rect.top) / rect.height) * canvas.height) / pixelSize
       );
       let color; // Define the color for the current tool
-      console.log(tool);
+
       if (tool === "pencil") {
         color = brushColor;
          
@@ -268,12 +267,12 @@ const Canvas = forwardRef(
 
         console.log("erasing");
       } else if (tool === "paint") {
-        const targetColor =
-          canvasData.pixels[pixelX + pixelY * canvasData.width];
-        if (targetColor === brushColor) return; // Already filled with the same color
 
-        // Perform flood fill
+        const targetColor =
+          canvasData.pixels[pixelX + pixelX  * canvasData.width];
+        if (targetColor === brushColor) return; // Already filled with the same color
         floodFill(pixelX, pixelY, targetColor, brushColor);
+
       }else if (tool === "eyeDropper"){
       
         const color = await handleEyeDropper();
@@ -283,7 +282,9 @@ const Canvas = forwardRef(
         }
        }
         return;
-      }
+      
+
+     }
       // update the pixel in local storage
       setCanvasData((oldCanvas) => {
         return updatePixelAt(oldCanvas, pixelX, pixelY, color);
@@ -304,7 +305,7 @@ const Canvas = forwardRef(
       const isBackgroundColor = "#00000000"
       if (
         targetColor === replacementColor ||
-        targetColor === isBackgroundColor
+        targetColor === isBackgroundColor 
       ) {
         return;
       }
