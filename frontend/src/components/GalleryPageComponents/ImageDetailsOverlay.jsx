@@ -1,18 +1,20 @@
 import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
-import WhatsAppIcon from '@mui/icons-material/WhatsApp';
-import FacebookIcon from '@mui/icons-material/Facebook';
-import TwitterIcon from '@mui/icons-material/Twitter';
+import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
+import WhatsAppIcon from "@mui/icons-material/WhatsApp";
+import FacebookIcon from "@mui/icons-material/Facebook";
+import TwitterIcon from "@mui/icons-material/Twitter";
 import "../../css/GalleryPageCSS/ImageDetailsOverlay.css";
 
 function ImageDetailsOverlay({ images }) {
-    const { imageId } = useParams();
+    const { imageId } = useParams(); 
     const navigate = useNavigate(); 
-    const [copied, setCopied] = useState(false);
-    const image = images.find((img) => img.id === parseInt(imageId)); 
+    const [copied, setCopied] = useState(false); 
 
-    if (!image) return <div>Image not found</div>; 
+    // Find the specific image details based on the `imageId`
+    const image = images.find((img) => img.id === parseInt(imageId));
+
+    if (!image) return <div>Image not found</div>;
 
     // Copy the image link to the clipboard
     const copyToClipboard = () => {
@@ -33,14 +35,25 @@ function ImageDetailsOverlay({ images }) {
         <div className="image_details">
             {/* Close button to navigate back to the gallery */}
             <CloseRoundedIcon onClick={() => navigate(-1)} className="close_icon" />
+
             <div className="content">
                 {/* Left side for the image */}
                 <div className="image_section">
-                    <img src={image.imgSrc} alt={`Image ${image.id}`} />
+                    <img src={image.imgSrc} alt={image.title || `Image ${image.id}`} />
                 </div>
 
                 {/* Right side for the details */}
                 <div className="details_section">
+                    {/* Metadata Section */}
+                    <h2>{image.title || "Untitled Image"}</h2>
+                    <p><b>Description:</b> {image.description || "No description available."}</p>
+                    <p><b>Photographer:</b> {image.photographer || "Unknown"}</p>
+                    <p><b>Date Uploaded:</b> {image.date || "Unknown"}</p>
+                    {image.tags && (
+                        <p><b>Tags:</b> {image.tags.join(", ")}</p>
+                    )}
+
+                    {/* Sharing Section */}
                     <p><b>Image URL:</b></p>
                     <input type="text" value={image.imgSrc} readOnly />
                     <button onClick={copyToClipboard}>{copied ? "Copied!" : "Copy URL"}</button>
@@ -58,6 +71,7 @@ function ImageDetailsOverlay({ images }) {
                         </a>
                     </div>
 
+                    {/* Download Section */}
                     <button className="download_btn" onClick={downloadImage}>
                         Download
                     </button>
