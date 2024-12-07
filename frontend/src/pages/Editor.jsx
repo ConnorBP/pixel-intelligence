@@ -235,13 +235,17 @@ const Editor = () => {
   const onCreateNewImageClicked = () => {
     setShowNewImagePrompt(true);
   };
+  
+  const onShareCurrentCanvasClicked = () => {
+    alert('todo');
+  };
 
   const contextMenuOptions = [
     { text: "New Project", onClick: onCreateNewImageClicked },
     { text: "Save", onClick: onSaveClicked },
-    { text: "Open", onClick: () => alert('todo: open a json document') },
+    { text: "Open", onClick: onImportProjectClicked },
     { text: "View Gallery", onClick: () => nav("/") },
-    { text: "Share", onClick: () => alert('todo') },
+    { text: "Share", onClick: onShareCurrentCanvasClicked },
     { text: "Import Image", onClick: onImportImageClicked },
     { text: "Export Image", onClick: onExportDownloadClicked },
   ];

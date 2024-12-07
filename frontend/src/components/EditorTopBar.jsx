@@ -10,8 +10,8 @@ import Menu from "./Menu";
 import ConfirmationPopup from "./ConfirmationPopup";
 import ScaleImagePopup from "./ScaleImagePopup";
 
-const EditorTopBar = ({ contextMenuOptions, onResizeImageRequested, onImportProjectClicked, onImportImageClicked, onCreateNewImageClicked, onImageExportClicked, currentCanvasSize, onSaveClicked, onTrashClearClicked }) => {
-  
+const EditorTopBar = ({ contextMenuOptions, onResizeImageRequested, onImportProjectClicked, onImportImageClicked, onCreateNewImageClicked, onImageExportClicked, onShareCurrentCanvasClicked, currentCanvasSize, onSaveClicked, onTrashClearClicked }) => {
+
   const [showConfirmClearCanvas, setShowConfirmClearCanvas] = useState(false);
   const [showResizePrompt, setShowResizePrompt] = useState(false);
 
@@ -28,7 +28,7 @@ const EditorTopBar = ({ contextMenuOptions, onResizeImageRequested, onImportProj
         onConfirm={() => {
           console.log("Confirmed!");
           setShowConfirmClearCanvas(false);
-          if(onTrashClearClicked) onTrashClearClicked();
+          if (onTrashClearClicked) onTrashClearClicked();
         }}
       />
 
@@ -62,9 +62,9 @@ const EditorTopBar = ({ contextMenuOptions, onResizeImageRequested, onImportProj
           <IoIosDownload className="icon" />
         </button>
         {/* clear canvas */}
-        <button onClick={()=> {setShowConfirmClearCanvas(true)}}><FaTrashCan /></button>
+        <button onClick={() => { setShowConfirmClearCanvas(true) }}><FaTrashCan /></button>
         {/* share */}
-        <button><FaShareFromSquare /></button>
+        <button onClick={onShareCurrentCanvasClicked}><FaShareFromSquare /></button>
 
         <button className="align-end" onClick={() => navigate("/")}>
           <RiArrowGoBackLine className="icon" /> Back to Gallery
