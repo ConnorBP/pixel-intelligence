@@ -9,6 +9,8 @@ export default (in_str) => {
         // if character count is divisible by 4 then it has an alpha component
         let hasAlpha = false;
         var collen = (input.length - 1) / 3;
+
+        // alpha check addition by ConnorBP
         // this takes advantage of the fact that css codes in all forms
         // are divisible by 4 only if they have an alpha component.
         // ex: #FFF vs #FFFF and #FFFFFFFFF vs #FFFFFFFFFFFF or of course #FFFFFF vs #FFFFFFFF
