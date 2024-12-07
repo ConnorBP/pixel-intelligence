@@ -269,7 +269,7 @@ const Canvas = forwardRef(
       } else if (tool === "paint") {
 
         const targetColor =
-          canvasData.pixels[pixelX + pixelX  * canvasData.width];
+          canvasData.pixels[pixelX + pixelY  * canvasData.width];
         if (targetColor === brushColor) return; // Already filled with the same color
         floodFill(pixelX, pixelY, targetColor, brushColor);
 
@@ -283,7 +283,6 @@ const Canvas = forwardRef(
        }
         return;
       
-
      }
       // update the pixel in local storage
       setCanvasData((oldCanvas) => {
@@ -305,7 +304,8 @@ const Canvas = forwardRef(
       const isBackgroundColor = "#00000000"
       if (
         targetColor === replacementColor ||
-        targetColor === isBackgroundColor 
+        replacementColor === isBackgroundColor
+       
       ) {
         return;
       }
