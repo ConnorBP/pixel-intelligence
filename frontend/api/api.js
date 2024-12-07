@@ -1,4 +1,4 @@
-// YOUR_BASE_DIRECTORY/netlify/functions/api.ts
+// YOUR_BASE_DIRECTORY/netlify/functions/api.js
 // serverless netlify api entrypoint
 
 import express from "express";
