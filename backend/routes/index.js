@@ -6,7 +6,7 @@ const router = express.Router();
 
 // Default root route of the API
 router.get('/', (req, res) => {
-    res.send('It works!');
+    res.status(200).json({ success: true, message: "It works!" });
 });
 
  // All routes starting with "/auth" will be handled by the authRoute
