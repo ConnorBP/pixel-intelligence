@@ -27,10 +27,15 @@ function App() {
           <Route path="menu" element={<Menu />} />
           <Route path="colorpicker" element={<ColorPickerToolbar />} />
           <Route path="*" element={<NotFound />} />
+          {/* Parallel route for overlay */}
+          <Route path="viewImage/:imageId" element={
+            <>
+              <Gallery images={testingImages} />
+              <ImageDetailsOverlay images={testingImages} />
+            </>
+          } />
         </Route>
         <Route path="/editor" element={<Editor />} />
-        {/* Route for detail info overlay window of a image */}
-        <Route path="/gallery/viewImage/:imageId" element={<ImageDetailsOverlay images={testingImages} />} />
       </Routes>
     </BrowserRouter>
   );

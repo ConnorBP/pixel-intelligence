@@ -1,7 +1,9 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import Canvas from "../components/Canvas";
 import EditorLeftToolBar from "../components/EditorLeftToolBar";
 import EditorTopBar from "../components/EditorTopBar";
+import NewImagePopup from "../components/NewImagePopup";
+import ScaleImagePopup from "../components/ScaleImagePopup";
 import "../css/EditorPageCSS/Editor.css";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 import { useNavigate } from "react-router-dom";
@@ -35,8 +37,16 @@ const Editor = () => {
   // wether the grid lines are shown or not on the editor canvas
   const [gridLinesVisible, setGridLinesVisible] = useLocalStorage("gridLinesVisible", true);
   const [tool, setTool] = useLocalStorage("tool", "pencil");
-  // file picker
+
+  // file pickers
+  // actual element is defined at the bottom of the file
+  // this ref lets react refer to the element on the dom
   const imageFileInputRef = useRef(null);
+  const jsonFileInputRef = useRef(null);
+
+  // popup state tracking
+  const [showNewImagePrompt, setShowNewImagePrompt] = useState(false);
+  const [showResizePrompt, setShowResizePrompt] = useState(false);
 
   async function toBase64(file) {
     return new Promise((resolve, reject) => {
@@ -88,7 +98,7 @@ const Editor = () => {
         if (pixelCanvasRef.current) {
           pixelCanvasRef.current.tryLoadCanvas(newCanvasData);
         }
- 
+
         console.log('import complete');
 
 
@@ -99,6 +109,30 @@ const Editor = () => {
     }
 
     img.src = base64;
+  };
+
+  const handleProjectDocumentLoad = async (event) => {
+    const target = event.target;
+    const files = target.files;
+    // get the first image selected by file-picker
+    // console.log(files[0]);
+    try {
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        // console.log('file read');
+        // console.log(e.target.result);
+        const json = JSON.parse(e.target.result);
+        // console.log(json);
+        setCanvasData(json);
+        if (pixelCanvasRef.current) {
+          // now attempt to load it to the canvas
+          pixelCanvasRef.current.tryLoadCanvas(json);
+        }
+      };
+      reader.readAsText(files[0]);
+    } catch (err) {
+      console.error('failed to load project document', err);
+    }
   };
 
   // takes in a new square resolution and scales the current canvas data to it
@@ -126,12 +160,13 @@ const Editor = () => {
         // this stupid ass thing does a string comparison half the time without parse int
         // and this is why javascript is a stupid language
         if (parseInt(newSize) > parseInt(canvasData.width)) {
-          console.log(`up-scaling from ${canvasData.width} to ${newSize}`);
+          // console.log(`up-scaling from ${canvasData.width} to ${newSize}`);
           pixels = DownScaler.resizeNN(simp, newSize, newSize).pixels;
         } else {
-          console.log(`down-scaling from ${canvasData.width} to ${newSize}`);
+          // console.log(`down-scaling from ${canvasData.width} to ${newSize}`, simp);
           let { kCentroid } = DownScaler.kCenter(simp, newSize, newSize, 16, 16);
           pixels = kCentroid.pixels;
+          // console.log('done: ', pixels);
         }
 
         const newCanvasData = {
@@ -152,6 +187,10 @@ const Editor = () => {
     }
   }
 
+  const handleCreateNewImageConfirmed = (newImage) => {
+    console.log("New Canvas Created:", newImage);
+  };
+
   const onImportImageClicked = () => {
     if (imageFileInputRef.current) {
       // reset the file input before prompting for file selection
@@ -159,6 +198,16 @@ const Editor = () => {
       imageFileInputRef.current.value = null;
       // simulate a click to the hidden file input component to prompt for an image file selection
       imageFileInputRef.current.click();
+    }
+  };
+
+  const onImportProjectClicked = () => {
+    if (jsonFileInputRef.current) {
+      // reset the file input before prompting for file selection
+      // so we don't get old input
+      jsonFileInputRef.current.value = null;
+      // simulate a click to the hidden file input component to prompt for an image file selection
+      jsonFileInputRef.current.click();
     }
   };
 
@@ -171,12 +220,12 @@ const Editor = () => {
     }
   };
 
-  function onTrashClearClicked(){
+  function onTrashClearClicked() {
     // this is ugly, api should be adjusted
-    if(pixelCanvasRef.current && pixelCanvasRef.current.canvasRef.current) {
-      pixelCanvasRef.current.clearCanvas(pixelCanvasRef.current.canvasRef.current, canvasData.width, canvasData.height,true);
+    if (pixelCanvasRef.current && pixelCanvasRef.current.canvasRef.current) {
+      pixelCanvasRef.current.clearCanvas(pixelCanvasRef.current.canvasRef.current, canvasData.width, canvasData.height, true);
     }
-   
+
   }
   // download the latest canvas data json
   function onSaveClicked() {
@@ -186,26 +235,54 @@ const Editor = () => {
     }
   }
 
+  const onCreateNewImageClicked = () => {
+    setShowNewImagePrompt(true);
+  };
+
+  const onShareCurrentCanvasClicked = () => {
+    alert('todo');
+  };
+
+  const onResizeImageClicked = () => {
+    setShowResizePrompt(true);
+  };
+
   const contextMenuOptions = [
-    { text: "New Drawing", onClick: () => alert('todo') },
+    { text: "New Project", onClick: onCreateNewImageClicked },
     { text: "Save", onClick: onSaveClicked },
-    { text: "Open", onClick: () => alert('todo: open a json document') },
-    { text: "View Gallery", onClick: () => nav("/") },
-    { text: "Share", onClick: () => alert('todo') },
+    { text: "Open", onClick: onImportProjectClicked },
+
     { text: "Import Image", onClick: onImportImageClicked },
     { text: "Export Image", onClick: onExportDownloadClicked },
+
+    { text: "Resize Canvas", onClick: onResizeImageClicked },
+
+    { text: "Share", onClick: onShareCurrentCanvasClicked },
+    { text: "View Gallery", onClick: () => nav("/") },
   ];
 
   return (
     <div className="editor-container">
+      <NewImagePopup
+        isOpen={showNewImagePrompt}
+        onClose={() => { setShowNewImagePrompt(false) }}
+        onCreate={(newImage) => {
+          handleCreateNewImageConfirmed(newImage);
+          setShowNewImagePrompt(false);
+        }}
+      />
+      <ScaleImagePopup isOpen={showResizePrompt} setIsOpen={setShowResizePrompt} onConfirm={handleResize} currentCanvasSize={canvasData.width} />
       <EditorTopBar
         contextMenuOptions={contextMenuOptions}
         onImportImageClicked={onImportImageClicked}
         currentCanvasSize={canvasData.width}
-        onResizeImageRequested={handleResize}
+        onResizeImageClicked={onResizeImageClicked}
         onImageExportClicked={onExportDownloadClicked}
         onSaveClicked={onSaveClicked}
-        onTrashClearClicked={onTrashClearClicked}// show a popup then run this: clearCanvas(canvas, canvasData.width, canvasData.height, true);
+        onTrashClearClicked={onTrashClearClicked}
+        onImportProjectClicked={onImportProjectClicked}
+        onCreateNewImageClicked={onCreateNewImageClicked}
+        onShareCurrentCanvasClicked={onShareCurrentCanvasClicked}
       />
       <EditorLeftToolBar
         selectedColor={brushColor}
@@ -214,7 +291,7 @@ const Editor = () => {
         setSecondaryColor={setSecondaryBrushColor}
         tool={tool}
         setTool={setTool}
-        
+
       />
       <div className="canvas-container">
         <Canvas
@@ -228,6 +305,7 @@ const Editor = () => {
           tool={tool}
         />
       </div>
+      {/* Hidden file input for opening images */}
       <input
         type="file"
         id="imgFileElem"
@@ -236,6 +314,16 @@ const Editor = () => {
         className="hidden"
         onChange={handleImageLoad}
         ref={imageFileInputRef}
+      />
+      {/* Hidden file input for opening json files */}
+      <input
+        type="file"
+        id="projectFileElem"
+        // multiple
+        accept="application/json"
+        className="hidden"
+        onChange={handleProjectDocumentLoad}
+        ref={jsonFileInputRef}
       />
     </div>
   );
