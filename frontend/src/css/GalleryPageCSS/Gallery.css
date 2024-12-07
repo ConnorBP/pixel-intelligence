@@ -4,8 +4,15 @@
     /* width: 100%;s */
     /* box-sizing: border-box; */
     /* overflow-x: hidden; Prevent horizontal overflow */
-    padding: 1em;
+    padding: 0.5em;
     margin: auto;
+    margin-top: var(--navbar-height);
+}
+
+.gallery_header {
+    color: var(--text-color);
+    text-align: center;
+    margin-bottom: 1em;
 }
 
 .gallery {
