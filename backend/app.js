@@ -5,10 +5,10 @@
 import 'dotenv/config';
 
 // test that it worked by leaking secrets lol
-// console.log(process.env.SECRET_KET);
+// console.log(process.env.SECRET_KEY);
 import express from "express";
 import cookieParser from "cookie-parser";
-import routes from "./routes/index.js"; // Import the routes defined in index.js
+import routes from "./routes/index.js";
 const app = express();
 
 // Cookie Parser for all routes

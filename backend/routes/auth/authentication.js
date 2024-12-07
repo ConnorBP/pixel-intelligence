@@ -13,7 +13,7 @@ export const authenticate = (req, res, next) => {
     }
 
     try {
-        let key = process.env.SECRET_KET;
+        let key = process.env.SECRET_KEY;
         const decoded = jwt.verify(token, key);
         const userIP = req.ip;
 

@@ -1,7 +1,7 @@
 // import 'dotenv/config';
 
 // test that it worked by leaking secrets lol
-// console.log(process.env.SECRET_KET);
+// console.log(process.env.SECRET_KEY);
 
   import express from "express";
   import jwt from "jsonwebtoken";
@@ -13,8 +13,8 @@
     try {
       const userIP = req.ip;
       // Create a token with user IP
-      // console.log(process.env.SECRET_KET);
-      let key = process.env.SECRET_KET;
+      // console.log(process.env.SECRET_KEY);
+      let key = process.env.SECRET_KEY;
       let expiresIn = 60 * 60 * 24; // 24 hours in seconds
       const token = jwt.sign({ ip: userIP }, key, { expiresIn: expiresIn  });
       console.log("ip: "+ userIP);
