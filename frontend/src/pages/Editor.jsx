@@ -3,6 +3,7 @@ import Canvas from "../components/Canvas";
 import EditorLeftToolBar from "../components/EditorLeftToolBar";
 import EditorTopBar from "../components/EditorTopBar";
 import NewImagePopup from "../components/NewImagePopup";
+import ScaleImagePopup from "../components/ScaleImagePopup";
 import "../css/EditorPageCSS/Editor.css";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 import { useNavigate } from "react-router-dom";
@@ -45,6 +46,7 @@ const Editor = () => {
 
   // popup state tracking
   const [showNewImagePrompt, setShowNewImagePrompt] = useState(false);
+  const [showResizePrompt, setShowResizePrompt] = useState(false);
 
   async function toBase64(file) {
     return new Promise((resolve, reject) => {
@@ -240,14 +242,19 @@ const Editor = () => {
     alert('todo');
   };
 
+  const onResizeImageClicked = () => {
+    setShowResizePrompt(true);
+  };
+
   const contextMenuOptions = [
     { text: "New Project", onClick: onCreateNewImageClicked },
     { text: "Save", onClick: onSaveClicked },
     { text: "Open", onClick: onImportProjectClicked },
 
-
     { text: "Import Image", onClick: onImportImageClicked },
     { text: "Export Image", onClick: onExportDownloadClicked },
+
+    { text: "Resize Canvas", onClick: onResizeImageClicked },
 
     { text: "Share", onClick: onShareCurrentCanvasClicked },
     { text: "View Gallery", onClick: () => nav("/") },
@@ -263,11 +270,12 @@ const Editor = () => {
           setShowNewImagePrompt(false);
         }}
       />
+      <ScaleImagePopup isOpen={showResizePrompt} setIsOpen={setShowResizePrompt} onConfirm={handleResize} currentCanvasSize={canvasData.width} />
       <EditorTopBar
         contextMenuOptions={contextMenuOptions}
         onImportImageClicked={onImportImageClicked}
         currentCanvasSize={canvasData.width}
-        onResizeImageRequested={handleResize}
+        onResizeImageClicked={onResizeImageClicked}
         onImageExportClicked={onExportDownloadClicked}
         onSaveClicked={onSaveClicked}
         onTrashClearClicked={onTrashClearClicked}

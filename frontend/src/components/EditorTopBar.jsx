@@ -8,12 +8,10 @@ import { IoIosDownload } from "react-icons/io";
 import "../css/EditorPageCSS/EditorTopBar.css";
 import Menu from "./Menu";
 import ConfirmationPopup from "./ConfirmationPopup";
-import ScaleImagePopup from "./ScaleImagePopup";
 
-const EditorTopBar = ({ contextMenuOptions, onResizeImageRequested, onImportProjectClicked, onImportImageClicked, onCreateNewImageClicked, onImageExportClicked, onShareCurrentCanvasClicked, currentCanvasSize, onSaveClicked, onTrashClearClicked }) => {
+const EditorTopBar = ({ contextMenuOptions, onResizeImageClicked, onImportProjectClicked, onImportImageClicked, onCreateNewImageClicked, onImageExportClicked, onShareCurrentCanvasClicked, currentCanvasSize, onSaveClicked, onTrashClearClicked }) => {
 
   const [showConfirmClearCanvas, setShowConfirmClearCanvas] = useState(false);
-  const [showResizePrompt, setShowResizePrompt] = useState(false);
 
   const navigate = useNavigate();
 
@@ -31,8 +29,6 @@ const EditorTopBar = ({ contextMenuOptions, onResizeImageRequested, onImportProj
           if (onTrashClearClicked) onTrashClearClicked();
         }}
       />
-
-      <ScaleImagePopup isOpen={showResizePrompt} setIsOpen={setShowResizePrompt} onConfirm={onResizeImageRequested} currentCanvasSize={currentCanvasSize} />
 
       <div className="top-toolbar">
         <Menu menuOptions={contextMenuOptions} />
@@ -64,7 +60,7 @@ const EditorTopBar = ({ contextMenuOptions, onResizeImageRequested, onImportProj
         </button>
 
         {/* resize canvas */}
-        <button onClick={() => setShowResizePrompt(true)}>
+        <button onClick={onResizeImageClicked}>
           <GiResize className="icon" />
         </button>
 
