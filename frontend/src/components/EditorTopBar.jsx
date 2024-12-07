@@ -13,7 +13,7 @@ import ScaleImagePopup from "./ScaleImagePopup";
 
 const EditorTopBar = ({ contextMenuOptions, onResizeImageRequested, onImportImageClicked, onImageExportClicked, currentCanvasSize, onSaveClicked, onTrashClearClicked }) => {
   const [showNewImagePrompt, setShowNewImagePrompt] = useState(false);
-  const [showSaveNotYetImplemented, setShowSaveNotYetImplemented] = useState(false);
+  const [showConfirmClearCanvas, setShowConfirmClearCanvas] = useState(false);
   const [showResizePrompt, setShowResizePrompt] = useState(false);
 
   const navigate = useNavigate();
@@ -24,14 +24,14 @@ const EditorTopBar = ({ contextMenuOptions, onResizeImageRequested, onImportImag
   return (
     <>
       <ConfirmationPopup
-        isOpen={showSaveNotYetImplemented}
+        isOpen={showConfirmClearCanvas}
         title="WARNING"
         message1="This action cannot be undone  ."
         message2=""
-        onCancel={() => setShowSaveNotYetImplemented(false)}
+        onCancel={() => setShowConfirmClearCanvas(false)}
         onConfirm={() => {
           console.log("Confirmed!");
-          setShowSaveNotYetImplemented(false);
+          setShowConfirmClearCanvas(false);
           if(onTrashClearClicked) onTrashClearClicked();
         }}
       />
@@ -55,7 +55,7 @@ const EditorTopBar = ({ contextMenuOptions, onResizeImageRequested, onImportImag
           <RiSave3Line className="icon" />
         </button>
         {/* import a canvas data json from disc */}
-        <button onClick={() => { setShowSaveNotYetImplemented(true) }}>
+        <button onClick={() => { setShowConfirmClearCanvas(true) }}>
           <FaRegFolderOpen className="icon" />
         </button>
         {/* import an image from disc */}
@@ -75,7 +75,7 @@ const EditorTopBar = ({ contextMenuOptions, onResizeImageRequested, onImportImag
           <IoIosDownload className="icon" />
         </button>
         {/* clear canvas */}
-        <button onClick={()=> {setShowSaveNotYetImplemented(true)}}><FaTrashCan /></button>
+        <button onClick={()=> {setShowConfirmClearCanvas(true)}}><FaTrashCan /></button>
         {/* share */}
         <button><FaShareFromSquare /></button>
 
