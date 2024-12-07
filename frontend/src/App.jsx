@@ -27,11 +27,11 @@ function App() {
           <Route path="popuptest" element={<PopupTest />} />
           <Route path="menu" element={<Menu />} />
           <Route path="colorpicker" element={<ColorPickerToolbar />} />
+          {/* Move ViewImage route inside Layout */}
+          <Route path="viewImage/:imageId" element={<ImageDetailsOverlay images={testingImages} />} />
           <Route path="*" element={<NotFound />} />
         </Route>
         <Route path="/editor" element={<Editor />} />
-        {/* Route for detail info overlay window of a image */}
-        <Route path="/gallery/viewImage/:imageId" element={<ImageDetailsOverlay images={testingImages} />} />
       </Routes>
     </BrowserRouter>
   );
