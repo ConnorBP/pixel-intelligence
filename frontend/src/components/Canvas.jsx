@@ -355,7 +355,7 @@ const Canvas = forwardRef(
       return () => {
         // destructor
         const canvas = canvasRef.current;
-        if (canvasRef) {
+        if (canvasRef.current) {
           canvas.removeEventListener("mousedown", () => {});
           canvas.removeEventListener("mouseup", () => {});
           canvas.removeEventListener("mousemove", handleCanvasDrag);
