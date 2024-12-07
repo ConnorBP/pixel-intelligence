@@ -267,7 +267,7 @@ const Canvas = forwardRef(
 
         console.log("erasing");
       } else if (tool === "paint") {
-
+   
         const targetColor = canvasData.pixels[pixelX + pixelY  * canvasData.width];
         if (targetColor === brushColor) return; // Already filled with the same color
         floodFill(pixelX, pixelY, targetColor, brushColor);
@@ -319,7 +319,7 @@ const Canvas = forwardRef(
       while (stack.length > 0) {
         const [currentX, currentY] = stack.pop();
         const index = getPixelIndex(currentX, currentY);
-
+ 
         // Skip if out of bounds or already visited
         if (
           currentX < 0 ||
