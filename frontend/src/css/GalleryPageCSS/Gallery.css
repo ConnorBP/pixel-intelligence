@@ -1,61 +1,60 @@
-    /* Styles for the gallery layout */
+/* Styles for the gallery layout */
+.gallery_container {
+    /* min-height: 100vh; */
+    /* width: 100%;s */
+    /* box-sizing: border-box; */
+    /* overflow-x: hidden; Prevent horizontal overflow */
+    padding: 1em;
+    margin: auto;
+}
 
-    .gallery_container {
-        min-height: 100vh;
-    }
-    .gallery_title{
-        text-align: center;
-        font-size: 2rem; 
-        font-weight: bold;
-        color: #333;
-        margin-bottom: 20px;
-        letter-spacing: 2px; 
-    }
+.gallery {
+    display: grid;
+    gap: 1em;
+    grid-template-columns: auto auto auto auto;
+    /* padding: 0 12px; */
+    width: calc(100% - 24px);
+    /* max-width: 100%; */
+    /* box-sizing: border-box; */
+    margin: 0 auto;
+}
 
+.gallery .images {
+    -webkit-transition: all 350ms ease;
+    transition: all 350ms ease;
+    cursor: pointer;
+    margin-bottom: 12px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.gallery .images:hover {
+    filter: opacity(0.7);
+    transform: scale(1.05);
+}
+
+.gallery img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1280px) {
     .gallery {
-        -webkit-column-count: 3;
-        -moz-column-count: 3;
-        column-count: 3;
-        -webkit-column-width:33%;
-        -moz-column-width: 33%;
-        column-width: 33%;
-        padding: 0 12px;
-        /* column-gap: 16px;  */
+        grid-template-columns: auto auto auto;
     }
+}
 
-    .gallery .images{
-        -webkit-transition: all 350ms ease;
-        transition: all 350ms ease;
-        cursor: pointer;
-        margin-bottom: 12px;
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .gallery {
+        grid-template-columns: auto auto;
     }
+}
 
-    .gallery .images:hover{
-        filter: opacity(0.7);
-        transform: scale(1.05);
+@media (max-width: 480px) {
+    .gallery {
+        grid-template-columns: auto;
     }
-
-    .gallery img {
-        object-fit: cover;
-        image-rendering: pixelated;
-    }
-
-    /* Responsive adjustments */
-    @media (max-width: 991px){
-        .gallery{
-        -webkit-column-count: 2;
-        -moz-column-count: 2;
-        column-count: 2;
-        }
-    }
-
-    @media (max-width: 480px){
-        .gallery {
-            -webkit-column-count:1;
-            -moz-column-count:1;
-            column-count: 1;
-            -webkit-column-width:100%;
-            -moz-column-width: 100%;
-            column-width: 100%;
-        }
-    }
+}
