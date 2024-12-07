@@ -1,7 +1,7 @@
 // import 'dotenv/config';
 
 // test that it worked by leaking secrets lol
-// console.log(process.env.SECRET_KET);
+// console.log(process.env.SECRET_KEY);
 
   import express from "express";
   import jwt from "jsonwebtoken";
@@ -13,9 +13,9 @@
     try {
       const userIP = req.ip;
       // Create a token with user IP
-      // console.log(process.env.SECRET_KET);
-      let key = process.env.SECRET_KET;
-      let expiresIn = 60 * 60 * 24; // 24 hours
+      // console.log(process.env.SECRET_KEY);
+      let key = process.env.SECRET_KEY;
+      let expiresIn = 60 * 60 * 24; // 24 hours in seconds
       const token = jwt.sign({ ip: userIP }, key, { expiresIn: expiresIn  });
       console.log("ip: "+ userIP);
       console.log("access token: " + token);
@@ -24,8 +24,8 @@
       try{
         res.cookie("access_token", token, {
           httpOnly: true,
-          secure: process.env.NODE_ENV === "production",
-          maxAge: 86400000,  // 1 day
+          secure: process.env.NODE_ENV === "production" || process.env.SECURE_MODE == true,
+          maxAge: 60 * 60 * 24 * 1000,  // 24 hours in milliseconds
           path: "/"
         });
         console.log("Cookie Generated");

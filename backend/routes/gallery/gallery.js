@@ -1,7 +1,8 @@
 import express from "express";
 import { validateCanvasData } from './validator.js';
-import {saveCanvasData, getAllCanvases} from "./canvas.js";
-import { authenticate } from "./authentication.js";
+import { saveCanvasData, getDBConnection } from "./canvas.js";
+import { authenticate } from "../auth/authentication.js";
+import { paginatedResults } from "./paginatedResults.js";
 
 const router = express.Router();
 
@@ -22,13 +23,18 @@ router.post("/upload", authenticate, async(req, res) => {
     // Convert canvas to image
     // code here
 
-    // Save canvas data to the database
-    const result = await saveCanvasData(
-      {
-        ...canvasData, 
-        creation_date: new Date()
-      }
-    );
+ // Save canvas data to the database
+ const result = await saveCanvasData(
+  {
+    // manually destructured for security purposes
+    name: canvasData.name,
+    description: canvasData.description,
+    pixels: canvasData.pixels,
+    width: canvasData.width,
+    height: canvasData.height,
+    creation_date: new Date().getUTCDate() // get date time in UTC format for timezone consistency
+  }
+);
     
     // Returning success code if there is no error
     return res.status(200).json({success: true, message:"Canvas uploaded successfully."})
@@ -38,14 +44,21 @@ router.post("/upload", authenticate, async(req, res) => {
   }
 });
 
-// GET route to retrieve all canvases
-router.get("/all", authenticate, async(req, res) => {
-  try{
-    const canvases = await getAllCanvases();
-    res.status(200).json(canvases);
-  } catch(e) {
-    console.error('Error retrieving canvases:', e.stack || e);
-    res.status(500).json({success: false, error: "Internal server error in /all route"});
+// GET route to retrieve all canvases with pagination
+router.get("/all", authenticate, async (req, res, next) => {
+  let db;
+  try {
+      // Save the database connection from canvas.js getDBConnection() function
+      db = await getDBConnection();
+  
+      // Using paginatedResults middleware to apply pagination on the collection
+      await paginatedResults(db)(req, res, next);
+
+      // Return the paginated response
+      return res.status(200).json(res.paginatedResults);
+  } catch (e) {
+      console.error('Error retrieving canvases:', e.stack || e);
+      res.status(500).json({ success: false, error: "Internal server error in /all route" });
   }
 });
 
