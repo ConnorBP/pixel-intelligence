@@ -21,12 +21,16 @@ class SimpleImage {
             if (!fromCanvasData.width || !fromCanvasData.height || fromCanvasData.width < 0 || fromCanvasData.height < 0) {
                 throw new Error("canvas data input dimensions were invalid");
             }
-            if (!fromCanvasData.pixels || fromCanvasData.pixels.length <= 0) {
-                throw new Error("canvas data input pixels array was invalid");
-            }
 
             this.width = fromCanvasData.width;
             this.height = fromCanvasData.height;
+
+            if (!fromCanvasData.pixels || fromCanvasData.pixels.length <= 0) {
+                // throw new Error("canvas data input pixels array was invalid");
+                // instead of throwing in this case just return an object with the width and height amount of clear pixels
+                this.pixels = new Array(this.width * this.height).fill({ r: 0, g: 0, b: 0, a: 0 });
+                return;
+            }
 
             // allocate pixels array and convert pixel datatype from css color code
             this.pixels = fromCanvasData.pixels.map((pixelColor) => {
