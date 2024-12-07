@@ -101,8 +101,8 @@ const kMeans = (image, k, accuracy) => {
     for (let y = 0; y < image.height; y++) {
         for (let x = 0; x < image.width; x++) {
             var got = image.getPixel(x, y);
-            if(got==null) {
-                console.warn(`Failed to get pixel at ${x} ${y} on image `, image);
+            if(got==null || got.a==0) {
+                // console.warn(`Failed to get pixel at ${x} ${y} on image `, image);
                 got =  { r:0,g:0,b:0,a:0};
             }
             pixels.push(got);
@@ -147,14 +147,15 @@ const assignToCentroids = (pixels, centroids) => {
     return clusters;
 }
 
+// calculates the average of each color component
 const recalculateCentroids = (clusters) => {
     return clusters.map(cluster => {
         const sum = cluster.reduce(
-            (acc, pixel) => ({ r: acc.r + pixel.r, g: acc.g + pixel.g, b: acc.b + pixel.b }),
-            { r: 0, g: 0, b: 0 }
+            (acc, pixel) => ({ r: acc.r + pixel.r, g: acc.g + pixel.g, b: acc.b + pixel.b, a: acc.a + pixel.a }),
+            { r: 0, g: 0, b: 0, a: 0 }
         );
         const count = cluster.length;
-        return { r: sum.r / count, g: sum.g / count, b: sum.b / count, count };
+        return { r: sum.r / count, g: sum.g / count, b: sum.b / count, a: sum.a / count , count };
     });
 }
 
@@ -180,11 +181,17 @@ const applyCentroids = (image, centroids) => {
 
 // Calculates the euclidean distance between two colors (squared)
 const distance = (color1, color2) => {
+    // return early with distance of zero if both colors are entirely transparent
+    if(color1.a==0 && color2.a==0) {
+        return 0.0;
+    }
+
     // console.log(`getting dist ${color1} ${color2}`);
     const dr = color1.r - color2.r;
     const dg = color1.g - color2.g;
     const db = color1.b - color2.b;
-    return dr * dr + dg * dg + db * db;
+    const da = color1.a - color2.a;
+    return dr * dr + dg * dg + db * db + da * da;
 }
 
 const DownScaler = {

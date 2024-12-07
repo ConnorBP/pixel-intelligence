@@ -39,9 +39,11 @@ class SimpleImage {
                     return { r: 0, g: 0, b: 0, a: 0 };
                 }
                 const parsed = parseColor(pixelColor);
-                const hasAlpha = (parsed.length > 3 && parsed[3] != null);
+                const hasAlpha = (parsed.length > 3 && parsed[3] !== null);
                 return { r: parsed[0], g: parsed[1], b: parsed[2], a: hasAlpha ? parsed[3] : 255 };
             });
+
+            // console.log(`converting ${fromCanvasData.pixels[0]} to `, this.pixels[0]);
 
             return;
         }

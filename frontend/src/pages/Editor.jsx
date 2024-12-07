@@ -160,12 +160,13 @@ const Editor = () => {
         // this stupid ass thing does a string comparison half the time without parse int
         // and this is why javascript is a stupid language
         if (parseInt(newSize) > parseInt(canvasData.width)) {
-          console.log(`up-scaling from ${canvasData.width} to ${newSize}`);
+          // console.log(`up-scaling from ${canvasData.width} to ${newSize}`);
           pixels = DownScaler.resizeNN(simp, newSize, newSize).pixels;
         } else {
-          console.log(`down-scaling from ${canvasData.width} to ${newSize}`);
+          // console.log(`down-scaling from ${canvasData.width} to ${newSize}`, simp);
           let { kCentroid } = DownScaler.kCenter(simp, newSize, newSize, 16, 16);
           pixels = kCentroid.pixels;
+          // console.log('done: ', pixels);
         }
 
         const newCanvasData = {
