@@ -28,6 +28,8 @@ export const paginatedResults = (db) => {
             // Count the total number of canvases in the collection.
             const totalCanvases = await collection.countDocuments();
 
+            results.totalPages = Math.ceil(totalCanvases / limit);
+
             // Add a 'next' property if there are more canvases after the current page.
             if (endIndex < totalCanvases) {
                 results.next = {
