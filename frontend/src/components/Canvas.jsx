@@ -1,11 +1,12 @@
 import { useRef, useEffect, forwardRef, useImperativeHandle, useCallback } from "react";
+
 import "../css/Canvas.css";
 import {
   drawCheckeredBackground,
   drawPixelToCtx,
   drawCheckeredPixel,
+  handleEyeDropper
 } from "../utils";
-
 // eslint-disable-next-line react/display-name
 const Canvas = forwardRef(
   (
@@ -18,23 +19,24 @@ const Canvas = forwardRef(
       drawGridLines = true,
       gridLineWidth = 1,
       gridLineColor = "#000000",
-      tool,
+      tool,     
+      onColorSelected,
     },
     ref
   ) => {
     //
     // State
     //
-
+    
     // reference to the canvas object for us to draw to
     const canvasRef = useRef(null);
-
     // how big a single pixel is on the actual rendering canvas:
     // this should be calculated on demand
     // const pixelSize = canvasRenderWidth / canvasData.width;
 
     // updates the state of a pixel at specific coordinate
     // on the provided canvas data and returns it
+
     const updatePixelAt = (oldCanvas, x, y, color) => {
       console.log(`updatePixelAt called with  ${oldCanvas} ${x} ${y} ${color}`);
       // don't allow out of bounds access
@@ -101,8 +103,8 @@ const Canvas = forwardRef(
 
       drawCheckeredBackground(
         context,
-        editorPixelsW * 2,
-        editorPixelsH * 2,
+        editorPixelsW*2,
+        editorPixelsH*2,
         canvas.width,
         canvas.height
       );
@@ -209,16 +211,17 @@ const Canvas = forwardRef(
       return true;
     };
     let isMouseDown = false;
+    // let isMouseDown = false;
     // outputs a pixel to the display canvas (does not save)
     const drawPixelAt = useCallback((x, y, color, drawingPixelsWidth) => {
       // don't run on empty pixels
       if (color == null) {
         return;
       }
-
+ 
       // calculate how big our "virtual pixels" are on the actual screen canvas pixel resolution
       const pixelSize = canvasRenderWidth / drawingPixelsWidth;
-
+    
       // reference the canvas context for drawing to
       const canvas = canvasRef.current;
       const context = canvas.getContext("2d");
@@ -233,7 +236,8 @@ const Canvas = forwardRef(
 
     // Handles the event of someone clicking on the canvas area
     // Currently only supports single click drawing
-    function handleCanvasClick(event) {
+    async function handleCanvasClick(event) {
+  
       console.log('clicked');
       const canvas = canvasRef.current;
 
@@ -251,9 +255,10 @@ const Canvas = forwardRef(
         (((event.clientY - rect.top) / rect.height) * canvas.height) / pixelSize
       );
       let color; // Define the color for the current tool
-      console.log(tool);
+
       if (tool === "pencil") {
         color = brushColor;
+         
       } else if (tool === "eraser") {
         color = "#00000000";
         // update the display for that pixel with clearcolor
@@ -262,13 +267,23 @@ const Canvas = forwardRef(
 
         console.log("erasing");
       } else if (tool === "paint") {
-        const targetColor =
-          canvasData.pixels[pixelX + pixelY * canvasData.width];
-        if (targetColor === brushColor) return; // Already filled with the same color
 
-        // Perform flood fill
+        const targetColor = canvasData.pixels[pixelX + pixelY  * canvasData.width];
+        if (targetColor === brushColor) return; // Already filled with the same color
         floodFill(pixelX, pixelY, targetColor, brushColor);
-      }
+
+      }else if (tool === "eyeDropper"){
+      
+        const color = await handleEyeDropper();
+        if (color) {
+        if (onColorSelected) {
+          onColorSelected(color); 
+        }
+       }
+        return;
+      
+
+     }
       // update the pixel in local storage
       setCanvasData((oldCanvas) => {
         return updatePixelAt(oldCanvas, pixelX, pixelY, color);
@@ -286,10 +301,10 @@ const Canvas = forwardRef(
 
     // Flood Fill Algorithm
     const floodFill = (x, y, targetColor, replacementColor) => {
-      const isBackgroundColor = (x + y) % 2 === 0 ? "#2c2f33" : "#1e2124";
+      const isBackgroundColor = "#00000000"
       if (
         targetColor === replacementColor ||
-        targetColor === isBackgroundColor
+        replacementColor === isBackgroundColor
       ) {
         return;
       }
@@ -330,11 +345,14 @@ const Canvas = forwardRef(
         stack.push([currentX, currentY + 1]);
         stack.push([currentX, currentY - 1]);
       }
+    
     };
 
     useEffect(() => {
       console.log("Canvas data updated:", canvasData);
     }, [canvasData]);
+
+
 
     useEffect(() => {
       const setupCanvasEvents = () => {

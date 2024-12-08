@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef,useState } from "react";
 import Canvas from "../components/Canvas";
 import EditorLeftToolBar from "../components/EditorLeftToolBar";
 import EditorTopBar from "../components/EditorTopBar";
@@ -33,7 +33,6 @@ const Editor = () => {
 
   // canvas pixel data
   const [canvasData, setCanvasData] = useLocalStorage("canvas", defaultCanvas);
-
   // wether the grid lines are shown or not on the editor canvas
   const [gridLinesVisible, setGridLinesVisible] = useLocalStorage("gridLinesVisible", true);
   const [tool, setTool] = useLocalStorage("tool", "pencil");
@@ -246,7 +245,11 @@ const Editor = () => {
   const onResizeImageClicked = () => {
     setShowResizePrompt(true);
   };
+  const handleEyeDropperColor = (color) => {
+    console.log("color from canvas:", color); 
 
+    setBrushColor(color); 
+  };
   const contextMenuOptions = [
     { text: "New Project", onClick: onCreateNewImageClicked },
     { text: "Save", onClick: onSaveClicked },
@@ -303,6 +306,7 @@ const Editor = () => {
           canvasRenderHeight={CANVAS_RENDER_WIDTH}
           gridLinesVisible={gridLinesVisible}
           tool={tool}
+          onColorSelected={handleEyeDropperColor} 
         />
       </div>
       {/* Hidden file input for opening images */}
