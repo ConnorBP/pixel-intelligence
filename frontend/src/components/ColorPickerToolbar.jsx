@@ -7,13 +7,10 @@ function ColorPickerToolbar({primaryColor, setPrimaryColor, secondaryColor, setS
  const secondSmallBox = "#FFFFFF";
  
 const handleChangeSmallBox=(box)=>{
-  const temp = primaryColor;
-  if(box === 'first'){
+ 
+  if(box === 'first' || box ==='second'){
     setPrimaryColor(fisrtSmallBox)
-    setSecondaryColor(temp);
-  }else if(box ==='second'){
-    setPrimaryColor(secondSmallBox)
-    setSecondaryColor(temp);
+    setSecondaryColor(secondSmallBox)
   }
 } 
 const handleColorPickerFirst = (event) => {
@@ -71,7 +68,6 @@ const handleColorPickerFirst = (event) => {
           <p
             className="color-box-first"
             style={{ visibility: "hidden", margin: 0 }}
-           
           >
             {secondaryColor}
           </p>

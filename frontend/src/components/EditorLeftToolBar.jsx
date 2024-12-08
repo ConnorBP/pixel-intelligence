@@ -30,7 +30,6 @@ const EditorLeftToolBar = ({  selectedColor, setSelectedColor, secondaryColor, s
           setPrimaryColor={setSelectedColor}
           secondaryColor={secondaryColor}
           setSecondaryColor={setSecondaryColor}
-
         />
       </div>
     </div>

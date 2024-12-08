@@ -36,6 +36,7 @@ const Editor = () => {
   // wether the grid lines are shown or not on the editor canvas
   const [gridLinesVisible, setGridLinesVisible] = useLocalStorage("gridLinesVisible", true);
   const [tool, setTool] = useLocalStorage("tool", "pencil");
+
   // file pickers
   // actual element is defined at the bottom of the file
   // this ref lets react refer to the element on the dom
