@@ -9,7 +9,7 @@ function GalleryPageLayout({ images, currentPage, totalPages, onPageSelected }) 
         <div className="gallery_container">
             <GalleryHeader pageNumber={currentPage} totalPages={totalPages} /> {/* The header with title and any additional UI */}
             <GalleryList images={images} /> {/* The list of images */}
-            <GalleryPagination currentPage={currentPage} onPageSelected={onPageSelected} /> {/* The pagination controls component */}
+            <GalleryPagination currentPage={currentPage} onPageSelected={onPageSelected} totalPages={totalPages}/> {/* The pagination controls component */}
         </div>
     );
 }

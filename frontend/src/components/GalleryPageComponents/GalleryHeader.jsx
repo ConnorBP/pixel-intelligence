@@ -1,9 +1,9 @@
 import React from "react";
 
 // Header component for the gallery page
-export const GalleryHeader = ({ pageNumber, maxPages }) => {
+export const GalleryHeader = ({ pageNumber, totalPages }) => {
 
-    const subHeading = pageNumber ? <p>Page {pageNumber} {maxPages ? ` of ${maxPages}` : ''}</p> : <></>;
+    const subHeading = pageNumber ? <p>Page {pageNumber} {totalPages ? ` of ${totalPages}` : ''}</p> : <></>;
 
     return (
         <header className="gallery_header">

@@ -24,6 +24,8 @@ function Gallery() {
     // pagination state
     // How many images to display per page. This won't change for now, but could be made dynamic in the future.
     const [listingsPerPage, setListingsPerPage] = useState(12);
+    // show 5 pages until this is set on server request
+    const [totalPages, setTotalPages] = useState(5);
 
     // get the currently requested page from the search params
     const location = useLocation();
@@ -43,7 +45,7 @@ function Gallery() {
 
     useEffect(() => {
         let newPage = parseInt(searchPage) || 1;
-        console.log(`${newPage} ${galleryStateCache.page} ${galleryStateCache.lastRefresh} ${Date.now() - galleryCacheInvalidationTime}`);
+        // console.log(`${newPage} ${galleryStateCache.page} ${galleryStateCache.lastRefresh} ${Date.now() - galleryCacheInvalidationTime}`);
         
         // load gallery data once a valid session is loaded
         // and:( the page has changed or the cache is stale)
@@ -62,8 +64,13 @@ function Gallery() {
             console.log('loading gallery data');
 
             getGallery(newPage, listingsPerPage).then((data) => {
-                if (data) {
-                    const dataWithImages = data.map((image) => {
+                // console.log('received gallery info: ', data);
+                if(data && data.totalPages && data.totalPages > 0) {
+                    setTotalPages(data.totalPages);
+                }
+                if (data && data.results && data.results.length > 0) {
+                    
+                    const dataWithImages = data.results.map((image) => {
                         return { ...image, imgDataUrl: GeneratePng(image) };
                     });
                     // update our localstorage cached gallery page state
@@ -87,7 +94,7 @@ function Gallery() {
             {/* show child route for image details in outlet */}
             <Outlet />
             {/* show the gallery page content here */}
-            <GalleryPageLayout images={galleryStateCache.images} currentPage={galleryStateCache.page} onPageSelected={onPageSelected} />
+            <GalleryPageLayout images={galleryStateCache.images} currentPage={galleryStateCache.page} onPageSelected={onPageSelected} totalPages={totalPages} />
         </>
     );
 }
