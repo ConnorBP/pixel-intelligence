@@ -36,7 +36,6 @@ const Editor = () => {
   // wether the grid lines are shown or not on the editor canvas
   const [gridLinesVisible, setGridLinesVisible] = useLocalStorage("gridLinesVisible", true);
   const [tool, setTool] = useLocalStorage("tool", "pencil");
-  const [eyeDropperColor, setEyeDropperColor] = useState (" ");
   // file pickers
   // actual element is defined at the bottom of the file
   // this ref lets react refer to the element on the dom
@@ -247,7 +246,6 @@ const Editor = () => {
   };
   const handleEyeDropperColor = (color) => {
     console.log("color from canvas:", color); 
-    setEyeDropperColor(color); 
     setBrushColor(color); 
   };
   const contextMenuOptions = [
@@ -294,7 +292,6 @@ const Editor = () => {
         setSecondaryColor={setSecondaryBrushColor}
         tool={tool}
         setTool={setTool}
-        eyeDropperColor={eyeDropperColor}
 
       />
       <div className="canvas-container">

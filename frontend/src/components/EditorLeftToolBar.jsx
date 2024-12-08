@@ -4,7 +4,7 @@ import { FaEraser, FaPencilAlt, FaEyeDropper } from "react-icons/fa";
 import { PiPaintBucketFill } from "react-icons/pi";
 
 
-const EditorLeftToolBar = ({  selectedColor, setSelectedColor, secondaryColor, setSecondaryColor,tool, setTool,  eyeDropperColor,}) => {
+const EditorLeftToolBar = ({  selectedColor, setSelectedColor, secondaryColor, setSecondaryColor,tool, setTool}) => {
 
   return (
     <div className="left-toolbar">
@@ -30,7 +30,7 @@ const EditorLeftToolBar = ({  selectedColor, setSelectedColor, secondaryColor, s
           setPrimaryColor={setSelectedColor}
           secondaryColor={secondaryColor}
           setSecondaryColor={setSecondaryColor}
-          eyeDropperColor={eyeDropperColor} // Pass the selected color to the toolbar
+
         />
       </div>
     </div>
