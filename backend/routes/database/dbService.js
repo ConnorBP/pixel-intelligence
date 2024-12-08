@@ -5,7 +5,8 @@ const dbName = process.env.DATABASE_NAME; // Database Name
 const canvasCollection = process.env.CANVAS_COLLECTION; // Canvas Collection Name
 const imageJobsCollection = process.env.IMAGE_JOBS_COLLECTION; // Image Jobs Collection
 
-// Database connection
+
+//**********DATABASE CONNECTION**********//
 export const connectToDB = async () => {
     const client = new MongoClient(dbStringURL);
     try {
@@ -13,10 +14,12 @@ export const connectToDB = async () => {
         console.log("Connected to database");
         return client.db(dbName); // Return the connected database instance
     } catch (e) {
-        console.error("Failed to connect to the database:", e.stack || e);
-        throw new Error("Database connection failed");
+        console.error("Failed to connect to the database: ", e.stack || e);
+        throw new Error("Database connection failed.");
     }
 };
+
+//********** CANVAS FUNCTIONS **********//
 
 // Saving the canvas into the database
 export const saveCanvasData = async (canvasData) => {
@@ -30,12 +33,71 @@ export const saveCanvasData = async (canvasData) => {
         console.log("Canvas data inserted.", result.insertedId);
         return result; 
     } catch (e) {
-        console.error("Error inserting canvas data:", e.stack || e);
-        throw new Error("Failed to insert canvas data");
+        console.error("Error inserting canvas data: ", e.stack || e);
+        throw new Error("Failed to insert canvas data.");
     } finally {
         if (db) db.client.close(); // Close the database connection
     }
 };
+
+//********** IMAGE JOB FUNCTIONS **********//
+
+// Saving image job data to the "image_jobs" collection
+export const saveImageJobData = async(jobData) => {
+    let db;
+    try{
+        db = await connectToDB();
+        const collection = db.collection(imageJobsCollection);
+
+        // Insert image job data to the collection
+        const result = await collection.insertOne(jobData);
+        console.log("Image job data inserted successfully.");
+        return result;
+    } catch (e) {
+        console.error("Error inserting image job data: " + e.stack || e);
+        throw new Error("Failed to insert image job data.");
+    } finally {
+        if (db) db.client.close(); // close the database connection
+    }
+}
+
+// Retrieving job data by job ID
+export const getImageJobData = async(jobID) => {
+    let db;
+    try {
+        db = await connectToDB();
+        const collection =  db.collection(imageJobsCollection);
+
+        // Retrieving the image job data
+        const result = await collection.findOne({jobID});
+        return result;
+    } catch (e) {
+        console.error("Error retrieving image job data: ", e.stack || e);
+        throw new Error("Failed to retrieve job data.");
+    } finally {
+        if (db) db.client.close();
+    }
+}
+
+// Updating the image jon status in database
+export const updateImageJobStatus = async (jobId, status, downloadUrl) => {
+    const db = await connectToDB();
+    try {
+        const collection = db.collection(imageJobsCollection);
+        await collection.updateOne(
+            { jobId },
+            { $set: { status, downloadUrl } }
+        );
+        console.log(`Job ${jobId} updated to ${status}`);
+    } catch (e) {
+        console.error("Error updating image job data: ", e.stack || e);
+        throw new Error("Failed to retrieve job data.");
+    } finally {
+        db.client.close();
+    }
+};
+
+//**********RETURN DB CONNECTION**********//
 
 // Function to return database connection
 export const getDBConnection = async () => {
@@ -44,7 +106,7 @@ export const getDBConnection = async () => {
         db = await connectToDB();
         return db;
     } catch (e) {
-        console.error("Error retrieving canvases:", e.stack || e);
-        throw new Error("Failed to retrieve canvases");
+        console.error("Error retrieving canvases: ", e.stack || e);
+        throw new Error("Failed to retrieve canvases.");
     }
 };
