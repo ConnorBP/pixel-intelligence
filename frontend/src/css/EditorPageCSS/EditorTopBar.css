@@ -98,13 +98,10 @@
   }
 }
 /* mobile support */
-@media screen and (max-width: 632px) {
-
-  :root {
-    --top-toolbar-size: calc(var(--top-toolbar-row-height) * 2);
-  }
+@media screen and (max-width: 640px) {
 
   .top-controls {
+    align-items: flex-start;
     justify-content: center;
   }
 
@@ -125,5 +122,11 @@
     margin: 0;
     padding: 0;
     position: absolute;
+  }
+}
+
+@media screen and (max-width: 580px) {
+  :root {
+    --top-toolbar-size: calc(var(--top-toolbar-row-height) * 2);
   }
 }
