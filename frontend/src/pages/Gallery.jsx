@@ -7,7 +7,7 @@ import { useImageDetails } from "../context/ImageDetailsContext";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 import { GeneratePng } from "../utils";
 
-const galleryCacheInvalidationTime = 1000 * 60 * 2; // 2 minutes
+const galleryCacheInvalidationTime = 1000 * 30; // 30 seconds
 // default values for keeping gallery data on the page
 const defaultGalleryState = {
     page: 1,
