@@ -26,6 +26,12 @@
   margin: 5px;
   border: none;
 }
+
+/* show which tool is currently selected */
+.icon-container .active {
+  color: var(--primary-color);
+}
+
 .left-toolbar .align-end {
   
   align-self: flex-end;
