@@ -1,0 +1,33 @@
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5em;
+    margin: 1em 0;
+}
+
+.pagination button {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 50px; /* Make buttons more bubbly */
+    padding: 0.5em 1em;
+    font-size: 1.2em; /* Make buttons larger */
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.pagination button:hover {
+    background-color: var(--primary-color-dark);
+    transform: scale(1.1); /* Slightly enlarge on hover */
+}
+
+.pagination button:disabled {
+    background-color: var(--primary-color-light);
+    cursor: not-allowed;
+}
+
+.pagination button.active {
+    background-color: var(--primary-color-dark);
+    font-weight: bold;
+}

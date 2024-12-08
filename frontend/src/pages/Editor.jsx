@@ -8,6 +8,7 @@ import "../css/EditorPageCSS/Editor.css";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 import { useNavigate } from "react-router-dom";
 import { SimpleImage, DownScaler, RGBAToHex, ExportPng, DownloadJson } from "../utils/index";
+import { uploadToGallery } from "../api";
 
 const Editor = () => {
   // brush colors are stored as html color codes
@@ -239,7 +240,22 @@ const Editor = () => {
   };
 
   const onShareCurrentCanvasClicked = () => {
-    alert('todo');
+    canvasData.name = 'test_image';
+    canvasData.description = 'test_description';
+    canvasData.author = 'test_author';
+    canvasData.tags = ['test', 'image'];
+    console.log('sharing canvas data:', canvasData);
+    // send the canvas data to the server
+    uploadToGallery(canvasData).then((resp) => {
+      console.log('upload to gallery response:', resp);
+      if (resp.success) {
+        alert('upload to gallery success');
+      } else {
+        alert('upload to gallery failed');
+      }
+    }).catch((err) => {
+      console.error('failed to upload to gallery:', err);
+    });
   };
 
   const onResizeImageClicked = () => {

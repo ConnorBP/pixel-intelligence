@@ -13,7 +13,7 @@ export const ImageDetailsProvider = ({ children }) => {
                     console.error('Image id is undefined:', action.image);
                     return state;
                 }
-                console.log('adding image ', action.id, ' ', action.image, ' to map ', state.map);
+                // console.log('adding image ', action.id, ' ', action.image, ' to map ', state.map);
                 return { ...state, map: currentMap.set(action.id, action.image), lastUpdate: Date.now() };
             case 'remove':
                 currentMap.delete(action.id);
