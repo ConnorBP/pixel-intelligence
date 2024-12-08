@@ -32,7 +32,7 @@ router.post("/upload", authenticate, async (req, res) => {
         pixels: canvasData.pixels,
         width: canvasData.width,
         height: canvasData.height,
-        creation_date: new Date().getUTCDate() // get date time in UTC format for timezone consistency
+        creation_date: new Date().getTime(),
       }
     );
 
