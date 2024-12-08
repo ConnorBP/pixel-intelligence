@@ -22,6 +22,19 @@
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
 }
 
+.error {
+    max-width: 1000px;
+    width: 80%;
+    background-color: var(--bg-color);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    color: #a62929;
+    font-weight: 800;
+    text-align: center;
+    font-size: 28pt;
+}
+
 .image_section {
     flex: 1;
     padding-right: 20px;
@@ -107,3 +120,4 @@
     font-size: 30px;
     z-index: 2000;
 }
+

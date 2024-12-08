@@ -27,7 +27,7 @@ function App() {
               path="/"
               element={<Gallery images={testingImages} />}
             >
-              <Route path="viewImage/:imageId" element={<ImageDetailsOverlay images={testingImages} />} />
+              <Route path="viewImage/:imageId" element={<ImageDetailsOverlay />} />
             </Route>
 
             {/* 404 route for invalid page urls */}

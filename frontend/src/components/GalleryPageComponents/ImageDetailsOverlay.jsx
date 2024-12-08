@@ -1,20 +1,28 @@
 import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { useImageDetails } from "../../context/ImageDetailsContext";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import WhatsAppIcon from "@mui/icons-material/WhatsApp";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import "../../css/GalleryPageCSS/ImageDetailsOverlay.css";
 
-function ImageDetailsOverlay({ images }) {
-    const { imageId } = useParams(); 
-    const navigate = useNavigate(); 
-    const [copied, setCopied] = useState(false); 
+function ImageDetailsOverlay() {
+    const { imageId } = useParams();
+    const navigate = useNavigate();
+    const [copied, setCopied] = useState(false);
+
+    const { images } = useImageDetails();
 
     // Find the specific image details based on the `imageId`
-    const image = images.find((img) => img.id === parseInt(imageId));
+    const image = images.get(imageId);
 
-    if (!image) return <div>Image not found</div>;
+    if (!image) return (<div className="image_details">
+        <CloseRoundedIcon onClick={() => navigate(-1)} className="close_icon" />
+        <div className="error">
+            <p>Image not found</p>
+        </div>
+    </div>);
 
     // Copy the image link to the clipboard
     const copyToClipboard = () => {
@@ -27,7 +35,7 @@ function ImageDetailsOverlay({ images }) {
     const downloadImage = () => {
         const link = document.createElement('a');
         link.href = image.imgSrc;
-        link.download = `image-${image.id}.jpg`; 
+        link.download = `image-${image.id}.jpg`;
         link.click();
     };
 
