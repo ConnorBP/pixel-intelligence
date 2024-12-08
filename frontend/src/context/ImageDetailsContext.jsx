@@ -50,7 +50,7 @@ export const ImageDetailsProvider = ({ children }) => {
     );
 };
 
-export function useImageDetails() {
+export const useImageDetails = () => {
     const {
         images,
         addImage,

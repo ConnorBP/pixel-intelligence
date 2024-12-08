@@ -12,7 +12,13 @@
 .gallery_header {
     color: var(--text-color);
     text-align: center;
-    margin-bottom: 1em;
+    margin-top: 1em;
+    margin-bottom: 2em;
+}
+
+.gallery_title {
+    margin-bottom: 2pt;
+    margin-top: 2pt;
 }
 
 .gallery {
@@ -38,6 +44,12 @@
 .gallery .images:hover {
     filter: opacity(0.7);
     transform: scale(1.05);
+}
+
+/* apply drop shadow on images (even transparent edged ones) */
+.gallery .images, .gallery .images:hover {
+    filter: drop-shadow(5px 5px 5px var(--shadow-color));
+    -webkit-filter: drop-shadow(5px 5px 5px var(--shadow-color));
 }
 
 .gallery img {

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useImageDetails } from "../../context/ImageDetailsContext";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
@@ -13,25 +13,20 @@ function ImageDetailsOverlay() {
     const [copied, setCopied] = useState(false);
 
     const { images, getImage } = useImageDetails();
-    const [imageDetails, setImageDetails] = useState(null);
-
-    useEffect(() => {
-        setImageDetails(getImage(imageId));
-    },[images]);
 
     // Find the specific image details based on the `imageId`
-    let image = getImage(imageId);
+    const image = getImage(imageId);
     console.log(`got image id ${imageId}: ${image} in map: `, images);
 
-    if (!imageDetails) return (<div className="image_details">
+    if (!image) return (<div className="image_details">
         <CloseRoundedIcon onClick={() => navigate(-1)} className="close_icon" />
         <div className="error">
             <p>Image {imageId} not found</p>
-            <ul>
+            {/* <ul>
                 {[...images.keys()].map(k => (
                     <li key={k}>{images.get(k)._id}</li>
                 ))}
-            </ul>
+            </ul> */}
         </div>
     </div>);
 
@@ -58,34 +53,34 @@ function ImageDetailsOverlay() {
             <div className="content">
                 {/* Left side for the image */}
                 <div className="image_section">
-                    <img src={imageDetails.imgDataUrl} alt={imageDetails.title || `Image ${imageDetails.id}`} />
+                    <img src={image.imgDataUrl} alt={image.name || `Image ${image.id}`} />
                 </div>
 
                 {/* Right side for the details */}
                 <div className="details_section">
                     {/* Metadata Section */}
-                    <h2>{imageDetails.title || "Untitled Image"}</h2>
-                    <p><b>Description:</b> {imageDetails.description || "No description available."}</p>
-                    <p><b>Photographer:</b> {imageDetails.photographer || "Unknown"}</p>
-                    <p><b>Date Uploaded:</b> {imageDetails.date || "Unknown"}</p>
-                    {imageDetails.tags && (
-                        <p><b>Tags:</b> {imageDetails.tags.join(", ")}</p>
+                    <h2>{image.name || "Untitled Image"}</h2>
+                    <p><b>Description:</b> {image.description || "No description available."}</p>
+                    <p><b>Creator:</b> {image.creator || "Unknown"}</p>
+                    <p><b>Date Uploaded:</b> {new Date(image.creation_date).toLocaleString() || "Unknown"}</p>
+                    {image.tags && (
+                        <p><b>Tags:</b> {image.tags.join(", ")}</p>
                     )}
 
                     {/* Sharing Section */}
                     <p><b>Image URL:</b></p>
-                    <input type="text" value={imageDetails.imgDataUrl} readOnly />
+                    <input type="text" value={image.imgDataUrl} readOnly />
                     <button onClick={copyToClipboard}>{copied ? "Copied!" : "Copy URL"}</button>
 
                     <p><b>Share:</b></p>
                     <div className="share_links">
-                        <a href={`https://wa.me/?text=${encodeURIComponent(imageDetails.imgDataUrl)}`} target="_blank" rel="noopener noreferrer">
+                        <a href={`https://wa.me/?text=${encodeURIComponent(image.imgDataUrl)}`} target="_blank" rel="noopener noreferrer">
                             <WhatsAppIcon />
                         </a>
-                        <a href={`https://www.facebook.com/sharer/sharer.php?u=${imageDetails.imgDataUrl}`} target="_blank" rel="noopener noreferrer">
+                        <a href={`https://www.facebook.com/sharer/sharer.php?u=${image.imgDataUrl}`} target="_blank" rel="noopener noreferrer">
                             <FacebookIcon />
                         </a>
-                        <a href={`https://twitter.com/intent/tweet?url=${imageDetails.imgDataUrl}`} target="_blank" rel="noopener noreferrer">
+                        <a href={`https://twitter.com/intent/tweet?url=${image.imgDataUrl}`} target="_blank" rel="noopener noreferrer">
                             <TwitterIcon />
                         </a>
                     </div>

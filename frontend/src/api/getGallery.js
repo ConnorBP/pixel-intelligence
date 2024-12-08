@@ -17,7 +17,7 @@ export default async function getGallery(page = 1, limit = 10) {
             return [];
         }
         const j = await resp.json();
-        return j.results;
+        return j;
     }
     catch (e) {
         console.error('err ',e, ' got response ', resp);
