@@ -8,13 +8,15 @@
 
 /* big bubbly buttons */
 .pagination button {
+    font-family: inherit;
     background-color: var(--primary-color);
-    color: white;
+    color: var(--text-color);
     border: none;
     border-radius: 50px;
     padding: 0.5em 1em;
     
     font-size: 1.2em;
+    font-weight: 600;
     cursor: pointer;
     transition: background-color 0.3s, transform 0.3s;
 }
