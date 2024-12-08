@@ -46,6 +46,12 @@
     transform: scale(1.05);
 }
 
+/* apply drop shadow on images (even transparent edged ones) */
+.gallery .images, .gallery .images:hover {
+    filter: drop-shadow(5px 5px 5px var(--shadow-color));
+    -webkit-filter: drop-shadow(5px 5px 5px var(--shadow-color));
+}
+
 .gallery img {
     width: 100%;
     height: auto;

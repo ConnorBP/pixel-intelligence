@@ -9,7 +9,7 @@
   --text-color: #222222;
   --border-color: #ccc;
   --border-radius: 5px;
-  --shadow-color: rgba(0, 0, 0, 0.2);
+  --shadow-color: rgba(0, 0, 0, 0.4);
   --bg-color: #ffffff;
   --header-bg-color: #fa947ae3;
   --primary-color: #c54b26;
@@ -36,6 +36,7 @@ a {
   color: #F5F5DC;
   text-decoration: inherit;
 }
+
 a:hover {
   color: #F5F5DC;
 }
@@ -63,9 +64,11 @@ h1 {
     color: #213547;
     background-color: #ffffff;
   }
+
   a:hover {
-    color:#F5F5DC;
+    color: #F5F5DC;
   }
+
   button {
     background-color: #f9f9f9;
   }
@@ -76,6 +79,7 @@ h1 {
   :root {
     --popup-bg: #3c3c3c;
     --text-color: #fff;
+    --shadow-color: rgba(0, 0, 0, 0.7);
     --bg-color: #1a1a1a;
     --text-color: #ffffff;
     --primary-color-dark: #49201b;
@@ -84,6 +88,7 @@ h1 {
     --link-color: #ffffff;
     --link-hover-color: #c5622d;
   }
+
   .popup-overlay {
     background: var(--overlay-bg-dark);
   }
