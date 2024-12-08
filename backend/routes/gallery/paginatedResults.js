@@ -47,7 +47,11 @@ export const paginatedResults = (db) => {
             }
 
             // Fetch the canvases for the current page from the collection.
-            results.results = await collection.find().skip(startIndex).limit(limit).toArray();
+            results.results = await collection.find()
+                .sort({ _id: -1 })
+                .skip(startIndex)
+                .limit(limit)
+                .toArray();
 
             // Sending the paginated result in response
             res.paginatedResults = results;
