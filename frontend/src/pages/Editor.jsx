@@ -247,6 +247,7 @@ const Editor = () => {
   };
   const handleEyeDropperColor = (color) => {
     console.log("color from canvas:", color); 
+
     setBrushColor(color); 
   };
   const contextMenuOptions = [
@@ -293,6 +294,7 @@ const Editor = () => {
         setSecondaryColor={setSecondaryBrushColor}
         tool={tool}
         setTool={setTool}
+
       />
       <div className="canvas-container">
         <Canvas

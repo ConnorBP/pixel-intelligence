@@ -8,7 +8,6 @@ function ColorPickerToolbar({primaryColor, setPrimaryColor, secondaryColor, setS
  
 const handleChangeSmallBox = ()=>{
  
-
     setPrimaryColor(firstSmallBoxDefaultColor)
     setSecondaryColor(secondSmallBoxDefaultColor)
   
