@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import '../../css/GalleryPageCSS/GalleryPagination.css';
 
-const GalleryPagination = ({ currentPage = 1, totalPages = 999, pageSelected }) => {
+const GalleryPagination = ({ currentPage = 1, totalPages = 999, onPageSelected }) => {
     const handlePageClick = (page) => {
-        if (pageSelected && page >= 1 && page <= totalPages) {
-            pageSelected(page);
+        if (onPageSelected && page >= 1 && page <= 8) {
+            onPageSelected(page);
         }
     };
 
@@ -38,8 +38,8 @@ const GalleryPagination = ({ currentPage = 1, totalPages = 999, pageSelected }) 
 
 GalleryPagination.propTypes = {
     currentPage: PropTypes.number.isRequired,
-    totalPages: PropTypes.number.isRequired,
-    pageSelected: PropTypes.func.isRequired,
+    totalPages: PropTypes.number,
+    onPageSelected: PropTypes.func.isRequired,
 };
 
 export default GalleryPagination;
