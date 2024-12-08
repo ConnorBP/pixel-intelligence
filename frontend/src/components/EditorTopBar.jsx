@@ -11,23 +11,14 @@ import ConfirmationPopup from "./ConfirmationPopup";
 
 const EditorTopBar = ({ contextMenuOptions, onResizeImageClicked, onImportProjectClicked, onImportImageClicked, onCreateNewImageClicked, onImageExportClicked, onShareCurrentCanvasClicked, currentCanvasSize, onSaveClicked, onTrashClearClicked }) => {
 
-  const [showConfirmClearCanvas, setShowConfirmClearCanvas] = useState(false);
+  const [popupInfo, setPopupInfo] = useState(null);
 
   const navigate = useNavigate();
 
   return (
     <>
       <ConfirmationPopup
-        isOpen={showConfirmClearCanvas}
-        title="WARNING"
-        message1="This action cannot be undone  ."
-        message2=""
-        onCancel={() => setShowConfirmClearCanvas(false)}
-        onConfirm={() => {
-          console.log("Confirmed!");
-          setShowConfirmClearCanvas(false);
-          if (onTrashClearClicked) onTrashClearClicked();
-        }}
+        popupData={popupInfo}
       />
 
       <div className="top-toolbar">
@@ -67,7 +58,21 @@ const EditorTopBar = ({ contextMenuOptions, onResizeImageClicked, onImportProjec
           </button>
 
           {/* clear canvas */}
-          <button onClick={() => { setShowConfirmClearCanvas(true) }}><FaTrashCan /></button>
+          <button onClick={() => {
+            setPopupInfo(
+              {
+                title: "WARNING",
+                message1: "This action cannot be undone .",
+                message2: "Would you like to clear the canvas?",
+                onCancel: () => setPopupInfo(null),
+                onConfirm: () => {
+                  console.log("Confirmed!");
+                  setPopupInfo(null);
+                  if (onTrashClearClicked) onTrashClearClicked();
+                }
+              }
+            )
+          }}><FaTrashCan /></button>
 
           {/* share */}
           <button onClick={onShareCurrentCanvasClicked}><FaShareFromSquare /></button>
@@ -77,7 +82,7 @@ const EditorTopBar = ({ contextMenuOptions, onResizeImageClicked, onImportProjec
         <button className="align-end mobile-hidden" onClick={() => navigate("/")}>
           <RiArrowGoBackLine className="icon mobile-hidden" /> <div className="inline small-hidden">Back to Gallery</div>
         </button>
-      </div>
+      </div >
     </>
   );
 };
