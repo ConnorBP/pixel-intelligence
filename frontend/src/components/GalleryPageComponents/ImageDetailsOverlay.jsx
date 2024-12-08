@@ -58,16 +58,16 @@ function ImageDetailsOverlay() {
             <div className="content">
                 {/* Left side for the image */}
                 <div className="image_section">
-                    <img src={imageDetails.imgDataUrl} alt={imageDetails.title || `Image ${imageDetails.id}`} />
+                    <img src={imageDetails.imgDataUrl} alt={imageDetails.name || `Image ${imageDetails.id}`} />
                 </div>
 
                 {/* Right side for the details */}
                 <div className="details_section">
                     {/* Metadata Section */}
-                    <h2>{imageDetails.title || "Untitled Image"}</h2>
+                    <h2>{imageDetails.name || "Untitled Image"}</h2>
                     <p><b>Description:</b> {imageDetails.description || "No description available."}</p>
-                    <p><b>Photographer:</b> {imageDetails.photographer || "Unknown"}</p>
-                    <p><b>Date Uploaded:</b> {imageDetails.date || "Unknown"}</p>
+                    <p><b>Creator:</b> {imageDetails.creator || "Unknown"}</p>
+                    <p><b>Date Uploaded:</b> {new Date(imageDetails.creation_date).toLocaleString() || "Unknown"}</p>
                     {imageDetails.tags && (
                         <p><b>Tags:</b> {imageDetails.tags.join(", ")}</p>
                     )}
