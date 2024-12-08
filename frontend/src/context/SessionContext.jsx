@@ -55,8 +55,8 @@ export const SessionProvider = ({ children }) => {
         }
     }, []);
 
-
-    function checkExpired() {
+    // check if the session is expired yet based on our saved expiryTime
+    function isSessionStillValid() {
         // if the session is expired
         if (sessionExpiry < Math.floor(Date.now() / 1000)) {
             // clear the session
@@ -68,13 +68,12 @@ export const SessionProvider = ({ children }) => {
         return true;
     }
 
-
     return (
         <SessionContext.Provider value={{
             sessionLoaded,
             sessionExpiry,
             refresh: refreshSession,
-            sessionExpired: checkExpired
+            isSessionStillValid: isSessionStillValid
         }}>
             {children}
         </SessionContext.Provider>
@@ -82,8 +81,8 @@ export const SessionProvider = ({ children }) => {
 };
 
 export function useSession() {
-    const { sessionLoaded, sessionExpiry, refresh, sessionExpired } = useContext(SessionContext);
+    const { sessionLoaded, sessionExpiry, refresh, isSessionStillValid } = useContext(SessionContext);
 
-    return { sessionLoaded, sessionExpiry, refresh, sessionExpired };
+    return { sessionLoaded, sessionExpiry, refresh, isSessionStillValid };
 };
 
