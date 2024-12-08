@@ -19,7 +19,13 @@ router.get("/", (req, res) => {
       if (decoded != null) {
         // if the user is already authorized, return success and the time remaining
         const currentTime = Math.floor(Date.now() / 1000);
-        return res.status(200).json({ success: true, message: "Already authorized.", expiresIn: decoded.exp - currentTime});
+        return res.status(200).json({
+          success: true,
+          message: "Already authorized.",
+          issuedAt: decoded.iat,
+          expiresIn: decoded.exp - currentTime,
+          expiresAt: decoded.exp
+        });
       }
     }
 
@@ -51,7 +57,8 @@ router.get("/", (req, res) => {
       console.log("Cookie not generated: " + e.stack || e);
     }
 
-    res.status(200).json({ success: true, message: "Token generated.", expiresIn: expiresIn });
+    const currentTime = Math.floor(Date.now() / 1000);
+    res.status(200).json({ success: true, message: "Token generated.", issuedAt: currentTime, expiresIn: expiresIn, expiresAt: currentTime + expiresIn });
   } catch (e) {
     console.error("Error generating token:", e.stack || e);
     res.status(500).json({ success: false, error: "Failed to generate token" });
