@@ -1,4 +1,4 @@
-import { useRef,useState } from "react";
+import { useRef,useState, useEffect } from "react";
 import Canvas from "../components/Canvas";
 import EditorLeftToolBar from "../components/EditorLeftToolBar";
 import EditorTopBar from "../components/EditorTopBar";
@@ -6,7 +6,7 @@ import NewImagePopup from "../components/NewImagePopup";
 import ScaleImagePopup from "../components/ScaleImagePopup";
 import "../css/EditorPageCSS/Editor.css";
 import { useLocalStorage } from "../hooks/useLocalStorage";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { SimpleImage, DownScaler, RGBAToHex, ExportPng, DownloadJson } from "../utils/index";
 import { uploadToGallery } from "../api";
 
@@ -14,10 +14,17 @@ const Editor = () => {
   // brush colors are stored as html color codes
   const [brushColor, setBrushColor] = useLocalStorage("primaryBrushColor", "#000000");
   const [secondaryBrushColor, setSecondaryBrushColor] = useLocalStorage("secondaryBrushColor", "#FFFFFF");
-  // we will store the canvas size as an object of width and height in case we decide to remove the square restriction
-  // const [canvasSize, setCanvasSize] = useLocalStorage("canvasSize", { width: 16, height: 16 });
+
+  // navigation hook
   const nav = useNavigate();
+
+  // for receiving an image to load from the gallery page
+  const location = useLocation();
+  const requestedImageLoad = location.state?.image;
+
+  // canvas ref for the pixel canvas (wraps the actual canvas element)
   const pixelCanvasRef = useRef(null);
+
   // how many pixels can actually be used on the screen to render the canvas object (for grid lines between pixels etc)
   const CANVAS_RENDER_WIDTH = 256;
 
@@ -190,6 +197,20 @@ const Editor = () => {
   const handleCreateNewImageConfirmed = (newImage) => {
     console.log("New Canvas Created:", newImage);
   };
+
+  // load the image from the gallery page if it was passed
+  useEffect(() => {
+    // if this is not null, then we have an image to load.
+    if (requestedImageLoad) {
+        // Load the image data into the canvas
+        console.log("Loading image into editor:", image);
+        // Add your logic to load the image data into the canvas here
+    }
+}, [requestedImageLoad]);
+
+  //
+  // Editor Button Click Handlers
+  //
 
   const onImportImageClicked = () => {
     if (imageFileInputRef.current) {

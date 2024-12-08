@@ -45,6 +45,10 @@ function ImageDetailsOverlay() {
         link.click();
     };
 
+    const editImage = () => {
+        navigate('/editor', { state: { image } });
+    };
+
     return (
         <div className="image_details">
             {/* Close button to navigate back to the gallery */}
@@ -68,10 +72,6 @@ function ImageDetailsOverlay() {
                     )}
 
                     {/* Sharing Section */}
-                    <p><b>Image URL:</b></p>
-                    <input type="text" value={image.imgDataUrl} readOnly />
-                    <button onClick={copyToClipboard}>{copied ? "Copied!" : "Copy URL"}</button>
-
                     <p><b>Share:</b></p>
                     <div className="share_links">
                         <a href={`https://wa.me/?text=${encodeURIComponent(image.imgDataUrl)}`} target="_blank" rel="noopener noreferrer">
@@ -83,12 +83,10 @@ function ImageDetailsOverlay() {
                         <a href={`https://twitter.com/intent/tweet?url=${image.imgDataUrl}`} target="_blank" rel="noopener noreferrer">
                             <TwitterIcon />
                         </a>
+                        <button onClick={copyToClipboard}>{copied ? "Copied!" : "Copy URL"}</button>
+                        <button onClick={downloadImage}>Download</button>
+                        <button onClick={editImage}>Edit</button>
                     </div>
-
-                    {/* Download Section */}
-                    <button className="download_btn" onClick={downloadImage}>
-                        Download
-                    </button>
                 </div>
             </div>
         </div>
