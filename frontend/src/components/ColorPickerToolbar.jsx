@@ -3,15 +3,15 @@ import { FaExchangeAlt } from "react-icons/fa";
 
 function ColorPickerToolbar({primaryColor, setPrimaryColor, secondaryColor, setSecondaryColor}) {
 
- const fisrtSmallBox = "#000000";
- const secondSmallBox = "#FFFFFF";
+ const firstSmallBoxDefaultColor = "#000000";
+ const secondSmallBoxDefaultColor = "#FFFFFF";
  
-const handleChangeSmallBox=(box)=>{
+const handleChangeSmallBox = ()=>{
  
-  if(box === 'first' || box ==='second'){
-    setPrimaryColor(fisrtSmallBox)
-    setSecondaryColor(secondSmallBox)
-  }
+
+    setPrimaryColor(firstSmallBoxDefaultColor)
+    setSecondaryColor(secondSmallBoxDefaultColor)
+  
 } 
 const handleColorPickerFirst = (event) => {
   setPrimaryColor(event.target.value); 
@@ -49,8 +49,8 @@ const handleColorPickerFirst = (event) => {
       <div className="color-display-box">
         <div
           className="color-display-first"
-          style={{ backgroundColor: fisrtSmallBox }}
-          onClick={()=>{handleChangeSmallBox('first')}}
+          style={{ backgroundColor: firstSmallBoxDefaultColor }}
+          onClick={handleChangeSmallBox}
         >
           <p
             className="color-box-first"
@@ -62,8 +62,8 @@ const handleColorPickerFirst = (event) => {
 
         <div
           className="color-display-second"
-          style={{ backgroundColor: secondSmallBox}}
-          onClick={()=>handleChangeSmallBox('second')}
+          style={{ backgroundColor: secondSmallBoxDefaultColor}}
+          onClick={handleChangeSmallBox}
         >
           <p
             className="color-box-first"

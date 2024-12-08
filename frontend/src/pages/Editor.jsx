@@ -293,7 +293,6 @@ const Editor = () => {
         setSecondaryColor={setSecondaryBrushColor}
         tool={tool}
         setTool={setTool}
-
       />
       <div className="canvas-container">
         <Canvas
