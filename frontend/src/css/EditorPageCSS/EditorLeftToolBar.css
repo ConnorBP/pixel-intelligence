@@ -13,15 +13,13 @@
   overflow-x: hidden;
   display: flex;
   flex-direction: column;
-  
-  /* justify-content: space-between; */
-  /* fix flex end calc */
-  padding-bottom: var(--top-toolbar-size);
 }
+
 .icon-container{
   padding-left:2px;
 
 }
+
 .icon-container .icon{
   margin: 5px;
   border: none;
@@ -33,11 +31,11 @@
 }
 
 .left-toolbar .align-end {
-  
   align-self: flex-end;
   margin-top: auto;
 }
 
+/* a nice little square for our color picker to live in */
 .left-toolbar .toolbar-square {
   width: var(--left-toolbar-size);
   height: var(--left-toolbar-size);
