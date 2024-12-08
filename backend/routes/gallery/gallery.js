@@ -1,6 +1,6 @@
 import express from "express";
 import { validateCanvasData } from './validator.js';
-import { saveCanvasData, getDBConnection } from "./canvas.js";
+import { saveCanvasData, getDBConnection } from "../database/dbService.js";
 import { authenticate } from "../auth/authentication.js";
 import { paginatedResults } from "./paginatedResults.js";
 
