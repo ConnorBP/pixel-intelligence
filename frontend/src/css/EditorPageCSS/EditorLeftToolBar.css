@@ -15,14 +15,27 @@
   flex-direction: column;
 }
 
-.icon-container{
-  padding-left:2px;
-
+.icon-container {
+  padding-left: 2px;
 }
 
-.icon-container .icon{
-  margin: 5px;
-  border: none;
+.icon-container .icon {
+  margin: 2px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  border-radius: 30%;
+  -webkit-border-radius: 30%;
+  -moz-border-radius: 30%;
+  -ms-border-radius: 30%;
+  -o-border-radius: 30%;
+}
+
+.icon-container .icon>* {
+  padding: 0.1rem;
+}
+
+.icon-container .icon:hover {
+  border-color: var(--primary-color);
 }
 
 /* show which tool is currently selected */
