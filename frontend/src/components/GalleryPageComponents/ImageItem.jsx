@@ -4,8 +4,8 @@ import { Link } from "react-router-dom";
 export const ImageItem = ({ image }) => {
     return (
         <div className="images">
-            <Link to={`/viewImage/${image.id}`}>
-                <img src={image.imgSrc} alt={`Gallery Image ${image.id}`} style={{ width: "100%" }} />
+            <Link to={`/viewImage/${image._id}`}>
+                <img className="" src={image.imgDataUrl} alt={`Gallery Image ${image.name}`} style={{ width: "100%" }} />
             </Link>
         </div>
     );
