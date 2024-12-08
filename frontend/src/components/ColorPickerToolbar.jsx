@@ -2,7 +2,17 @@ import "../css/ColorPickerToolbar.css";
 import { FaExchangeAlt } from "react-icons/fa";
 
 function ColorPickerToolbar({primaryColor, setPrimaryColor, secondaryColor, setSecondaryColor,eyeDropperColor}) {
-  
+
+ const fisrtSmallBox = "#000000";
+ const secondSmallBox = "#FFFFFF";
+ 
+const handleChangeSmallBox=(box)=>{
+  if(box === 'first'){
+    setPrimaryColor(fisrtSmallBox)
+  }else if(box ==='second'){
+    setPrimaryColor(secondSmallBox)
+  }
+} 
   const handleColorPickerFirst = (event) => {
   if(primaryColor){
       setPrimaryColor(event.target.value);
@@ -29,6 +39,7 @@ function ColorPickerToolbar({primaryColor, setPrimaryColor, secondaryColor, setS
           type="color"
           value={primaryColor || eyeDropperColor} 
           onChange={handleColorPickerFirst}
+         
         />
         <input
           className="color-pcik-second"
@@ -43,7 +54,8 @@ function ColorPickerToolbar({primaryColor, setPrimaryColor, secondaryColor, setS
       <div className="color-display-box">
         <div
           className="color-display-first"
-          style={{ backgroundColor: primaryColor || eyeDropperColor }}
+          style={{ backgroundColor: fisrtSmallBox }}
+          onClick={()=>{handleChangeSmallBox('first')}}
         >
           <p
             className="color-box-first"
@@ -55,11 +67,13 @@ function ColorPickerToolbar({primaryColor, setPrimaryColor, secondaryColor, setS
 
         <div
           className="color-display-second"
-          style={{ backgroundColor: secondaryColor }}
+          style={{ backgroundColor: secondSmallBox}}
+          onClick={()=>handleChangeSmallBox('second')}
         >
           <p
             className="color-box-first"
             style={{ visibility: "hidden", margin: 0 }}
+           
           >
             {secondaryColor}
           </p>
