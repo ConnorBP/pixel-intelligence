@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Asap:ital,wght@0,100..900;1,100..900&family=Karla:ital,wght@0,200..800;1,200..800&family=Outfit:wght@100..900&family=Pixelify+Sans:wght@400..700&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
+
 .alert-overlay {
   position: fixed;
   top: 0;
@@ -18,87 +19,54 @@
 
 .alert-box {
   background: rgb(230, 225, 225);
-  padding: 0px;
+  padding: 20px;
   border-radius: 20px;
   width: 70%;
   max-width: 300px;
-  text-align: center;
-  height: 30%;
-  max-height: 150px;
-  text-align: left;
+  text-align: center; /* Center text inside the alert box */
+}
+
+.alert-box p {
+  margin-block-start: 0px;
+  margin-block-end: 0px;
 }
 
 .title {
-  font-size: 0.9rem;
+  font-size: 1.2rem;
   margin: 2px;
   padding: 6px;
-  padding-left: 5%;
-
-  position: relative;
-}
-.title::after {
-  content: " ";
-  position: absolute;
-  bottom: 0;
-  left: 5%;
-  width: 90%;
-  border-bottom: 1px solid black;
 }
 
-.message1 {
-  margin-bottom: 0;
-  font-size: 0.9rem;
-  padding-left: 15%;
-}
-
+.message1,
 .message2 {
-  margin-top: 0;
-  font-size: 0.9rem;
-  padding-left: 15%;
+  font-size: 1rem;
+  margin: 2px;
+  padding: 6px;
 }
 
-/* display style for buttons in a popup window */
-.popup-button  {
-  margin: 5px;
-  padding: 5px 10px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  border-radius: 20px;
-}
-
-/* wraps the buttons in the popup */
 .popup-button-container {
   display: flex;
-  justify-content: flex-end;
-  font-size: 0.9rem;
+  justify-content: space-around;
+  margin-top: 10px;
+}
+
+.popup-button {
+  font-family: inherit;
+  font-size: 14pt;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
 .cancel-button {
-  align-items: right;
-  background: #9c6b67;
-  width: 70px;
-  height: 32px;
-  border: solid #ddd 2px;
-  box-shadow: 2px 4px 6px rgba(126, 116, 116, 0.3);
-}
-
-.cancel-button:hover {
-  background: #95544f;
-  backdrop-filter: blur(50px);
+  background-color: #f44336;
+  color: white;
 }
 
 .confirm-button {
-  background: #9c6b67;
-  width: 50px;
-  height: 32px;
-  border: solid #ddd 2px;
-  box-shadow: 2px 4px 6px rgba(126, 116, 116, 0.3);
-}
-
-.confirm-button:hover {
-  background: #95544f;
-  backdrop-filter: blur(50px);
+  background-color: #4caf50;
+  color: white;
 }
 
 /* dark mode compatibility */
