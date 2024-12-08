@@ -6,20 +6,22 @@
     margin: 1em 0;
 }
 
+/* big bubbly buttons */
 .pagination button {
     background-color: var(--primary-color);
     color: white;
     border: none;
-    border-radius: 50px; /* Make buttons more bubbly */
+    border-radius: 50px;
     padding: 0.5em 1em;
-    font-size: 1.2em; /* Make buttons larger */
+    
+    font-size: 1.2em;
     cursor: pointer;
     transition: background-color 0.3s, transform 0.3s;
 }
 
-.pagination button:hover {
+.pagination button:not(:disabled):hover {
     background-color: var(--primary-color-dark);
-    transform: scale(1.1); /* Slightly enlarge on hover */
+    transform: scale(1.1);
 }
 
 .pagination button:disabled {
@@ -30,4 +32,20 @@
 .pagination button.active {
     background-color: var(--primary-color-dark);
     font-weight: bold;
+}
+
+/* scale pagination buttons with page width */
+
+@media screen and (max-width: 768px) {
+    .pagination button {
+        font-size: 0.8em;
+    }
+    
+}
+
+@media screen and (max-width: 480px) {
+    .pagination button {
+        font-size: 0.6em;
+    }
+    
 }
