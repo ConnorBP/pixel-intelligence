@@ -47,18 +47,20 @@ const header = {
     }
 }
 
-// Sending POST request to the api
-const generateImage = async() => {
+// Sending POST request to the api to get image id
+const getImageID = async() => {
     try{
         const response = await axios.post(baseUrl, data, header);
-        console.log("Response: ", response);
+        const id = response.data.id;
+        // console.log("Response: ", response.data.id);
+        return id; 
     } catch(e) {
       console.error(
-        "Error generating image:", 
+        "Error getting id:", 
         e.response ? e.response.data : e.message
       );
     }
 }
 
-generateImage();
+getImageID();
 
