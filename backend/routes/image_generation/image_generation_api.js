@@ -135,4 +135,6 @@ router.get("/generate/download/:jobId", async (req, res) => {
     console.error("Error downloading image: ", e.response ? e.response.data : e.message);
     res.status(500).json({ success: false, error: "Internal server error" });
   }
-})
+});
+
+export default router;
