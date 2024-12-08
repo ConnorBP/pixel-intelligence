@@ -7,6 +7,7 @@ import Menu from "./components/Menu.jsx";
 import ImageDetailsOverlay from "./components/GalleryPageComponents/ImageDetailsOverlay.jsx";
 
 import './css/App.css';
+import ContextRouteWrapper from "./context/ContextRouteWrapper.jsx";
 
 const baseUrl = '/test_images';
 
@@ -19,21 +20,23 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* all other routes under layout have navbar */}
-        <Route path="/" element={<Layout />}>
-          <Route
-            path="/"
-            element={<Gallery images={testingImages} />}
-          >
-            <Route path="viewImage/:imageId" element={<ImageDetailsOverlay images={testingImages} />} />
-          </Route>
-          
-          {/* 404 route for invalid page urls */}
-          <Route path="*" element={<NotFound />} />
-        </Route>
+        <Route path="/" element={<ContextRouteWrapper/>}>
+          {/* all other routes under layout have navbar */}
+          <Route path="/" element={<Layout />}>
+            <Route
+              path="/"
+              element={<Gallery images={testingImages} />}
+            >
+              <Route path="viewImage/:imageId" element={<ImageDetailsOverlay />} />
+            </Route>
 
-        {/* editor page unaffected by layout element */}
-        <Route path="/editor" element={<Editor />} />
+            {/* 404 route for invalid page urls */}
+            <Route path="*" element={<NotFound />} />
+          </Route>
+
+          {/* editor page unaffected by layout element */}
+          <Route path="/editor" element={<Editor />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   );
