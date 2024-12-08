@@ -16,7 +16,6 @@ router.post("/upload", authenticate, async(req, res) => {
     if(validationError){
       return res.status(400).json({ success: false, error: validationError });
     }
-
     // Generating a unique filename for the image 
     // code here
 
@@ -35,7 +34,6 @@ router.post("/upload", authenticate, async(req, res) => {
     creation_date: new Date().getUTCDate() // get date time in UTC format for timezone consistency
   }
 );
-    
     // Returning success code if there is no error
     return res.status(200).json({success: true, message:"Canvas uploaded successfully."})
   } catch(e){
