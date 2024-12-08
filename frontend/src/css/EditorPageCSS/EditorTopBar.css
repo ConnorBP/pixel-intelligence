@@ -74,12 +74,12 @@
 }
 
 .top-toolbar button:hover {
-  border-color: #646cff;
+  border-color: var(--primary-color);
 }
 
 .top-toolbar button:focus,
 .top-toolbar button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  border-color: 4px auto -webkit-focus-ring-color;
 }
 
 .inline {
