@@ -33,12 +33,12 @@
 
 a {
   font-weight: 500;
-  color: #F5F5DC;
+  color: var(--link-color);
   text-decoration: inherit;
 }
 
 a:hover {
-  color: #F5F5DC;
+  color: var(--link-hover-color);
 }
 
 body {
@@ -57,21 +57,6 @@ h1 {
 
 .hidden {
   display: none;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-
-  a:hover {
-    color: #F5F5DC;
-  }
-
-  button {
-    background-color: #f9f9f9;
-  }
 }
 
 /* Dark mode styles */
