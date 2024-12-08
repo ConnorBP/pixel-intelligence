@@ -1,22 +1,49 @@
 :root {
-    --top-toolbar-size: 4em;
+  --top-toolbar-row-height: 4em;
+  --top-toolbar-size: var(--top-toolbar-row-height);
 }
 
 .top-toolbar {
-    /* padding-left: var(--left-toolbar-size); */
-    background-color: rgba(100,100,100,0.6);
-    width:100%;
-    height: var(--top-toolbar-size);
-    display: flex;
-    /* justify-content: left; */
-    flex-direction: row;
+  /* padding-left: var(--left-toolbar-size); */
+  background-color: rgba(100, 100, 100, 0.6);
+  width: 100%;
+  height: var(--top-toolbar-size);
+  display: flex;
+  flex-direction: row;
+
+  /* flex-wrap: wrap; */
+  justify-content: space-evenly;
+
+}
+
+
+.top-controls {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  /* padding-left: 0.8em; */
+  /* padding-right: 0.8em; */
+  width: 100%;
+
+}
+
+/* Direct children of toolbar (buttons, groups, etc) */
+.top-controls>* {
+  flex: 1 1 auto;
+  width: var(--top-toolbar-row-height);
+  height: var(--top-toolbar-row-height);
+  max-width: var(--top-toolbar-row-height);
+  max-height: var(--top-toolbar-row-height);
 }
 
 /* clear base button styles first of all */
 .top-toolbar button {
-    background-color: transparent;
-    border-style: none;
-    display: block;
+  background-color: transparent;
+  border-style: none;
+  display: block;
+
 }
 
 .top-toolbar .align-end {
@@ -26,20 +53,77 @@
 }
 
 .top-toolbar button {
-    border-radius: 8px;
-    border: 1px solid transparent;
-    padding: 0.6em 1.2em;
-    font-size: 1em;
-    font-weight: 500;
-    font-family: inherit;
-    cursor: pointer;
-    transition: border-color 0.25s;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 1.2em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  transition: border-color 0.25s;
+  /* align text and icons together nicely */
+  display: flex;
+  align-items: center;
+  gap: 0.2em;
+}
+
+/* center icons */
+.top-toolbar button>* {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.top-toolbar button:hover {
+  border-color: #646cff;
+}
+
+.top-toolbar button:focus,
+.top-toolbar button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+.inline {
+  display: inline;
+}
+
+@media screen and (max-width: 728px) {
+  .small-hidden {
+    display: none !important;
+    visibility: hidden;
+    width: 0;
+    height: 0;
+    margin: 0;
+    padding: 0;
+    position: absolute;
   }
-  
-  .top-toolbar button:hover {
-    border-color: #646cff;
+}
+
+@media screen and (max-width: 632px) {
+
+  :root {
+    --top-toolbar-size: calc(var(--top-toolbar-row-height) * 2);
   }
-  .top-toolbar button:focus,
-  .top-toolbar button:focus-visible {
-    outline: 4px auto -webkit-focus-ring-color;
+
+  .top-controls {
+    justify-content: center;
   }
+
+  .top-controls>* {
+    flex: 0 0 calc(100% / 5 - 0.5em);
+    /* Fixed width, no grow/shrink */
+    min-width: min-content;
+    /* Prevent text overflow */
+    margin: 0;
+    /* Remove any margin interference */
+  }
+
+  .mobile-hidden {
+    display: none !important;
+    visibility: hidden;
+    width: 0;
+    height: 0;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+  }
+}
