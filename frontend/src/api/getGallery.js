@@ -1,9 +1,11 @@
 import { getApiEndpoint } from '../utils';
 
-export default async function getGallery() {
+// Fetches the gallery from the server
+// includes pagination support
+export default async function getGallery(page = 1, limit = 10) {
     let resp;
     try {
-        resp = await fetch(getApiEndpoint() + '/gallery/all', {
+        resp = await fetch(getApiEndpoint() + `/gallery/all?page=${page}&limit=${limit}`, {
             method: 'GET',
             credentials: 'include',
             headers: {

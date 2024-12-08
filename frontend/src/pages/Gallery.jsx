@@ -6,7 +6,7 @@ import { useSession } from "../context/SessionContext";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 
 const defaultGalleryState = {
-    page: 0,
+    page: 1,
     lastRefresh: Date.now(),
     images: [],
 };
@@ -14,20 +14,26 @@ const defaultGalleryState = {
 // Main Gallery component that holds the gallery state
 function Gallery({ images }) {
 
-    const [imageList, setImageList] = useState(null);
-
     const [galleryStateCache, setGalleryStateCache] = useLocalStorage('galleryState', defaultGalleryState);
 
     // track if we have connected to the api endpoint and received a session
     const { sessionLoaded } = useSession();
 
     useEffect(() => {
-        // load gallery data once session is loaded initially
-        if (sessionLoaded && imageList === null) {
-            getGallery().then((data) => {
+        // load gallery data once a valid session is loaded
+        if (sessionLoaded) {
+
+            let page = defaultGalleryState != null ? defaultGalleryState.page : 1;
+
+            getGallery(page).then((data) => {
                 if (data) {
-                    setImageList(data);
-                    console.log('loaded: ', data);
+
+                    // update our localstorage cached gallery page state
+                    setGalleryStateCache((oldState) => {
+                        let newState = { ...oldState, page, images: data, lastRefresh: Date.now() };
+                        return newState;
+                    });
+                    // console.log('loaded: ', data);
                 }
             });
         }

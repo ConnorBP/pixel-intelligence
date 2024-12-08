@@ -24,7 +24,7 @@ export const SessionProvider = ({ children }) => {
         setSessionLoaded(false);
 
         const endpoint = getApiEndpoint() + '/auth';
-        console.log(endpoint);
+        // console.log(endpoint);
         fetch(endpoint, {
             method: 'GET',
             credentials: 'include',
