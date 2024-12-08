@@ -33,45 +33,49 @@ const EditorTopBar = ({ contextMenuOptions, onResizeImageClicked, onImportProjec
       <div className="top-toolbar">
         <Menu menuOptions={contextMenuOptions} />
 
-        {/* create new image generation and canvas */}
-        <button onClick={onCreateNewImageClicked}>
-          <MdOutlineAddBox className="icon" />
-        </button>
+        <div className="top-controls">
 
-        {/* save json file to disc */}
-        <button onClick={onSaveClicked}>
-          <RiSave3Line className="icon" />
-        </button>
+          {/* create new image generation and canvas */}
+          <button onClick={onCreateNewImageClicked}>
+            <MdOutlineAddBox className="icon" />
+          </button>
 
-        {/* import a canvas data json from disc */}
-        <button onClick={onImportProjectClicked}>
-          <FaRegFolderOpen className="icon" />
-        </button>
+          {/* save json file to disc */}
+          <button onClick={onSaveClicked}>
+            <RiSave3Line className="icon" />
+          </button>
 
-        {/* import an image from disc */}
-        <button onClick={onImportImageClicked}>
-          <FaFileImport className="icon" />
-        </button>
+          {/* import a canvas data json from disc */}
+          <button onClick={onImportProjectClicked}>
+            <FaRegFolderOpen className="icon" />
+          </button>
+
+          {/* import an image from disc */}
+          <button onClick={onImportImageClicked}>
+            <FaFileImport className="icon" />
+          </button>
 
 
-        {/* export image */}
-        <button onClick={onImageExportClicked}>
-          <IoIosDownload className="icon" />
-        </button>
+          {/* export image */}
+          <button onClick={onImageExportClicked}>
+            <IoIosDownload className="icon" />
+          </button>
 
-        {/* resize canvas */}
-        <button onClick={onResizeImageClicked}>
-          <GiResize className="icon" />
-        </button>
+          {/* resize canvas */}
+          <button onClick={onResizeImageClicked}>
+            <GiResize className="icon" />
+          </button>
 
-        {/* clear canvas */}
-        <button onClick={() => { setShowConfirmClearCanvas(true) }}><FaTrashCan /></button>
+          {/* clear canvas */}
+          <button onClick={() => { setShowConfirmClearCanvas(true) }}><FaTrashCan /></button>
 
-        {/* share */}
-        <button onClick={onShareCurrentCanvasClicked}><FaShareFromSquare /></button>
+          {/* share */}
+          <button onClick={onShareCurrentCanvasClicked}><FaShareFromSquare /></button>
 
-        <button className="align-end" onClick={() => navigate("/")}>
-          <RiArrowGoBackLine className="icon" /> Back to Gallery
+        </div>
+
+        <button className="align-end mobile-hidden" onClick={() => navigate("/")}>
+          <RiArrowGoBackLine className="icon mobile-hidden" /> <div className="inline small-hidden">Back to Gallery</div>
         </button>
       </div>
     </>

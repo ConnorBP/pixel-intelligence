@@ -52,7 +52,7 @@
 
 .menuBox li:hover {
   background-color: #b0a9a9;
-  color: #0303c4;
+  color: var(--primary-color);
 }
 
 .menuBox li:last-child {

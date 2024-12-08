@@ -1,69 +1,106 @@
 :root {
   --color-box-size: 55px;
+  --mini-box-size: 10px;
 }
 
 .color-container {
-  display: inline-block;
-}
-.color-picker-input-box {
-  border-color: "none";
+  display: grid;
+  grid-template-columns: var(--color-box-size) auto;
+  grid-template-rows: var(--color-box-size) var(--color-box-size);
+  gap: 2px;
+  row-gap: 8px;
+  padding: 0.2em;
+  position: relative;
+  width: calc(var(--color-box-size) + 15px);
+  height: calc(var(--color-box-size) + 15px);
+  /* border: 1px solid black; */
 }
 
-.color-pcik-first {
-  position: relative;
-  display: block;
+.color-pick-first {
+  grid-column: 1 / 2;
+  grid-row: 1 / 2;
   width: var(--color-box-size);
   height: var(--color-box-size);
-  top: 6px;
-  left: 30px;
-  border: transparent;
-  z-index: 1000;
+  /* border: 1px solid black; */
+  border: none;
   appearance: none;
   background-color: transparent;
-}
-.color-pcik-second {
-  position: relative;
-  top: calc(0px - var(--color-box-size) / 2);
-  left: 58px;
-  width: 55px;
-  height: 55px;
-  border: transparent;
-  appearance: none;
-  background-color: transparent;
-}
-.btn-color-change {
-  position: relative;
-  top: -38px;
-  left: 30px;
-  background-color: transparent;
-  border: transparent;
   cursor: pointer;
-  font-size: 16px;
-  z-index: 1000;
-  display: block;
+  z-index: 2;
 }
-.color-display-box {
-  position: relative; /* 부모 요소를 기준으로 배치 */
+
+.color-pick-second {
+  grid-column: 1 / 2;
+  grid-row: 1 / 2;
+  width: var(--color-box-size);
+  height: var(--color-box-size);
+  border: 1px solid black;
+  border: none;
+  appearance: none;
+  background-color: transparent;
+  cursor: pointer;
+  margin-top: 15px; 
+  margin-left: 15px;
+  z-index: 1;
+}
+
+.btn-color-change {
+  grid-column: 2 / 3;
+  grid-row: 1 / 2;
+  width: calc(var(--mini-box-size) * 2);
+  height: calc(var(--mini-box-size) * 2);
+  min-width: 20px;
+  min-height: 20px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
   display: flex;
-  top: -128px;
-  left: 90px;
+  justify-content: center;
+  align-items: center;
+  z-index: 3;
 }
+
+.btn-color-change >* {
+  min-width: var(--mini-box-size);
+  min-height: var(--mini-box-size);
+}
+
+.color-display-box {
+  display: grid;
+  grid-template-areas: "mini-box";
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  width: var(--mini-box-size);
+  height: var(--mini-box-size);
+}
+
 .color-display-first {
-  position: relative;
+  grid-area: mini-box;
+  position: absolute;
+  z-index: 2;
+  width: var(--mini-box-size);
+  height: var(--mini-box-size);
+  background-color: black;
   border: 1px solid white;
-  width: 10px;
-  height: 10px;
-  top: 0px;
-  /* margin-top: 5px; */
-  z-index: 10;
 }
+
 .color-display-second {
-  position: relative;
-  right: 0px;
-  top: 6px;
-  right: 6px;
-  /* display: flex; */
+  grid-area: mini-box;
+  position: absolute;
+  z-index: 1;
+  left: 3px;
+  top: 3px;
+  width: var(--mini-box-size);
+  height: var(--mini-box-size);
+  background-color: white;
   border: 1px solid white;
-  width: 10px;
-  height: 10px;
+}
+
+@media screen and (max-width: 632px) {
+  :root {
+    --color-box-size: 20px;
+    --mini-box-size: 4px;
+  }
+  
 }
