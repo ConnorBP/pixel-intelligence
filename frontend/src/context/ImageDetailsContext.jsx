@@ -1,37 +1,49 @@
-// caches details of images by id that we have seen before in the gallery
-// and provides them to components that need them
+import { createContext, useContext, useReducer } from 'react';
 
-import { createContext, useContext, useEffect, useReducer } from 'react';
 const ImageDetailsContext = createContext(null);
 
 export const ImageDetailsProvider = ({ children }) => {
-    // const [currentSession, setCurrentSession] = useLocalStorage("userSession",null);
     const [images, dispatchImages] = useReducer((state, action) => {
+        const currentMap = new Map(state.map);
+
         switch (action.type) {
             case 'update':
             case 'add':
-                return { ...state, map: state.map.set(action.id, action.image) };
+                if (!action.id) {
+                    console.error('Image id is undefined:', action.image);
+                    return state;
+                }
+                console.log('adding image ', action.id, ' ', action.image, ' to map ', state.map);
+                return { ...state, map: currentMap.set(action.id, action.image), lastUpdate: Date.now() };
             case 'remove':
-                return { ...state, map: state.map.delete(action.id) };
+                currentMap.delete(action.id);
+                return { ...state, map: currentMap, lastUpdate: Date.now() };
             case 'clear':
-                return { map: new Map() };
+                return { map: new Map(), lastUpdate: Date.now() };
             default:
                 return state;
         }
-    },
-    {
+    }, {
         map: new Map(),
     });
 
-    
     function addImage(image) {
-        dispatchImages({ type: 'add', image });
+        if (!image._id) {
+            console.error('Image id is undefined:', image);
+            return;
+        }
+        dispatchImages({ type: 'add', id: image._id, image });
+    }
+
+    function getImage(id) {
+        return images.map.get(id);
     }
 
     return (
         <ImageDetailsContext.Provider value={{
             images: images.map,
-            addImage
+            addImage,
+            getImage
         }}>
             {children}
         </ImageDetailsContext.Provider>
@@ -41,12 +53,14 @@ export const ImageDetailsProvider = ({ children }) => {
 export function useImageDetails() {
     const {
         images,
-        addImage
+        addImage,
+        getImage
     } = useContext(ImageDetailsContext);
 
     return {
         images,
-        addImage
+        addImage,
+        getImage
     };
 };
 

@@ -3,6 +3,7 @@ import GalleryPageLayout from "../components/GalleryPageComponents/GalleryPageLa
 import { Outlet } from "react-router-dom";
 import { getGallery } from "../api";
 import { useSession } from "../context/SessionContext";
+import { useImageDetails } from "../context/ImageDetailsContext";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 import { GeneratePng } from "../utils";
 
@@ -15,12 +16,14 @@ const defaultGalleryState = {
 };
 
 // Main Gallery component that holds the gallery state
-function Gallery({ images }) {
+function Gallery() {
 
     const [galleryStateCache, setGalleryStateCache] = useLocalStorage('galleryState', defaultGalleryState);
 
     // track if we have connected to the api endpoint and received a session
     const { sessionLoaded, isSessionStillValid, refresh } = useSession();
+
+    const {images, addImage} = useImageDetails();
 
     useEffect(() => {
         // load gallery data once a valid session is loaded
@@ -48,7 +51,12 @@ function Gallery({ images }) {
                 }
             });
         }
-    }, [sessionLoaded]);
+        if(galleryStateCache.images.length > 0){
+            galleryStateCache.images.forEach((image) => {
+                addImage(image);
+            });
+        }
+    }, [sessionLoaded, galleryStateCache]);
 
     return (
         <>
