@@ -7,3 +7,4 @@ export { default as ExportPng } from './ExportPng';
 export { default as drawPixelToCtx } from './drawPixelToCtx';
 export { default as DownloadJson } from './DownloadJson';
 export { default as getApiEndpoint } from './getApiEndpoint';
+export { default as GeneratePng } from './GeneratePng';
