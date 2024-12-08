@@ -2,7 +2,8 @@ import { MongoClient } from "mongodb";
 
 const dbStringURL = process.env.MONGO_DB_STRING; // Database connection string
 const dbName = process.env.DATABASE_NAME; // Database Name
-const collectionName = process.env.COLLECTION_NAME; // Collection Name
+const canvasCollection = process.env.CANVAS_COLLECTION; // Canvas Collection Name
+const imageJobsCollection = process.env.IMAGE_JOBS_COLLECTION; // Image Jobs Collection
 
 // Database connection
 export const connectToDB = async () => {
@@ -22,7 +23,7 @@ export const saveCanvasData = async (canvasData) => {
     let db;
     try {
         db = await connectToDB();
-        const collection = db.collection(collectionName);
+        const collection = db.collection(canvasCollection);
 
         // Insert canvas data into the collection
         const result = await collection.insertOne(canvasData);
