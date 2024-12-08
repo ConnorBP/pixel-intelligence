@@ -3,7 +3,7 @@ import "../../css/GalleryPageCSS/Gallery.css";
 
 // Component to render the list of images
 export const GalleryList = ({ images }) => {
-    console.log(images);
+    // console.log(images);
     return (
         <div className="gallery">
             {images && images.length > 0 ? (
