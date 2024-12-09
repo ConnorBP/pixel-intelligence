@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { usePreserveQueryParamsNavigate } from "../../hooks/usePreserveQueryParamsNavigate";
 import { useImageDetails } from "../../context/ImageDetailsContext";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
@@ -13,7 +13,8 @@ import "../../css/GalleryPageCSS/ImageDetailsOverlay.css";
 
 function ImageDetailsOverlay() {
     const { imageId } = useParams();
-    const navigate = usePreserveQueryParamsNavigate();
+    const pNavigate = usePreserveQueryParamsNavigate();
+    const navigate = useNavigate();
     const [copied, setCopied] = useState(false);
 
     const { images, getImage } = useImageDetails();
@@ -23,7 +24,7 @@ function ImageDetailsOverlay() {
     console.log(`got image id ${imageId}: ${image} in map: `, images);
 
     if (!image) return (<div className="image_details">
-        <CloseRoundedIcon onClick={() => navigate('/')} className="close_icon" />
+        <CloseRoundedIcon onClick={() => pNavigate('/')} className="close_icon" />
         <div className="error">
             <p>Image {imageId} not found</p>
             {/* <ul>
@@ -60,7 +61,7 @@ function ImageDetailsOverlay() {
     return (
         <div className="image_details">
             {/* Close button to navigate back to the gallery */}
-            <CloseRoundedIcon onClick={() => navigate('/')} className="close_icon" />
+            <CloseRoundedIcon onClick={() => pNavigate('/')} className="close_icon" />
 
             <div className="content">
                 {/* Left side for the image */}
