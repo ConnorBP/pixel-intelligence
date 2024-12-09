@@ -74,10 +74,20 @@ const Editor = () => {
     const files = target.files;
     // get the first image selected by file-picker
     const base64 = await toBase64(files[0]);
+    const type = files[0].type;
+    const size = files[0].size;
+    const name = files[0].name;
+    console.log('loading file:', name, type, size);
+
+    if(files[0].type.substring(0,5) != "image") {
+      alert("Invalid file type. Please select an image file.");
+      return;
+    }
 
     // now process it into the canvas if possible
 
     var img = new Image();
+    // img.crossOrigin = "Anonymous"; // Enable CORS so firefox will be nice
     img.onload = function () {
       console.log('loading image');
       // create a temporary canvas element not on the dom for processing the image
@@ -90,7 +100,14 @@ const Editor = () => {
       try {
         // might throw
         console.log(`new canvas width and height ${tmpCanvas.width}, ${tmpCanvas.height}`);
-        const simp = new SimpleImage({ imageData: ctx.getImageData(0, 0, tmpCanvas.width, tmpCanvas.height) });
+        const imageData = ctx.getImageData(0, 0, tmpCanvas.width, tmpCanvas.height);
+        console.log('image data:', imageData);
+        if(!imageData) {
+          console.error('failed to load image data');
+          alert('image load failed. Likely due to CORS policy blocking the image.');
+          return;
+        }
+        const simp = new SimpleImage({ imageData });
         // this applies the k-means clustering centroid based downscaling algorithm to the image with 4 buckets and 10 iterations
         let { kCentroid } = DownScaler.kCenter(simp, canvasData.width, canvasData.height, 4, 10);
 
@@ -125,6 +142,12 @@ const Editor = () => {
     const files = target.files;
     // get the first image selected by file-picker
     // console.log(files[0]);
+
+    if(files[0].type !== "application/json") {
+      alert("Invalid file type. Please select a JSON file.");
+      return;
+    }
+
     try {
       const reader = new FileReader();
       reader.onload = function (e) {

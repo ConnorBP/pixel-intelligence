@@ -49,8 +49,11 @@ class SimpleImage {
         }
 
         // otherwise we try and load an srgb image
-        if (!imageData || imageData.colorSpace != "srgb") {
-            throw new Error(`must provide a valid srgb ImageData to SimpleImage. Tried ${imageData}`);
+        if (
+            !imageData
+            // || imageData.colorSpace != "srgb" // we are disabling this restriction for now due to firefox being different
+        ) {
+            throw new Error(`must provide a valid srgb ImageData to SimpleImage. Tried ${imageData.colorSpace} ${JSON.stringify(imageData)}`);
         }
         if (imageData.width == null || imageData.height == null || imageData.width <= 0 || imageData.height <= 0) {
             throw new Error("image data dimensions were invalid");
