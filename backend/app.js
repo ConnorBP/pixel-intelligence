@@ -16,34 +16,22 @@ import cors from "cors";
 
 const app = express();
 
-// Cookie Parser for all routes
-app.use(cookieParser());
-
 // Middleware to parse JSON
 app.use(express.json());
+
+// Cookie Parser for all routes
+app.use(cookieParser());
 
 // allow any origin in dev mode
 const corsOptions = {
     origin: 'http://localhost:5173',
-    // methods: [],
-    // allowedHeaders: [],
-    // exposedHeaders: [],
     credentials: true
 };
 
-// disable cors for everythind
+// Enable CORS options for all routes
 app.use(cors(corsOptions));
 
-// intercept json syntax error responses and return them as json instead of html
-app.use((err, req, res, next) => {
-    if (err instanceof SyntaxError && err.status === 400 && 'body' in err) {
-        console.error(err);
-        return res.status(400).send({ success: false, status: 400, message: err.message });
-    }
-    next();
-});
-
- // All routes will be prefixed with "/api"
-app.use('/api/', routes);
+// Your routes here
+app.use('/api', routes);
 
 export default app;

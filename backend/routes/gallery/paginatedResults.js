@@ -1,4 +1,4 @@
-const collectionName = process.env.COLLECTION_NAME;
+import {canvasCollection as collectionName} from '../database/dbService.js';
 
 export const paginatedResults = (db) => {
     return async (req, res, next) => {

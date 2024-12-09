@@ -10,20 +10,22 @@ import serverless from "serverless-http";
 import routes from '../../routes/index.js';
 
 const api = express();
-api.set('trust proxy', true);
+// sets allow proxy headers in express on netlify
+// api.set('trust proxy', true);
 
 // Middleware to parse JSON
 api.use(express.json());
 api.use(cookieParser());
 
 // intercept json syntax error responses and return them as json instead of html
-api.use((err, req, res, next) => {
-    if (err instanceof SyntaxError && err.status === 400 && 'body' in err) {
-        console.error(err);
-        return res.status(400).send({ success: false, status: 400, message: err.message });
-    }
-    next();
-});
+// moved to routes/index.js
+// api.use((err, req, res, next) => {
+//     if (err instanceof SyntaxError && err.status === 400 && 'body' in err) {
+//         console.error(err);
+//         return res.status(400).send({ success: false, status: 400, message: err.message });
+//     }
+//     next();
+// });
 
 // Verify routes is a valid middleware
 if (typeof routes !== 'function') {
@@ -40,10 +42,10 @@ if (typeof routes !== 'function') {
     api.use("/api/", routes);
 }
 
-// Error handling middleware
+// Backup Error handling middleware
 api.use((err, req, res, next) => {
     console.error('API Error:', err);
-    res.status(500).json({ error: 'Internal Server Error' });
+    res.status(500).json({ success: false, status: 500, error: 'Internal Server Error' });
 });
 
 export const handler = serverless(api);
