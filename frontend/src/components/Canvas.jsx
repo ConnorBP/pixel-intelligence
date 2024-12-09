@@ -1,4 +1,4 @@
-import { useRef, useEffect, forwardRef, useImperativeHandle, useCallback } from "react";
+import { useRef, useEffect, forwardRef, useImperativeHandle, useCallback,useState } from "react";
 
 import "../css/Canvas.css";
 import {
@@ -33,11 +33,11 @@ const Canvas = forwardRef(
     // how big a single pixel is on the actual rendering canvas:
     // this should be calculated on demand
     // const pixelSize = canvasRenderWidth / canvasData.width;
-
+    const [showGridLines, setShowGridLines] = useState(true); 
     // updates the state of a pixel at specific coordinate
     // on the provided canvas data and returns it
-
     const updatePixelAt = (oldCanvas, x, y, color) => {
+   
       console.log(`updatePixelAt called with  ${oldCanvas} ${x} ${y} ${color}`);
       // don't allow out of bounds access
       if (x >= oldCanvas.width || y >= oldCanvas.height) {
@@ -66,7 +66,7 @@ const Canvas = forwardRef(
       context.lineTo(canvasW, -0.5 + y * gridSpacing);
       context.stroke();
     }
-
+ 
     // fixes the grid lines on all four sides at a specific pixel coordinate
     function fixGridLinesAt(context, x, y, gridSpacing, canvasW, canvasH) {
       drawGridLineX(context, x, gridSpacing, canvasH);
@@ -74,8 +74,9 @@ const Canvas = forwardRef(
       drawGridLineX(context, x + 1, gridSpacing, canvasH);
       drawGridLineY(context, y + 1, gridSpacing, canvasW);
     }
-
+   
     function drawAllGridLines(canvas, editorPixelsW, editorPixelsH) {
+      if (!showGridLines) return; 
       // draw all grid lines on the canvas
       const context = canvas.getContext("2d");
 
@@ -90,6 +91,7 @@ const Canvas = forwardRef(
         drawGridLineY(context, y, gridSpacing, canvas.width);
       }
     }
+    
 
     // clears the canvas with a background grid
     // only clears the visual display by default, but you can make it clear the data too
@@ -100,7 +102,7 @@ const Canvas = forwardRef(
       updateDataOnClear = false
     ) => {
       const context = canvas.getContext("2d");
-
+      
       drawCheckeredBackground(
         context,
         editorPixelsW*2,
@@ -109,10 +111,14 @@ const Canvas = forwardRef(
         canvas.height
       );
 
-      if (drawGridLines) {
+      if (!drawGridLines) {
         // draw all grid lines on the canvas
         drawAllGridLines(canvas, editorPixelsW, editorPixelsH);
       }
+      // if (showGridLines) {
+      //   drawAllGridLines(canvas, editorPixelsW, editorPixelsH);
+      // }
+      drawAllGridLines(canvas, editorPixelsW, editorPixelsH);
       if (updateDataOnClear) {
         setCanvasData((oldCanvas) => {
           // deep copy (make react update)
@@ -127,6 +133,7 @@ const Canvas = forwardRef(
     // attempt to load a provided canvas json representation
     // it is "try" because the loaded data can be tampered with by the user
     // or be incompatible due to updates
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     const tryLoadCanvas = (canvasData, storeOnLoad = false) => {
       console.info("loading canvas state with object: ", canvasData);
       try {
@@ -218,7 +225,6 @@ const Canvas = forwardRef(
       if (color == null) {
         return;
       }
- 
       // calculate how big our "virtual pixels" are on the actual screen canvas pixel resolution
       const pixelSize = canvasRenderWidth / drawingPixelsWidth;
     
@@ -229,11 +235,17 @@ const Canvas = forwardRef(
       // Draw a pixel at the clicked position
       drawPixelToCtx(context, x, y, color, pixelSize);
 
-      if (drawGridLines) {
+      // if (drawGridLines) {
+      //   fixGridLinesAt(context, x, y, pixelSize, canvas.width, canvas.height);
+      // }
+      // else 
+      if (!showGridLines) {
         fixGridLinesAt(context, x, y, pixelSize, canvas.width, canvas.height);
       }
+  
     });
 
+  
     // Handles the event of someone clicking on the canvas area
     // Currently only supports single click drawing
     async function handleCanvasClick(event) {
@@ -255,7 +267,7 @@ const Canvas = forwardRef(
         (((event.clientY - rect.top) / rect.height) * canvas.height) / pixelSize
       );
       let color; // Define the color for the current tool
-
+    
       if (tool === "pencil") {
         color = brushColor;
          
@@ -281,9 +293,34 @@ const Canvas = forwardRef(
         }
        }
         return;
+     }else if (tool =="showGridLines"){
       
+      setShowGridLines((prev) => !prev);
 
-     }
+        const context = canvas.getContext("2d");
+        context.clearRect(0, 0, canvas.width, canvas.height);
+
+        drawCheckeredBackground(
+          context,
+          canvasData.width * 2,
+          canvasData.height * 2,
+          canvas.width,
+          canvas.height
+        );
+
+        canvasData.pixels.forEach((color, index) => {
+          const x = index % canvasData.width;
+          const y = Math.floor(index / canvasData.width);
+          drawPixelToCtx(context, x, y, color, canvas.width / canvasData.width);
+        });
+
+        if (showGridLines) {
+          drawAllGridLines(canvas, canvasData.width, canvasData.height);
+        }
+
+        return; 
+      }
+  
       // update the pixel in local storage
       setCanvasData((oldCanvas) => {
         return updatePixelAt(oldCanvas, pixelX, pixelY, color);
@@ -351,9 +388,7 @@ const Canvas = forwardRef(
     useEffect(() => {
       console.log("Canvas data updated:", canvasData);
     }, [canvasData]);
-
-
-
+    
     useEffect(() => {
       const setupCanvasEvents = () => {
         const canvas = canvasRef.current;
