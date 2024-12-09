@@ -6,10 +6,20 @@ import { GiResize } from "react-icons/gi";
 import { FaFileImport, FaShareFromSquare, FaTrashCan, FaRegFolderOpen } from "react-icons/fa6";
 import { IoIosDownload } from "react-icons/io";
 import "../css/EditorPageCSS/EditorTopBar.css";
-import Menu from "./Menu";
-import ConfirmationPopup from "./ConfirmationPopup";
+import Menu from "./Menu.jsx";
+import ConfirmationPopup from "./ConfirmationPopup.jsx";
 
-const EditorTopBar = ({ contextMenuOptions, onResizeImageClicked, onImportProjectClicked, onImportImageClicked, onCreateNewImageClicked, onImageExportClicked, onShareCurrentCanvasClicked, currentCanvasSize, onSaveClicked, onTrashClearClicked }) => {
+const EditorTopBar = ({
+  contextMenuOptions,
+  onResizeImageClicked,
+  onImportProjectClicked,
+  onImportImageClicked,
+  onCreateNewImageClicked,
+  onImageExportClicked,
+  onShareCurrentCanvasClicked,
+  onSaveClicked,
+  onTrashClearClicked
+}) => {
 
   const [popupInfo, setPopupInfo] = useState(null);
 

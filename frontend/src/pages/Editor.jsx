@@ -3,6 +3,7 @@ import Canvas from "../components/Canvas";
 import EditorLeftToolBar from "../components/EditorLeftToolBar";
 import EditorTopBar from "../components/EditorTopBar";
 import NewImagePopup from "../components/NewImagePopup";
+import ShareImagePopUp from "../components/ShareImagePopUp";
 import ScaleImagePopup from "../components/ScaleImagePopup";
 import ConfirmationPopup from "../components/ConfirmationPopup";
 import "../css/EditorPageCSS/Editor.css";
@@ -56,6 +57,8 @@ const Editor = () => {
   const [showNewImagePrompt, setShowNewImagePrompt] = useState(false);
   const [showResizePrompt, setShowResizePrompt] = useState(false);
   const [confirmationPopupData, setConfirmationPopupData] = useState(null);
+  const [showShareImagePrompt, setShowShareImagePrompt] = useState(false);
+
 
   async function toBase64(file) {
     return new Promise((resolve, reject) => {
@@ -79,7 +82,7 @@ const Editor = () => {
     const name = files[0].name;
     console.log('loading file:', name, type, size);
 
-    if(files[0].type.substring(0,5) != "image") {
+    if (files[0].type.substring(0, 5) != "image") {
       alert("Invalid file type. Please select an image file.");
       return;
     }
@@ -102,7 +105,7 @@ const Editor = () => {
         console.log(`new canvas width and height ${tmpCanvas.width}, ${tmpCanvas.height}`);
         const imageData = ctx.getImageData(0, 0, tmpCanvas.width, tmpCanvas.height);
         console.log('image data:', imageData);
-        if(!imageData) {
+        if (!imageData) {
           console.error('failed to load image data');
           alert('image load failed. Likely due to CORS policy blocking the image.');
           return;
@@ -143,7 +146,7 @@ const Editor = () => {
     // get the first image selected by file-picker
     // console.log(files[0]);
 
-    if(files[0].type !== "application/json") {
+    if (files[0].type !== "application/json") {
       alert("Invalid file type. Please select a JSON file.");
       return;
     }
@@ -221,6 +224,68 @@ const Editor = () => {
 
   const handleCreateNewImageConfirmed = (newImage) => {
     console.log("New Canvas Created:", newImage);
+  };
+
+  const handleShareImageConfirmed = async (shareImg) => {
+
+    canvasData.name = shareImg.name;
+    canvasData.description = shareImg.description;
+    canvasData.author = 'unknown';
+    canvasData.tags = ['test', 'image'];
+    console.log('sharing canvas data:', canvasData);
+    // send the canvas data to the server
+
+    const displayFailedMessage = (msg1 = "Failed to share image.", msg2 = "Please try again later.") => {
+      setConfirmationPopupData({
+        title: "Share Image Failed",
+        message1: msg1,
+        message2: msg2,
+        onCancel: () => {
+          setConfirmationPopupData(null);
+        },
+        onConfirm: () => {
+          setConfirmationPopupData(null);
+        },
+      });
+    };
+
+    const displaySuccessMessage = () => {
+      setConfirmationPopupData({
+        title: "Share Image Sucess",
+        message1: "Image shared successfully.",
+        message2: "You can view it in the gallery.",
+        onCancel: () => {
+          setConfirmationPopupData(null);
+        },
+        onConfirm: () => {
+          setConfirmationPopupData(null);
+        },
+      });
+    };
+
+    // validate input before sending
+    if (!canvasData.name || !canvasData.description) {
+      displayFailedMessage("Failed to share image.", "Please provide a name and description.");
+      return;
+    }
+
+    if(canvasData.name.length > 32 || canvasData.description.length > 256) {
+      displayFailedMessage("Failed to share image.", "Name must be less than 32 characters and description less than 256 characters.");
+      return;
+    }
+
+    try {
+      let resp = await uploadToGallery(canvasData);
+      console.log('upload to gallery response:', resp);
+      if (resp.success) {
+        displaySuccessMessage();
+      } else {
+        displayFailedMessage();
+      }
+    } catch (err) {
+      console.error('failed to upload to gallery:', err);
+      displayFailedMessage();
+    };
   };
 
   // load the image from the gallery page if it was passed
@@ -301,23 +366,8 @@ const Editor = () => {
     setShowNewImagePrompt(true);
   };
 
-  const onShareCurrentCanvasClicked = () => {
-    canvasData.name = 'test_image';
-    canvasData.description = 'test_description';
-    canvasData.author = 'test_author';
-    canvasData.tags = ['test', 'image'];
-    console.log('sharing canvas data:', canvasData);
-    // send the canvas data to the server
-    uploadToGallery(canvasData).then((resp) => {
-      console.log('upload to gallery response:', resp);
-      if (resp.success) {
-        alert('upload to gallery success');
-      } else {
-        alert('upload to gallery failed');
-      }
-    }).catch((err) => {
-      console.error('failed to upload to gallery:', err);
-    });
+  const onShareImageClicked = () => {
+    setShowShareImagePrompt(true);
   };
 
   const onResizeImageClicked = () => {
@@ -338,7 +388,7 @@ const Editor = () => {
 
     { text: "Resize Canvas", onClick: onResizeImageClicked },
 
-    { text: "Share", onClick: onShareCurrentCanvasClicked },
+    { text: "Share", onClick: onShareImageClicked },
     { text: "View Gallery", onClick: () => nav("/") },
   ];
 
@@ -354,6 +404,14 @@ const Editor = () => {
           setShowNewImagePrompt(false);
         }}
       />
+      <ShareImagePopUp
+        isOpen={showShareImagePrompt}
+        onClose={() => { setShowShareImagePrompt(false) }}
+        onShare={(newImage) => {
+          handleShareImageConfirmed(newImage);
+          setShowShareImagePrompt(false);
+        }} />
+
       <ScaleImagePopup isOpen={showResizePrompt} setIsOpen={setShowResizePrompt} onConfirm={handleResize} currentCanvasSize={canvasData.width} />
       <EditorTopBar
         contextMenuOptions={contextMenuOptions}
@@ -365,7 +423,7 @@ const Editor = () => {
         onTrashClearClicked={onTrashClearClicked}
         onImportProjectClicked={onImportProjectClicked}
         onCreateNewImageClicked={onCreateNewImageClicked}
-        onShareCurrentCanvasClicked={onShareCurrentCanvasClicked}
+        onShareCurrentCanvasClicked={onShareImageClicked}
       />
       <EditorLeftToolBar
         selectedColor={brushColor}
