@@ -24,8 +24,9 @@ function ImageDetailsOverlay() {
     console.log(`got image id ${imageId}: ${image} in map: `, images);
 
     if (!image) return (<div className="image_details">
-        <CloseRoundedIcon onClick={() => pNavigate('/')} className="close_icon" />
+
         <div className="error">
+        <CloseRoundedIcon onClick={() => pNavigate('/')} className="close_icon" />
             <p>Image {imageId} not found</p>
             {/* <ul>
                 {[...images.keys()].map(k => (
