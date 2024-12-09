@@ -24,9 +24,9 @@ export const validateCanvasData = (canvasData) => {
 
     // Check if width and height are one of the allowed values
     // loose compare to allow stringified numbers
-    if (!(canvasData.width == 16 || canvasData.width == 32 || canvasData.width == 64) ||
-        !(canvasData.height == 16 || canvasData.height == 32 || canvasData.height == 64)) {
-        errors.push('Canvas width and height must be 16, 32, or 64.');
+    if (!(canvasData.width == 8 || canvasData.width == 16 || canvasData.width == 32 || canvasData.width == 64) ||
+        !(canvasData.height == 8 || canvasData.height == 16 || canvasData.height == 32 || canvasData.height == 64)) {
+        errors.push('Canvas width and height must be 8, 16, 32, or 64.');
     }
 
     // Check if the number of pixels does not exceed the total number of pixels allowed on the canvas
