@@ -3,6 +3,7 @@ import Canvas from "../components/Canvas";
 import EditorLeftToolBar from "../components/EditorLeftToolBar";
 import EditorTopBar from "../components/EditorTopBar";
 import NewImagePopup from "../components/NewImagePopup";
+import ShareImagePopUp from "../components/ShareImagePopUp";
 import ScaleImagePopup from "../components/ScaleImagePopup";
 import ConfirmationPopup from "../components/ConfirmationPopup";
 import "../css/EditorPageCSS/Editor.css";
@@ -56,6 +57,8 @@ const Editor = () => {
   const [showNewImagePrompt, setShowNewImagePrompt] = useState(false);
   const [showResizePrompt, setShowResizePrompt] = useState(false);
   const [confirmationPopupData, setConfirmationPopupData] = useState(null);
+  const [showShareImagePrompt, setShowShareImagePrompt] = useState(false);
+
 
   async function toBase64(file) {
     return new Promise((resolve, reject) => {
@@ -223,6 +226,10 @@ const Editor = () => {
     console.log("New Canvas Created:", newImage);
   };
 
+  const handleShareImageConfirmed = async (newImage) => {
+    console.log("Share Image initiated:", newImage);
+  };
+
   // load the image from the gallery page if it was passed
   useEffect(() => {
     // if this is not null, then we have an image to load.
@@ -301,6 +308,10 @@ const Editor = () => {
     setShowNewImagePrompt(true);
   };
 
+  const onShareImageClicked = () => {
+    setShowShareImagePrompt(true);
+  };
+
   const onShareCurrentCanvasClicked = () => {
     canvasData.name = 'test_image';
     canvasData.description = 'test_description';
@@ -338,7 +349,7 @@ const Editor = () => {
 
     { text: "Resize Canvas", onClick: onResizeImageClicked },
 
-    { text: "Share", onClick: onShareCurrentCanvasClicked },
+    { text: "Share", onClick: onShareImageClicked },
     { text: "View Gallery", onClick: () => nav("/") },
   ];
 
@@ -354,6 +365,14 @@ const Editor = () => {
           setShowNewImagePrompt(false);
         }}
       />
+      <ShareImagePopUp 
+      isOpen={showShareImagePrompt}
+        onClose={() => { setShowShareImagePrompt(false) }}
+        onShare={(newImage) => {
+          handleShareImageConfirmed(newImage);
+          setShowShareImagePrompt(false);
+        }} />
+
       <ScaleImagePopup isOpen={showResizePrompt} setIsOpen={setShowResizePrompt} onConfirm={handleResize} currentCanvasSize={canvasData.width} />
       <EditorTopBar
         contextMenuOptions={contextMenuOptions}
@@ -365,6 +384,7 @@ const Editor = () => {
         onTrashClearClicked={onTrashClearClicked}
         onImportProjectClicked={onImportProjectClicked}
         onCreateNewImageClicked={onCreateNewImageClicked}
+        onShareImageClicked={onShareImageClicked}
         onShareCurrentCanvasClicked={onShareCurrentCanvasClicked}
       />
       <EditorLeftToolBar

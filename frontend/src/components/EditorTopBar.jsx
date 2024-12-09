@@ -9,7 +9,7 @@ import "../css/EditorPageCSS/EditorTopBar.css";
 import Menu from "./Menu";
 import ConfirmationPopup from "./ConfirmationPopup";
 
-const EditorTopBar = ({ contextMenuOptions, onResizeImageClicked, onImportProjectClicked, onImportImageClicked, onCreateNewImageClicked, onImageExportClicked, onShareCurrentCanvasClicked, currentCanvasSize, onSaveClicked, onTrashClearClicked }) => {
+const EditorTopBar = ({ contextMenuOptions, onResizeImageClicked, onImportProjectClicked, onImportImageClicked, onCreateNewImageClicked,onShareImageClicked, onImageExportClicked, onShareCurrentCanvasClicked, currentCanvasSize, onSaveClicked, onTrashClearClicked }) => {
 
   const [popupInfo, setPopupInfo] = useState(null);
 
@@ -75,7 +75,7 @@ const EditorTopBar = ({ contextMenuOptions, onResizeImageClicked, onImportProjec
           }}><FaTrashCan /></button>
 
           {/* share */}
-          <button onClick={onShareCurrentCanvasClicked}><FaShareFromSquare /></button>
+          <button onClick={onShareImageClicked}><FaShareFromSquare /></button>
 
         </div>
 
