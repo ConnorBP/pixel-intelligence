@@ -62,10 +62,14 @@ export const saveImageJobData = async(jobData) => {
 }
 
 // Retrieving job data by job ID
-export const getImageJobData = async(jobId) => {
+export const getImageJobData = async(jobId, dbConnection) => {
     let db;
     try {
-        db = await connectToDB();
+        if(!dbConnection){
+            db = await connectToDB();
+        } else {
+            db = dbConnection;
+        }
         const collection =  db.collection(imageJobsCollection);
 
         // Retrieving the image job data
@@ -75,9 +79,34 @@ export const getImageJobData = async(jobId) => {
         console.error("Error retrieving image job data: ", e.stack || e);
         throw new Error("Failed to retrieve job data.");
     } finally {
-        if (db) db.client.close();
+        if (db && !dbConnection) db.client.close();
     }
 }
+
+// Function to check if a job ID exists in the database
+// optionally takes in an existing db connection to avoid
+// creating a new one if not needed
+export const doesJobIdExist = async (jobId, dbConnection) => {
+    let db;
+    try {
+        if(!dbConnection){
+            db = await connectToDB();
+        } else {
+            db = dbConnection;
+        }
+        const collection = db.collection(imageJobsCollection);
+
+        // Check if the job ID exists
+        const result = await collection.findOne({ jobId });
+        // double negation to convert to boolean because js is stupid
+        return !!result;
+    } catch (e) {
+        console.error("Error checking job ID existence: ", e.stack || e);
+        throw new Error("Failed to check job ID existence.");
+    } finally {
+        if (db && !dbConnection) db.client.close();
+    }
+};
 
 // Updating the image jon status in database
 export const updateImageJobStatus = async (jobId, status, downloadUrl) => {

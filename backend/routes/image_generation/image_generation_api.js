@@ -1,7 +1,8 @@
 import express from "express";
 import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
-import { saveImageJobData, getImageJobData, updateImageJobStatus } from "../database/dbService.js";
+import { check, validationResult } from "express-validator";
+import { saveImageJobData, getImageJobData, updateImageJobStatus, connectToDB, doesJobIdExist } from "../database/dbService.js";
 
 const router = express.Router();
 const baseUrl = "https://stablehorde.net/api/v2";
@@ -24,10 +25,18 @@ const header = {
 const validSizes = [8, 16, 32, 64];
 
 // POST route to start image generation
-router.post("/generate", async (req, res) => {
+router.post("/generate", [
+  check("prompt").optional().isString().trim().escape().isLength({ min: 1, max: 32 }).default("pixel art"),
+  check("size").optional().isInt().isIn(validSizes).toInt().default(16)
+], async (req, res) => {
   // optional prompt and pixel size query parameters: ?promt=pixel+art&size=16
   // if not provided defaults to pixel art and 16px
   const { prompt, size } = req.query || { prompt: "pixel art", size: 16 };
+
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ success: false, error: "Validation error", errors: errors.array() });
+  }
 
   if (!validSizes.includes(parseInt(size))) {
     return res.status(400).json({ success: false, error: "Invalid pixel size. Valid sizes are 8, 16, 32, 64." });
@@ -46,14 +55,14 @@ router.post("/generate", async (req, res) => {
   // 64px canvas: 512 generated pixels
   // 128px canvas: 1024 generated pixels
 
-  const gnerationResolution = Math.max(pixelSize * 8, minimumGenerationSize);
+  const gnerationResolution = Math.max(size * 8, minimumGenerationSize);
 
   // Job ID for each job
   const jobId = uuidv4();
 
   // Data payload
   const data = {
-    "prompt": `pixelart${userPrompt}, ${pixelSize}px, side view, gamedev. game asset, pixelsprite, pixel-art, pixel_art, retro_artstyle, colorful, low-res, blocky, pixel art style, 16-bit graphics ### out of frame, duplicate, watermark, signature, text, error, deformed, sloppy, messy, blurry, noisy, highly detailed, ultra textured, photo, realisticlogo`,
+    "prompt": `pixelart${prompt}, ${size}px, side view, gamedev. game asset, pixelsprite, pixel-art, pixel_art, retro_artstyle, colorful, low-res, blocky, pixel art style, 16-bit graphics ### out of frame, duplicate, watermark, signature, text, error, deformed, sloppy, messy, blurry, noisy, highly detailed, ultra textured, photo, realisticlogo`,
     "params": {
       "cfg_scale": 7,
       "seed": "493768514",
@@ -142,17 +151,33 @@ router.get("/download/:jobId", async (req, res) => {
   if (!isValidJobId(jobId)) {
     return res.status(400).json({ success: false, error: "Invalid job Id." });
   }
-
+  let db;
   try {
-    const imageJob = await getImageJobData(jobId);
+    db = await connectToDB();
+    if(db) {
+      if (!doesJobIdExist(jobId, db)) {
+        db.client.close();
+        return res.status(404).json({ success: false, error: "Image Job not found" });
+      }
+      const imageJob = await getImageJobData(jobId);
 
-    if (imageJob.status !== "completed") {
-      return res.status(404).json({ success: false, error: "Image is not ready yet." });
+      if (imageJob.status !== "completed") {
+        return res.status(404).json({ success: false, error: "Image is not ready yet." });
+      }
+      // res.redirect(imageJob.downloadURL);
+      res.status(200).json({ success: true, downloadUrl: imageJob.downloadUrl });
+
+    } else {
+      return res.status(500).json({ success: false, error: "Database connection failed." });
     }
-    res.redirect(imageJob.downloadURL);
+    
+
+    
   } catch (e) {
     console.error("Error downloading image: ", e.response ? e.response.data : e.message);
     res.status(500).json({ success: false, error: "Internal server error" });
+  } finally {
+    if (db) db.client.close();
   }
 });
 
