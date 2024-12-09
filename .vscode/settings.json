@@ -2,5 +2,12 @@
     "cSpell.words": [
         "lightgallery",
         "uuidv"
-    ]
+    ],
+    "eslint.validate": [
+        "javascript",
+        "javascriptreact",
+        "typescript",
+        "typescriptreact"
+    ],
+    "eslint.format.enable": true
 }
