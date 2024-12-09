@@ -22,8 +22,8 @@ const header = {
 }
 
 // POST route to start image generation
-router.post("/generate/start", async(req, res) => {
-  const {userPrompt, pixelSize} = req.body;
+router.post("/generate/:userPrompt/:pixelSize", async(req, res) => {
+  const { userPrompt, pixelSize } = req.params;
 
   // Check if user prompt and pixel size is their
   if (!userPrompt || !pixelSize) {
@@ -73,7 +73,7 @@ router.post("/generate/start", async(req, res) => {
       jobId,
       generationId: response.data.id,
       status: "pending",
-      downloadURL: null,
+      downloadUrl: null,
       createdAt: new Date()
     });
 
@@ -86,8 +86,9 @@ router.post("/generate/start", async(req, res) => {
 });
 
 // GET request to poll generation status
-router.get("/generate/poll/:jobId", async(req, res) => {
-  const {jobId } = req.params;
+router.get("/poll/:jobId", async(req, res) => {
+  const { jobId } = req.params;
+  // console.log("Job ID: " + jobId);
 
   // Checking if the job id format is valid or not
   if (!isValidJobId(jobId)) {
@@ -101,7 +102,7 @@ router.get("/generate/poll/:jobId", async(req, res) => {
       return res.status(404).json({ success: false, error: "Image Job not found" });
     }
 
-    const response = await axios.get(`${baseUrl}/generate/status/${job.generationId}`, header);
+    const response = await axios.get(`${baseUrl}/generate/status/${imageJob.generationId}`, header);
 
     if(response.data.done) {
       await updateImageJobStatus(jobId, "completed", response.data.generations[0].img);
@@ -116,9 +117,9 @@ router.get("/generate/poll/:jobId", async(req, res) => {
 });
 
 // GET request to download the image
-router.get("/generate/download/:jobId", async (req, res) => {
+router.get("/download/:jobId", async(req, res) => {
   const { jobId } = req.params;
-
+  console.log("Job ID: " + jobId);
   // Checking if the job id format is valid or not
   if (!isValidJobId(jobId)) {
     return res.status(400).json({ success: false, error: "Invalid job Id." });
@@ -127,7 +128,7 @@ router.get("/generate/download/:jobId", async (req, res) => {
   try{
     const imageJob = await getImageJobData(jobId);
 
-    if(!imageJob || imageJob.status !== "completed") {
+    if(imageJob.status !== "completed") {
       return res.status(404).json({success : false, error: "Image is not ready yet."});
     }
     res.redirect(imageJob.downloadURL);

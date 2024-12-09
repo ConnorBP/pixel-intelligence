@@ -62,14 +62,14 @@ export const saveImageJobData = async(jobData) => {
 }
 
 // Retrieving job data by job ID
-export const getImageJobData = async(jobID) => {
+export const getImageJobData = async(jobId) => {
     let db;
     try {
         db = await connectToDB();
         const collection =  db.collection(imageJobsCollection);
 
         // Retrieving the image job data
-        const result = await collection.findOne({jobID});
+        const result = await collection.findOne({jobId});
         return result;
     } catch (e) {
         console.error("Error retrieving image job data: ", e.stack || e);

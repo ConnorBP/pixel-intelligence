@@ -17,7 +17,7 @@ router.use("/auth", authRoute);
 router.use("/gallery", galleryRoutes); 
 
 // All rotes starting with "generateImage" will be handled by genRoutes
-router.use("generateImage", genRoutes);
+router.use("/image", genRoutes);
 
 export { router };
 export default router;
