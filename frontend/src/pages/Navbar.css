@@ -2,15 +2,6 @@
     --navbar-height: 4em;
 }
 
-/* General Body Styles */
-body {
-    /* margin-top: var(--navbar-height); */
-    margin: 0;
-    background-color: var(--bg-color);
-    color: var(--text-color);
-    transition: background-color 0.3s, color 0.3s;
-}
-
 /* Navbar Styles */
 .navbar {
     position: fixed;
@@ -20,7 +11,7 @@ body {
     box-sizing: border-box;
     height: var(--navbar-height);
     margin: 0;
-    background-color: var(--primary-color);
+    background-color: var(--header-bg-color);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     z-index: 1000;
     display: flex;
@@ -34,8 +25,9 @@ body {
     width: 100%;
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 20px; 
-    box-sizing: border-box; /* Add this */
+    padding: 0 20px;
+    box-sizing: border-box;
+    /* Add this */
 }
 
 .navbar-brand {
@@ -100,11 +92,11 @@ body {
 .navbar-logo {
     display: flex;
     align-items: center;
-    gap: 10px; 
+    gap: 10px;
 }
 
 .logo {
-    width: 40px; 
+    width: 40px;
     height: 40px;
-    object-fit: contain; 
+    object-fit: contain;
 }

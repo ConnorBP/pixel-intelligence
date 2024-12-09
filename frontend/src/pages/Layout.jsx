@@ -2,6 +2,7 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
 import Navbar from "./Navbar.jsx";
+import Footer from "../components/Footer.jsx";
 
 
 
@@ -15,6 +16,7 @@ const Layout = () => {
       <Navbar />
       {/* This is the main app content outlet */}
       <Outlet />
+      <Footer />
     </>
   );
 };

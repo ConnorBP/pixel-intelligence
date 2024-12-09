@@ -1,0 +1,19 @@
+.main-footer {
+    padding: 1rem;
+    /* color: var(--text-color); */
+    background-color: var(--background-color);
+    text-align: center;
+}
+
+.main-footer a {
+    /* color: var(--link-color); */
+    text-decoration: none;
+}
+
+.main-footer hr {
+    width: 100%;
+    height: 1px;
+    border-color: var(--popup-bg);
+    background: var(--popup-bg);
+    color: var(--popup-bg);
+}

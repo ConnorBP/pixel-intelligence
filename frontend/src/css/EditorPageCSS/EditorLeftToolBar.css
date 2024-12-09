@@ -13,19 +13,55 @@
   overflow-x: hidden;
   display: flex;
   flex-direction: column;
-  
-  /* justify-content: space-between; */
-  /* fix flex end calc */
-  padding-bottom: var(--top-toolbar-size);
+}
+
+.icon-container {
+  padding-left: 2px;
+}
+
+.icon-container .icon {
+  margin: 2px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  border-radius: 30%;
+  -webkit-border-radius: 30%;
+  -moz-border-radius: 30%;
+  -ms-border-radius: 30%;
+  -o-border-radius: 30%;
+}
+
+.icon-container .icon>* {
+  padding: 0.1rem;
+}
+
+.icon-container .icon:hover {
+  border-color: var(--primary-color);
+}
+
+/* show which tool is currently selected */
+.icon-container .active {
+  color: var(--primary-color);
 }
 
 .left-toolbar .align-end {
-  
   align-self: flex-end;
   margin-top: auto;
 }
 
+/* a nice little square for our color picker to live in */
 .left-toolbar .toolbar-square {
   width: var(--left-toolbar-size);
   height: var(--left-toolbar-size);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* mobile support */
+@media screen and (max-width: 632px) {
+
+  :root {
+    --left-toolbar-size: 3em;
+  }
+
 }

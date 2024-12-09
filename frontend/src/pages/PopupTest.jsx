@@ -4,29 +4,27 @@ import ConfirmationPopup from '../components/ConfirmationPopup.jsx'
 // strictly for demonstration purposes during development
 
 const PopupTest = () => {
-  const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [popupData, setPopupData] = useState(false);
 
   const handleOpenPopup = () => {
-    setIsPopupOpen(true);
+    setPopupData({
+      title: "Title of Message Box",
+      message1: "This action cannot be undone.",
+      message2: "Continue anyways?",
+      onCancel: handleClosePopup,
+      onConfirm: () => { console.log("Confirmed!"); handleClosePopup(); }
+    });
   };
 
   const handleClosePopup = () => {
-    setIsPopupOpen(false);
+    setIsPopupOpen(null);
   };
 
   return (
     <div>
       <button onClick={handleOpenPopup}>Test Popup</button>
       <ConfirmationPopup
-        isOpen={isPopupOpen}
-        title="Title of Message Box"
-        message1="This action cannot be undone."
-        message2="Continue anyways?"
-        onCancel={handleClosePopup}
-        onConfirm={() => {
-          console.log("Confirmed!");
-          handleClosePopup();
-        }}
+        popupData={popupData}
       />
     </div>
   );

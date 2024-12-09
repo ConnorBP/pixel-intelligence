@@ -1,22 +1,31 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import Canvas from "../components/Canvas";
 import EditorLeftToolBar from "../components/EditorLeftToolBar";
 import EditorTopBar from "../components/EditorTopBar";
 import NewImagePopup from "../components/NewImagePopup";
 import ScaleImagePopup from "../components/ScaleImagePopup";
+import ConfirmationPopup from "../components/ConfirmationPopup";
 import "../css/EditorPageCSS/Editor.css";
 import { useLocalStorage } from "../hooks/useLocalStorage";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { SimpleImage, DownScaler, RGBAToHex, ExportPng, DownloadJson } from "../utils/index";
+import { uploadToGallery } from "../api";
 
 const Editor = () => {
   // brush colors are stored as html color codes
   const [brushColor, setBrushColor] = useLocalStorage("primaryBrushColor", "#000000");
   const [secondaryBrushColor, setSecondaryBrushColor] = useLocalStorage("secondaryBrushColor", "#FFFFFF");
-  // we will store the canvas size as an object of width and height in case we decide to remove the square restriction
-  // const [canvasSize, setCanvasSize] = useLocalStorage("canvasSize", { width: 16, height: 16 });
+
+  // navigation hook
   const nav = useNavigate();
+
+  // for receiving an image to load from the gallery page
+  const location = useLocation();
+  const requestedImageLoad = location.state?.image;
+
+  // canvas ref for the pixel canvas (wraps the actual canvas element)
   const pixelCanvasRef = useRef(null);
+
   // how many pixels can actually be used on the screen to render the canvas object (for grid lines between pixels etc)
   const CANVAS_RENDER_WIDTH = 256;
 
@@ -33,7 +42,6 @@ const Editor = () => {
 
   // canvas pixel data
   const [canvasData, setCanvasData] = useLocalStorage("canvas", defaultCanvas);
-
   // wether the grid lines are shown or not on the editor canvas
   const [gridLinesVisible, setGridLinesVisible] = useLocalStorage("gridLinesVisible", true);
   const [tool, setTool] = useLocalStorage("tool", "pencil");
@@ -47,6 +55,7 @@ const Editor = () => {
   // popup state tracking
   const [showNewImagePrompt, setShowNewImagePrompt] = useState(false);
   const [showResizePrompt, setShowResizePrompt] = useState(false);
+  const [confirmationPopupData, setConfirmationPopupData] = useState(null);
 
   async function toBase64(file) {
     return new Promise((resolve, reject) => {
@@ -65,10 +74,20 @@ const Editor = () => {
     const files = target.files;
     // get the first image selected by file-picker
     const base64 = await toBase64(files[0]);
+    const type = files[0].type;
+    const size = files[0].size;
+    const name = files[0].name;
+    console.log('loading file:', name, type, size);
+
+    if(files[0].type.substring(0,5) != "image") {
+      alert("Invalid file type. Please select an image file.");
+      return;
+    }
 
     // now process it into the canvas if possible
 
     var img = new Image();
+    // img.crossOrigin = "Anonymous"; // Enable CORS so firefox will be nice
     img.onload = function () {
       console.log('loading image');
       // create a temporary canvas element not on the dom for processing the image
@@ -81,7 +100,14 @@ const Editor = () => {
       try {
         // might throw
         console.log(`new canvas width and height ${tmpCanvas.width}, ${tmpCanvas.height}`);
-        const simp = new SimpleImage({ imageData: ctx.getImageData(0, 0, tmpCanvas.width, tmpCanvas.height) });
+        const imageData = ctx.getImageData(0, 0, tmpCanvas.width, tmpCanvas.height);
+        console.log('image data:', imageData);
+        if(!imageData) {
+          console.error('failed to load image data');
+          alert('image load failed. Likely due to CORS policy blocking the image.');
+          return;
+        }
+        const simp = new SimpleImage({ imageData });
         // this applies the k-means clustering centroid based downscaling algorithm to the image with 4 buckets and 10 iterations
         let { kCentroid } = DownScaler.kCenter(simp, canvasData.width, canvasData.height, 4, 10);
 
@@ -116,6 +142,12 @@ const Editor = () => {
     const files = target.files;
     // get the first image selected by file-picker
     // console.log(files[0]);
+
+    if(files[0].type !== "application/json") {
+      alert("Invalid file type. Please select a JSON file.");
+      return;
+    }
+
     try {
       const reader = new FileReader();
       reader.onload = function (e) {
@@ -191,6 +223,36 @@ const Editor = () => {
     console.log("New Canvas Created:", newImage);
   };
 
+  // load the image from the gallery page if it was passed
+  useEffect(() => {
+    // if this is not null, then we have an image to load.
+    if (requestedImageLoad) {
+      // Load the image data into the canvas
+      console.log("Requesting to load image into editor:", requestedImageLoad);
+
+      setConfirmationPopupData({
+        title: "Load Image: " + requestedImageLoad.name,
+        message1: "Would you like to load the image into the editor?",
+        message2: "This will overwrite the current canvas data.",
+        onCancel: () => {
+          setConfirmationPopupData(null);
+        },
+        onConfirm: () => {
+          if (pixelCanvasRef.current) {
+            pixelCanvasRef.current.tryLoadCanvas(requestedImageLoad, true);
+            nav(location.pathname, { replace: true, state: {} });
+          }
+          setConfirmationPopupData(null);
+        },
+      })
+      // Add your logic to load the image data into the canvas here
+    }
+  }, [requestedImageLoad]);
+
+  //
+  // Editor Button Click Handlers
+  //
+
   const onImportImageClicked = () => {
     if (imageFileInputRef.current) {
       // reset the file input before prompting for file selection
@@ -240,13 +302,32 @@ const Editor = () => {
   };
 
   const onShareCurrentCanvasClicked = () => {
-    alert('todo');
+    canvasData.name = 'test_image';
+    canvasData.description = 'test_description';
+    canvasData.author = 'test_author';
+    canvasData.tags = ['test', 'image'];
+    console.log('sharing canvas data:', canvasData);
+    // send the canvas data to the server
+    uploadToGallery(canvasData).then((resp) => {
+      console.log('upload to gallery response:', resp);
+      if (resp.success) {
+        alert('upload to gallery success');
+      } else {
+        alert('upload to gallery failed');
+      }
+    }).catch((err) => {
+      console.error('failed to upload to gallery:', err);
+    });
   };
 
   const onResizeImageClicked = () => {
     setShowResizePrompt(true);
   };
+  const handleEyeDropperColor = (color) => {
+    console.log("color from canvas:", color);
 
+    setBrushColor(color);
+  };
   const contextMenuOptions = [
     { text: "New Project", onClick: onCreateNewImageClicked },
     { text: "Save", onClick: onSaveClicked },
@@ -263,6 +344,8 @@ const Editor = () => {
 
   return (
     <div className="editor-container">
+      {/* confirmation popup is above all the rest in case we decide to pass down the ability to activate it from children */}
+      <ConfirmationPopup popupData={confirmationPopupData} />
       <NewImagePopup
         isOpen={showNewImagePrompt}
         onClose={() => { setShowNewImagePrompt(false) }}
@@ -303,6 +386,7 @@ const Editor = () => {
           canvasRenderHeight={CANVAS_RENDER_WIDTH}
           gridLinesVisible={gridLinesVisible}
           tool={tool}
+          onColorSelected={handleEyeDropperColor}
         />
       </div>
       {/* Hidden file input for opening images */}
