@@ -1,7 +1,7 @@
 import express from "express";
 import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
-import { check, validationResult } from "express-validator";
+import { query, check, validationResult } from "express-validator";
 import { saveImageJobData, getImageJobData, updateImageJobStatus, connectToDB, doesJobIdExist } from "../database/dbService.js";
 
 const router = express.Router();
@@ -26,12 +26,40 @@ const validSizes = [8, 16, 32, 64];
 
 // POST route to start image generation
 router.post("/generate", [
-  check("prompt").optional().isString().trim().escape().isLength({ min: 1, max: 32 }).default("pixel art"),
-  check("size").optional().isInt().isIn(validSizes).toInt().default(16)
+  // filter the input
+  query("prompt")
+    .optional()
+    .isString()
+    .trim()
+    .customSanitizer(value => value?.replace(/[^a-zA-Z0-9 ]/g, ''))
+    .isLength({ min: 1, max: 32 })
+    .withMessage('Prompt must be between 1 and 32 characters')
+    .default("pixel art"),
+
+  query("size")
+    .optional()
+    .trim()
+    .isString()
+    .customSanitizer(value => parseInt(value))
+    .custom(value => {
+      const size = parseInt(value);
+      return validSizes.includes(size);
+    })
+    .withMessage(`Size must be one of: ${validSizes.join(', ')}`)
+    .default(16),
+
+  check("seed")
+    .optional()
+    .trim()
+    .isInt()
+    .withMessage('Seed must be an integer')
+    // .customSanitizer(value => parseInt(value))
+    .default(() => Math.floor(Math.random() * 1000000000))
 ], async (req, res) => {
   // optional prompt and pixel size query parameters: ?promt=pixel+art&size=16
   // if not provided defaults to pixel art and 16px
-  const { prompt, size } = req.query || { prompt: "pixel art", size: 16 };
+  const { prompt, size, seed } = req.query;// || { prompt: "pixel art", size: 16 };
+
 
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -60,27 +88,42 @@ router.post("/generate", [
   // Job ID for each job
   const jobId = uuidv4();
 
-  // Data payload
+  // Generation Data payload
   const data = {
-    "prompt": `pixelart${prompt}, ${size}px, side view, gamedev. game asset, pixelsprite, pixel-art, pixel_art, retro_artstyle, colorful, low-res, blocky, pixel art style, 16-bit graphics ### out of frame, duplicate, watermark, signature, text, error, deformed, sloppy, messy, blurry, noisy, highly detailed, ultra textured, photo, realisticlogo`,
+    "prompt": `a ${size}bit pixel style ${prompt}, ${size}px, side view, pixelart, gamedev. game asset, pixelsprite, pixel-art, pixel_art, retro_artstyle, colorful, low-res, blocky, pixel art style, 16-bit graphics ### out of frame, duplicate, watermark, signature, text, error, deformed, sloppy, messy, blurry, noisy, highly detailed, ultra textured, photo, realisticlogo`,
     "params": {
       "cfg_scale": 7,
-      "seed": "493768514",
-      "sampler_name": "k_euler_a",
+      "seed": seed,
+      "sampler_name": "DDIM",
       "height": gnerationResolution,
       "width": gnerationResolution,
       "post_processing": [],
-      "steps": 10,
+      "steps": 30,
       "tiling": false,
-      "karras": true,
+      "karras": false,
       "hires_fix": false,
       "clip_skip": 1,
-      "n": 1
+      "n": 1,
+      "loras": [
+        {
+          "name": "636318",
+          "model": 1,
+          "clip": 1,
+          "is_version": true
+        }
+      ],
+      "tis": [
+        {
+          "name": "4172",
+          "strength": 0.4,
+          "inject_ti": "prompt"
+        }
+      ]
     },
     "allow_downgrade": false,
     "nsfw": false,
     "censor_nsfw": true,
-    "trusted_workers": false,
+    "trusted_workers": true,
     "models": [
       "AIO Pixel Art"
     ],
@@ -89,7 +132,7 @@ router.post("/generate", [
     "shared": true,
     "slow_workers": false,
     "dry_run": false
-  }
+  };
 
   // Making request to the api for image id
   try {
@@ -154,7 +197,7 @@ router.get("/download/:jobId", async (req, res) => {
   let db;
   try {
     db = await connectToDB();
-    if(db) {
+    if (db) {
       if (!doesJobIdExist(jobId, db)) {
         db.client.close();
         return res.status(404).json({ success: false, error: "Image Job not found" });
@@ -170,9 +213,9 @@ router.get("/download/:jobId", async (req, res) => {
     } else {
       return res.status(500).json({ success: false, error: "Database connection failed." });
     }
-    
 
-    
+
+
   } catch (e) {
     console.error("Error downloading image: ", e.response ? e.response.data : e.message);
     res.status(500).json({ success: false, error: "Internal server error" });
