@@ -60,10 +60,9 @@ function ImageDetailsOverlay() {
 
     return (
         <div className="image_details">
-            {/* Close button to navigate back to the gallery */}
-            <CloseRoundedIcon onClick={() => pNavigate('/')} className="close_icon" />
-
             <div className="content">
+                {/* Close button to navigate back to the gallery */}
+                <CloseRoundedIcon onClick={() => pNavigate('/')} className="close_icon" />
                 {/* Left side for the image */}
                 <div className="image_section">
                     <img src={image.imgDataUrl} alt={image.name || `Image ${image.id}`} />
