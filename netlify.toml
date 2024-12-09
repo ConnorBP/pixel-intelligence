@@ -21,7 +21,7 @@ NODE_VERSION = "20.17.0"
 directory = "backend/netlify/functions"
 
 # Flags "express" as an external node module for all functions
-external_node_modules = ["express", "mongodb", "cookie-parser", "jsonwebtoken"]
+external_node_modules = ["express", "mongodb", "cookie-parser", "jsonwebtoken", "axios", "uuid", "express-validator"]
 
 # Specifies `esbuild` for functions bundling
 node_bundler = "esbuild"

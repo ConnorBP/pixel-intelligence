@@ -1,6 +1,6 @@
 import express from "express";
 import { validateCanvasData } from './validator.js';
-import { saveCanvasData, getDBConnection } from "./canvas.js";
+import { saveCanvasData, getDBConnection } from "../database/dbService.js";
 import { authenticate } from "../auth/authentication.js";
 import { paginatedResults } from "./paginatedResults.js";
 
@@ -16,7 +16,6 @@ router.post("/upload", authenticate, async (req, res) => {
     if (validationError) {
       return res.status(400).json({ success: false, error: validationError });
     }
-
     // Generating a unique filename for the image 
     // code here
 
