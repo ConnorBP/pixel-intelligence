@@ -5,6 +5,9 @@ import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import WhatsAppIcon from "@mui/icons-material/WhatsApp";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import TwitterIcon from "@mui/icons-material/Twitter";
+import { CiLink } from "react-icons/ci";
+import { FaEdit } from "react-icons/fa";
+import { IoIosDownload } from "react-icons/io";
 import "../../css/GalleryPageCSS/ImageDetailsOverlay.css";
 
 function ImageDetailsOverlay() {
@@ -83,9 +86,12 @@ function ImageDetailsOverlay() {
                         <a href={`https://twitter.com/intent/tweet?url=${image.imgDataUrl}`} target="_blank" rel="noopener noreferrer">
                             <TwitterIcon />
                         </a>
-                        <button onClick={copyToClipboard}>{copied ? "Copied!" : "Copy URL"}</button>
-                        <button onClick={downloadImage}>Download</button>
-                        <button onClick={editImage}>Edit</button>
+                        <div className="tooltip">
+                            <button onClick={copyToClipboard}><CiLink /></button>
+                            <span className={`tooltiptext ${copied ? 'show' : ''}`}>Copied!</span>
+                        </div>
+                        <button onClick={downloadImage}><IoIosDownload /></button>
+                        <button onClick={editImage}><FaEdit /></button>
                     </div>
                 </div>
             </div>
