@@ -27,15 +27,20 @@
 .error {
     max-width: 1000px;
     width: 80%;
-    background-color: var(--bg-color);
-    padding: 20px;
+    background-color: var(--popup-bg);
     border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    padding: 20px;
     color: #a62929;
     font-weight: 800;
     text-align: center;
-    font-size: 28pt;
+    font-size: 18pt;
     position: relative;
+    text-shadow: 0 0 5px #a62929;
+}
+
+.error p {
+    margin: 0;
+    word-break: break-all;
 }
 
 .image_section {

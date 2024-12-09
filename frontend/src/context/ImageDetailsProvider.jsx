@@ -34,8 +34,16 @@ export const ImageDetailsProvider = ({ children }) => {
         dispatchImages({ type: 'add', id: image._id, image });
     }
 
-    function getImage(id) {
-        return images.map.get(id);
+    async function getImage(id) {
+        if (images.map.has(id)) {
+            return {
+                status: 'cached',
+                image: images.map.get(id)
+            };
+        } else {
+
+        }
+        return 
     }
 
     return (
