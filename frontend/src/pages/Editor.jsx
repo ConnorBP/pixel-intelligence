@@ -74,6 +74,15 @@ const Editor = () => {
     const files = target.files;
     // get the first image selected by file-picker
     const base64 = await toBase64(files[0]);
+    const type = files[0].type;
+    const size = files[0].size;
+    const name = files[0].name;
+    console.log('loading file:', name, type, size);
+
+    if(files[0].type.substring(0,5) != "image") {
+      alert("Invalid file type. Please select an image file.");
+      return;
+    }
 
     // now process it into the canvas if possible
 
@@ -125,6 +134,12 @@ const Editor = () => {
     const files = target.files;
     // get the first image selected by file-picker
     // console.log(files[0]);
+
+    if(files[0].type !== "application/json") {
+      alert("Invalid file type. Please select a JSON file.");
+      return;
+    }
+
     try {
       const reader = new FileReader();
       reader.onload = function (e) {
