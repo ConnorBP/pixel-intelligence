@@ -109,7 +109,7 @@ function ImageDetailsOverlay() {
     } else {
         innerContent = (<>
             <div className="error">
-                <p>Image {imageId} not found</p>
+                <p>{imageDetails.message}</p>
             </div>
         </>)
     }

@@ -9,17 +9,18 @@ export default async function getImage(imageId) {
             credentials: 'include',
             headers: {
                 'Content-Type': 'application/json',
-            }
+            },
+            mode: 'cors'
         });
         if (!resp.ok) {
             console.error('Error fetching gallery image: ', resp);
-            return [];
+            return {success:false, status: resp.status, error: resp.statusText};
         }
         const j = await resp.json();
         return j;
     }
     catch (e) {
-        console.error('err ',e, ' got response ', resp);
-        return [];
+        console.error('Fetch to api failed with exception ',e, ' got response ', resp);
+        return {success:false, status: -1, error: e};
     }
 }

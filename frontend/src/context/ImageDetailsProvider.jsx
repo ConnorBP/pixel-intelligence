@@ -62,6 +62,7 @@ export const ImageDetailsProvider = ({ children }) => {
         try {
             dispatchImages({ type: 'add', id, image: { status: 'loading' } });
             const imageResp = await getImageFromApi(id);
+            console.log('fetchImage response:', JSON.stringify(imageResp));
             
             if (imageResp.success) {
                 const image = { 

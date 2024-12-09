@@ -30,19 +30,24 @@ router.use((err, req, res, next) => {
 
 // Catch 404 and forward to error handler
 router.use((req, res, next) => {
-    const err = new Error('Not Found');
-    err.status = 404;
-    next(err);
+    if (!res.headersSent) {
+        const err = new Error('Not Found');
+        err.status = 404;
+        next(err);
+    }
 });
 
 // General error handler
 router.use((err, req, res, next) => {
-    if (res.headersSent) {
-        return next(err);
+    if (!res.headersSent) {
+        console.error(err.message);
+        const status = err.status || 500;
+        res.status(status).json({ 
+            success: false, 
+            status, 
+            message: err.message 
+        });
     }
-    console.error(err.message); // Log error message in our server's console
-    const status = err.status || 500;
-    return res.status(status).send({ success: false, status, message: err.message });
 });
 
 export { router };

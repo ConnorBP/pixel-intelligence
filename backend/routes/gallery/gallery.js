@@ -67,16 +67,19 @@ router.get("/image/:id",
       const objectId = new ObjectId(id);
 
       const image = await collection.findOne({ _id: objectId });
+      if (db) db.client.close();
+      db = null;
+      console.log('found image:', image);
       if (!image) {
-        return res.status(404).json({ success: false, error: "Image not found" });
+        return res.status(404).json({ success: false, status: 404, error: "Image not found" });
       }
 
       // Return the image data
-      return res.status(200).json({ success: true, image });
+      return res.status(200).json({ success: true, status: 200, image });
 
     } catch (e) {
       console.error('Error retrieving image from the database:', e.stack || e);
-      res.status(500).json({ success: false, error: 'Internal Server Error in image/:id route' });
+      res.status(500).json({ success: false, status: 500, error: 'Internal Server Error in image/:id route' });
     } finally {
       // Close the database connection even on failure
       if (db) db.client.close();
