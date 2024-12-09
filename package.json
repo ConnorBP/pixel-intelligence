@@ -10,7 +10,8 @@
     "start": "concurrently \"npm run backend\" \"npm run frontend\"",
     "dev": "npm run start",
     "watch": "npm run start",
-    "build": "cd frontend && npm install && npm run build"
+    "build": "cd frontend && npm install && npm run build",
+    "lint": "eslint ./frontend"
   },
   "repository": {
     "type": "git",
@@ -28,7 +29,14 @@
     "frontend"
   ],
   "devDependencies": {
+    "@eslint/js": "^9.16.0",
     "concurrently": "^8.2.2",
+    "eslint": "^9.16.0",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-react": "^7.37.2",
+    "eslint-plugin-react-hooks": "^5.1.0",
+    "eslint-plugin-react-refresh": "^0.4.16",
+    "globals": "^15.13.0",
     "vite": "^6.0.3"
   },
   "bugs": {
