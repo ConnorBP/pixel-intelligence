@@ -69,7 +69,7 @@ router.get("/image/:id",
       const image = await collection.findOne({ _id: objectId });
       if (db) db.client.close();
       db = null;
-      console.log('found image:', image);
+      // console.log('found image:', image);
       if (!image) {
         return res.status(404).json({ success: false, status: 404, error: "Image not found" });
       }

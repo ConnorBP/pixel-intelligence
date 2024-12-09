@@ -37,18 +37,18 @@ export const ImageDetailsProvider = ({ children }) => {
     }, []);
 
     const getImage = useCallback((id) => {
-        const cachedImage = images.map.get(id);
-
-        if (cachedImage) {
-            return cachedImage;
-        }
-
         if (id.length !== 24) {
             return {
                 status: 'error',
                 message: `Invalid image id ${id}`,
                 image: null
             };
+        }
+
+        const cachedImage = images.map.get(id);
+
+        if (cachedImage) {
+            return cachedImage;
         }
 
         // Return loading state, let component handle fetch
@@ -60,32 +60,33 @@ export const ImageDetailsProvider = ({ children }) => {
 
     const fetchImage = useCallback(async (id) => {
         try {
-            dispatchImages({ type: 'add', id, image: { status: 'loading' } });
+            // dispatching like this before awaiting causes a state update during initial render
+            // dispatchImages({ type: 'add', id, image: { status: 'loading' } });
             const imageResp = await getImageFromApi(id);
-            console.log('fetchImage response:', JSON.stringify(imageResp));
-            
+            // console.log('fetchImage response:', JSON.stringify(imageResp));
+
             if (imageResp.success) {
-                const image = { 
-                    ...imageResp.image, 
-                    imgDataUrl: GeneratePng(imageResp.image) 
+                const image = {
+                    ...imageResp.image,
+                    imgDataUrl: GeneratePng(imageResp.image)
                 };
-                dispatchImages({ 
-                    type: 'add', 
-                    id, 
-                    image: { status: 'success', data: image } 
+                dispatchImages({
+                    type: 'add',
+                    id,
+                    image: { status: 'success', data: image }
                 });
             } else {
-                dispatchImages({ 
-                    type: 'add', 
-                    id, 
-                    image: { status: 'error', message: imageResp.error } 
+                dispatchImages({
+                    type: 'add',
+                    id,
+                    image: { status: 'error', message: imageResp.error }
                 });
             }
         } catch (error) {
-            dispatchImages({ 
-                type: 'add', 
-                id, 
-                image: { status: 'error', message: error.message } 
+            dispatchImages({
+                type: 'add',
+                id,
+                image: { status: 'error', message: error.message }
             });
         }
     }, []);

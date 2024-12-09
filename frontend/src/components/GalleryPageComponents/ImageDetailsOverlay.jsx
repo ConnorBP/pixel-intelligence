@@ -21,7 +21,7 @@ function ImageDetailsOverlay() {
 
     // Find the specific image details based on the `imageId`
     const imageDetails = getImage(imageId);
-    console.log(`got image id ${imageId}: ${JSON.stringify(imageDetails)} in map: `, images);
+    // console.log(`got image id ${imageId}: ${JSON.stringify(imageDetails)} in map: `, images);
 
     // Fetch the image details if not already fetched
     useState(() => {
@@ -29,7 +29,7 @@ function ImageDetailsOverlay() {
         if (imageDetails && imageDetails.status == 'loading') {
             fetchImage(imageId);
         }
-    }, [imageDetails, imageId]);
+    }, [imageDetails, imageId, fetchImage]);
 
     let innerContent;
 
