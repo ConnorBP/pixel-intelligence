@@ -37,9 +37,12 @@ router.use((req, res, next) => {
 
 // General error handler
 router.use((err, req, res, next) => {
+    if (res.headersSent) {
+        return next(err);
+    }
     console.error(err.message); // Log error message in our server's console
     const status = err.status || 500;
-    res.status(status).send({ success: false, status, message: err.message });
+    return res.status(status).send({ success: false, status, message: err.message });
 });
 
 export { router };

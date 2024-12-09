@@ -6,13 +6,15 @@ export const useImageDetails = () => {
     const {
         images,
         addImage,
-        getImage
+        getImage,
+        fetchImage
     } = useContext(ImageDetailsContext);
 
     return {
         images,
         addImage,
-        getImage
+        getImage,
+        fetchImage
     };
 };
 

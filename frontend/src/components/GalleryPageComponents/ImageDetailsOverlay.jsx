@@ -17,17 +17,25 @@ function ImageDetailsOverlay() {
     const navigate = useNavigate();
     const [copied, setCopied] = useState(false);
 
-    const { images, getImage } = useImageDetails();
+    const { images, getImage, fetchImage } = useImageDetails();
 
     // Find the specific image details based on the `imageId`
-    const image = getImage(imageId);
-    console.log(`got image id ${imageId}: ${image} in map: `, images);
+    const imageDetails = getImage(imageId);
+    console.log(`got image id ${imageId}: ${JSON.stringify(imageDetails)} in map: `, images);
 
+    // Fetch the image details if not already fetched
+    useState(() => {
+        // Fetch the image details if not already fetched
+        if (imageDetails && imageDetails.status == 'loading') {
+            fetchImage(imageId);
+        }
+    }, [imageDetails, imageId]);
 
     let innerContent;
 
-    if (image && (image.status == 'cached' || image.status == 'success')) {
+    if (imageDetails && imageDetails.status == 'success') {
 
+        const image = imageDetails.data;
 
         // Copy the image link to the clipboard
         const copyToClipboard = () => {
@@ -92,6 +100,12 @@ function ImageDetailsOverlay() {
             </div>
         </>);
 
+    } else if (imageDetails && imageDetails.status == 'loading') {
+        innerContent = (<>
+            <div className="loading">
+                <p>Loading...</p>
+            </div>
+        </>)
     } else {
         innerContent = (<>
             <div className="error">
