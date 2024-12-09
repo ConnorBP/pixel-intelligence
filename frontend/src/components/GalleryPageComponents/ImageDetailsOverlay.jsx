@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import { usePreserveQueryParamsNavigate } from "../../hooks/usePreserveQueryParamsNavigate";
 import { useImageDetails } from "../../context/ImageDetailsContext";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import WhatsAppIcon from "@mui/icons-material/WhatsApp";
@@ -12,7 +13,7 @@ import "../../css/GalleryPageCSS/ImageDetailsOverlay.css";
 
 function ImageDetailsOverlay() {
     const { imageId } = useParams();
-    const navigate = useNavigate();
+    const navigate = usePreserveQueryParamsNavigate();
     const [copied, setCopied] = useState(false);
 
     const { images, getImage } = useImageDetails();
@@ -22,7 +23,7 @@ function ImageDetailsOverlay() {
     console.log(`got image id ${imageId}: ${image} in map: `, images);
 
     if (!image) return (<div className="image_details">
-        <CloseRoundedIcon onClick={() => navigate(-1)} className="close_icon" />
+        <CloseRoundedIcon onClick={() => navigate('/')} className="close_icon" />
         <div className="error">
             <p>Image {imageId} not found</p>
             {/* <ul>
@@ -35,7 +36,7 @@ function ImageDetailsOverlay() {
 
     // Copy the image link to the clipboard
     const copyToClipboard = () => {
-        navigator.clipboard.writeText(image.imgDataUrl);
+        navigator.clipboard.writeText(cleanUrl(window.location.href));
         setCopied(true);
         setTimeout(() => setCopied(false), 2000);
     };
@@ -52,10 +53,14 @@ function ImageDetailsOverlay() {
         navigate('/editor', { state: { image } });
     };
 
+    function cleanUrl(url) {
+        return url.split("?")[0].split("#")[0];
+    }
+
     return (
         <div className="image_details">
             {/* Close button to navigate back to the gallery */}
-            <CloseRoundedIcon onClick={() => navigate(-1)} className="close_icon" />
+            <CloseRoundedIcon onClick={() => navigate('/')} className="close_icon" />
 
             <div className="content">
                 {/* Left side for the image */}
@@ -77,13 +82,13 @@ function ImageDetailsOverlay() {
                     {/* Sharing Section */}
                     <p><b>Share:</b></p>
                     <div className="share_links">
-                        <a href={`https://wa.me/?text=${encodeURIComponent(image.imgDataUrl)}`} target="_blank" rel="noopener noreferrer">
+                        <a href={`https://wa.me/?text=${encodeURIComponent("Check out this pixel art image! " + cleanUrl(window.location.href))}`} target="_blank" rel="noopener noreferrer">
                             <WhatsAppIcon />
                         </a>
-                        <a href={`https://www.facebook.com/sharer/sharer.php?u=${image.imgDataUrl}`} target="_blank" rel="noopener noreferrer">
+                        <a href={`https://www.facebook.com/sharer/sharer.php?u=${cleanUrl(window.location.href)}`} target="_blank" rel="noopener noreferrer">
                             <FacebookIcon />
                         </a>
-                        <a href={`https://twitter.com/intent/tweet?url=${image.imgDataUrl}`} target="_blank" rel="noopener noreferrer">
+                        <a href={`https://twitter.com/intent/tweet?url=${encodeURIComponent("Check out this pixel art image! " + cleanUrl(window.location.href))}`} target="_blank" rel="noopener noreferrer">
                             <TwitterIcon />
                         </a>
                         <div className="tooltip">
