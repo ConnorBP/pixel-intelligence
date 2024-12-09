@@ -41,5 +41,11 @@ export default defineConfig({
         react: {
             version: 'detect',
         },
+        'import/resolver': {
+            node: {
+                extensions: ['.js', '.jsx', '.css'],
+                caseSensitive: true
+            }
+        }
     },
 });
