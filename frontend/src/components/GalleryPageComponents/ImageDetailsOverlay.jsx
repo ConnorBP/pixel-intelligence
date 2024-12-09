@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { usePreserveQueryParamsNavigate } from "../../hooks/usePreserveQueryParamsNavigate";
-import { useImageDetails } from "../../context/ImageDetailsContext";
+import useImageDetails from "../../context/useImageDetails";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import WhatsAppIcon from "@mui/icons-material/WhatsApp";
 import FacebookIcon from "@mui/icons-material/Facebook";

@@ -1,6 +1,5 @@
-import { createContext, useContext, useReducer } from 'react';
-
-const ImageDetailsContext = createContext(null);
+import { createContext, useReducer } from 'react';
+import { ImageDetailsContext } from './useImageDetails';
 
 export const ImageDetailsProvider = ({ children }) => {
     const [images, dispatchImages] = useReducer((state, action) => {
@@ -50,17 +49,4 @@ export const ImageDetailsProvider = ({ children }) => {
     );
 };
 
-export const useImageDetails = () => {
-    const {
-        images,
-        addImage,
-        getImage
-    } = useContext(ImageDetailsContext);
-
-    return {
-        images,
-        addImage,
-        getImage
-    };
-};
-
+export default ImageDetailsProvider;

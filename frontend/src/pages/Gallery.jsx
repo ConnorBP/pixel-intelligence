@@ -3,7 +3,7 @@ import GalleryPageLayout from "../components/GalleryPageComponents/GalleryPageLa
 import { Outlet, useNavigate, useLocation } from "react-router-dom";
 import { getGallery } from "../api";
 import { useSession } from "../context/SessionContext";
-import { useImageDetails } from "../context/ImageDetailsContext";
+import useImageDetails from "../context/useImageDetails";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 import { GeneratePng } from "../utils";
 
