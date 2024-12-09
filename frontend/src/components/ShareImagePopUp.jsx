@@ -1,5 +1,5 @@
 import { useState } from "react";
-import "../css/ShareImagePopUp.css";
+import "../css/ShareImagePopup.css";
 
 const ShareImagePopUp = ({ isOpen, onClose, onShare }) => {
 
