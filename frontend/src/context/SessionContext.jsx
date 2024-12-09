@@ -14,11 +14,11 @@ export const SessionProvider = ({ children }) => {
     // until the specified UTC date/time, ignoring leap seconds.
     const [sessionExpiry, setSessionExpiry] = useState(0);
 
-    const getCurrentSession = () => {
-        // const currentToken = Cookies.get('access_token');
+    // const getCurrentSession = () => {
+    //     // const currentToken = Cookies.get('access_token');
 
-        return
-    }
+    //     return
+    // }
 
     const refreshSession = () => {
         setSessionLoaded(false);

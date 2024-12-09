@@ -16,34 +16,60 @@ import cors from "cors";
 
 const app = express();
 
-// Cookie Parser for all routes
-app.use(cookieParser());
-
 // Middleware to parse JSON
 app.use(express.json());
+
+// Cookie Parser for all routes
+app.use(cookieParser());
 
 // allow any origin in dev mode
 const corsOptions = {
     origin: 'http://localhost:5173',
-    // methods: [],
-    // allowedHeaders: [],
-    // exposedHeaders: [],
-    credentials: true
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
 };
 
-// disable cors for everythind
+// Enable pre-flight requests
+app.options('*', cors(corsOptions));
+
+
+
+// Enable CORS options for all routes
 app.use(cors(corsOptions));
 
-// intercept json syntax error responses and return them as json instead of html
-app.use((err, req, res, next) => {
-    if (err instanceof SyntaxError && err.status === 400 && 'body' in err) {
-        console.error(err);
-        return res.status(400).send({ success: false, status: 400, message: err.message });
-    }
+// Debug middleware
+app.use((req, res, next) => {
+    console.log(`${req.method} ${req.url}`);
     next();
 });
 
- // All routes will be prefixed with "/api"
-app.use('/api/', routes);
+// Your routes here
+app.use('/api', routes);
+
+// Catch 404s
+app.use((req, res, next) => {
+    if (!res.headersSent) {
+        console.log('APP 404 Not Found:', req.originalUrl);
+        res.status(404).json({
+            success: false,
+            status: 404,
+            message: 'Not Found'
+        });
+    }
+});
+
+// Error handler
+app.use((err, req, res, next) => {
+    if (!res.headersSent) {
+        console.error('APP Error:', err.message);
+        const status = err.status || 500;
+        res.status(status).json({
+            success: false,
+            status,
+            message: err.message
+        });
+    }
+});
 
 export default app;
