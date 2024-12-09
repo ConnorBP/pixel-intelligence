@@ -6,7 +6,7 @@ const canvasCollection = process.env.CANVAS_COLLECTION; // Canvas Collection Nam
 const imageJobsCollection = process.env.IMAGE_JOBS_COLLECTION; // Image Jobs Collection
 
 
-//**********DATABASE CONNECTION**********//
+//********** DATABASE CONNECTION **********//
 export const connectToDB = async () => {
     const client = new MongoClient(dbStringURL);
     try {
