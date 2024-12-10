@@ -32,11 +32,13 @@ const Canvas = forwardRef(
 
     // reference to the canvas object for us to draw to
     const canvasRef = useRef(null);
+
+    // track drag state
+    let isMouseDown = useRef(false);
+
     // how big a single pixel is on the actual rendering canvas:
     // this should be calculated on demand
     // const pixelSize = canvasRenderWidth / canvasData.width;
-
-    const isDrawing = useRef(false);
 
     // updates the state of a pixel at specific coordinate
     // on the provided canvas data and returns it
@@ -225,8 +227,7 @@ const Canvas = forwardRef(
       // if nothing failed by here, it was a great success :)
       return true;
     };
-    let isMouseDown = false;
-    // let isMouseDown = false;
+
     // outputs a pixel to the display canvas (does not save)
     const drawPixelAt = useCallback((x, y, color, drawingPixelsWidth) => {
       // don't run on empty pixels
@@ -257,8 +258,6 @@ const Canvas = forwardRef(
     // Handles the event of someone clicking on the canvas area
     // Currently only supports single click drawing
     async function handleCanvasClick(event) {
-      if (!isDrawing.current && event.type !== "mousedown") return;
-      console.log('clicked');
       const canvas = canvasRef.current;
 
       // Get the bounding rectangle of the canvas
@@ -316,10 +315,10 @@ const Canvas = forwardRef(
       // drawPixelAt(pixelX, pixelY, color, canvasData.width);
     }
 
-    // function handleCanvasDrag(event) {
-    //   if (!isMouseDown) return;
-    //   handleCanvasClick(event)
-    // }
+    function handleCanvasDrag(event) {
+      if (!isMouseDown.current) return;
+      handleCanvasClick(event)
+    }
 
     // Flood Fill Algorithm
     const floodFill = (x, y, targetColor, replacementColor) => {
@@ -437,15 +436,15 @@ const Canvas = forwardRef(
           width={canvasRenderWidth}
           height={canvasRenderHeight}
           onMouseDown={(e) => {
-            isDrawing.current = true;
+            isMouseDown.current = true;
             handleCanvasClick(e);
           }}
-          onMouseMove={handleCanvasClick}
+          onMouseMove={handleCanvasDrag}
           onMouseUp={() => {
-            isDrawing.current = false;
+            isMouseDown.current = false;
           }}
           onMouseLeave={() => {
-            isDrawing.current = false;
+            isMouseDown.current = false;
           }}
         ></canvas>
       </>
