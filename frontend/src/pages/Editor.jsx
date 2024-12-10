@@ -171,12 +171,9 @@ const Editor = () => {
   };
 
 
-  const toggleGride = () => {
+  const toggleGrid = () => {
 
     setShowGridLines((prev) => !prev)
-   
- 
-   
   };
   // takes in a new square resolution and scales the current canvas data to it
   // warning: must be a function, and not a const closure
@@ -454,7 +451,7 @@ const Editor = () => {
           tool={tool}
           onColorSelected={handleEyeDropperColor}
           showGridLines={showGridLines} 
-          toggleGride={toggleGride} 
+          toggleGrid={toggleGrid} 
         />
       </div>
       {/* Hidden file input for opening images */}

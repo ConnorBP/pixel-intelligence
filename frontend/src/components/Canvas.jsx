@@ -22,7 +22,7 @@ const Canvas = forwardRef(
       tool,     
       onColorSelected,
       showGridLines,
-      toggleGride
+      toggleGrid
     },
     ref
   ) => {
@@ -118,7 +118,7 @@ const Canvas = forwardRef(
         // draw all grid lines on the canvas
         drawAllGridLines(canvas, editorPixelsW, editorPixelsH);
       }else{
-        toggleGride()
+        toggleGrid()
       }
     
       drawAllGridLines(canvas, editorPixelsW, editorPixelsH);
@@ -300,7 +300,7 @@ const Canvas = forwardRef(
        }
         return;
      }else if (tool =="showGridLines"){
-      toggleGride(); 
+      toggleGrid(); 
      return;
       }
   
