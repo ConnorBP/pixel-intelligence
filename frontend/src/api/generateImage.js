@@ -1,0 +1,28 @@
+import { getApiEndpoint } from '../utils';
+
+// Fetches a single image from the gallery api
+export default async function generateImage(prompt, size, seed) {
+    let resp;
+    try {
+        const seedParam = seed ? `&seed=${seed}` : '';
+        const sizeParam = size ? `&size=${size}` : '';
+        resp = await fetch(getApiEndpoint() + `/image/generate?prompt=${prompt}${sizeParam}${seedParam}`, {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            mode: 'cors'
+        });
+        if (!resp.ok) {
+            console.error('Error requesting image generation: ', resp);
+            return {success:false, status: resp.status, error: resp.statusText};
+        }
+        const j = await resp.json();
+        return j;
+    }
+    catch (e) {
+        console.error('Fetch to api failed with exception ',e, ' got response ', resp);
+        return {success:false, status: -1, error: e};
+    }
+}

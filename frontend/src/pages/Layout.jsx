@@ -5,7 +5,7 @@ import Navbar from "./Navbar.jsx";
 import Footer from "../components/Footer.jsx";
 
 
-
+// this is the layout wrapper for all non editor routes
 const Layout = () => {
   return (
     <>
