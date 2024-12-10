@@ -5,4 +5,5 @@
 .canvas-container {
     /* add padding room for toolbar */
     padding-left: var(--left-toolbar-size);
-}
+    z-index: 0;
+}   

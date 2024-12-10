@@ -10,7 +10,6 @@
   top: var(--top-toolbar-size);
   left: 0;
   background-color: rgba(100, 100, 100, 0.6);
-  overflow-x: hidden;
   display: flex;
   flex-direction: column;
 }
@@ -56,6 +55,70 @@
   justify-content: center;
   align-items: center;
 }
+
+/* Tooltip container */
+.tooltip-vertical {
+  position: relative;
+  display: inline-block;
+}
+
+/* Tooltip text (hidden by default) */
+.tooltip-vertical::before {
+  content: attr(button-name); /* Tooltip text from attribute */
+  position: absolute;
+  top: 50%;
+  left: calc(100% + 0.5em); /* Position the tooltip to the right of the button */
+  transform: translateY(-50%); /* Center vertically */
+  background-color: rgba(0, 0, 0, 0.85); /* Make tooltip more transparent */
+  color: white;
+  padding: 0.5em 1em;
+  font-size: 0.6em; /* Ensure font size is consistent */
+  font-family: "Pixelify Sans", sans-serif; /* Match the font family */
+  font-weight: 500; /* Match the font weight */
+  white-space: nowrap;
+  border-radius: 6px;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease-in-out;
+  pointer-events: none; /* Prevent accidental hover */
+  z-index: 100; /* Ensure tooltip is above other elements */
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Tooltip arrow */
+.tooltip-vertical::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: -11px; /* Position the triangle on the right side of the tooltip */
+  transform: translateY(-50%);
+  border-width: 6px;
+  border-style: solid;
+  border-color: transparent transparent transparent rgba(0, 0, 0, 0.85); /* Change color to match tooltip transparency */
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease-in-out;
+  z-index: 100;
+}
+
+/* Show tooltip on hover */
+.tooltip-vertical:hover::before, 
+.tooltip-vertical:hover::after {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(-50%) translateX(0); /* Tooltip slide-in effect */
+}
+
+/* Optional: Adjust tooltip positioning for left-side */
+.tooltip-vertical-left::before {
+  left: calc(-100% - 0.5em); /* Position the tooltip to the left of the button */
+}
+
+.tooltip-vertical-left::after {
+  left: 100%;
+  transform: translateY(-50%) translateX(0);
+}
+
 
 /* mobile support */
 @media screen and (max-width: 632px) {
