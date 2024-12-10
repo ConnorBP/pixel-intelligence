@@ -29,13 +29,15 @@ const Canvas = forwardRef(
     //
     // State
     //
-    const isDrawing = useRef(false);
+
     // reference to the canvas object for us to draw to
     const canvasRef = useRef(null);
     // how big a single pixel is on the actual rendering canvas:
     // this should be calculated on demand
     // const pixelSize = canvasRenderWidth / canvasData.width;
   
+    const isDrawing = useRef(false);
+
     // updates the state of a pixel at specific coordinate
     // on the provided canvas data and returns it
     const updatePixelAt = (oldCanvas, x, y, color) => {
