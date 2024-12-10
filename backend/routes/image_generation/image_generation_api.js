@@ -49,7 +49,7 @@ router.post("/generate", [
     .isString()
     .trim()
     .customSanitizer(value => value?.replace(/[^a-zA-Z0-9 ]/g, ''))
-    .isLength({ min: 1, max: 32 })
+    .isLength({ min: 1, max: 64 })
     .withMessage('Prompt must be between 1 and 32 characters')
     .default("pixel art"),
 
