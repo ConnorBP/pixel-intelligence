@@ -97,7 +97,7 @@ export const JobWatcherProvider = ({ children, jobCheckIntervalMsMin = 5000, job
                         type: 'update',
                         responseStatus: response.status,
                         wait_time: response.wait_time,
-                        eta: Date.now() + (response.wait_time*1000),
+                        eta: Date.now() + (response.wait_time * 1000),
                         position: response.queue_position,
                         result: response.result
                     });
@@ -110,11 +110,9 @@ export const JobWatcherProvider = ({ children, jobCheckIntervalMsMin = 5000, job
         }
     }, []);
 
-    useEffect(() => {
+    const pollJobStatusWithInterval = useCallback((jobId) => {
         if (state.currentJobStatus === 'running') {
-            // for now just use a fixed interval
-            function timeout() {
-                const timeOutLength = 
+            const timeOutLength =
                 Math.min(
                     Math.max(
                         state.currentJobWaitTime || jobCheckIntervalMsMin,
@@ -122,25 +120,24 @@ export const JobWatcherProvider = ({ children, jobCheckIntervalMsMin = 5000, job
                     ),
                     jobCheckIntervalMsMax
                 );
-                setTimeout(() => {
-                    console.log('polling job status');
-                    if (state.currentJobStatus === 'running') {
-                        pollJobStatus(state.currentJobId);
-                        // if we are still running then call the next timeout
-                        if(checkGeneration) timeout();
-                    } else {
-                        setCheckingGeneration(false);
-                    }
-                }, timeOutLength);
-            }
-            // only start a new recursion if one is not already running
-            if(!checkGeneration) {
-                timeout();
-                setCheckingGeneration(true);
-            }
+            setTimeout(() => {
+                console.log('polling job status');
+                if (state.currentJobStatus === 'running') {
+                    console.log('polling job status in timeout');
+                    pollJobStatus(state.currentJobId);
+                }
+            }, timeOutLength);
+        } else {
+            setCheckingGeneration(false);
+        }
+    }, [state.currentJobStatus, state.currentJobId, , state.currentJobWaitTime, jobCheckIntervalMsMin, jobCheckIntervalMsMax.pollJobStatus]);
 
-            // return the cleanup function as our useEffect destructor
-            return () => setCheckingGeneration(false);
+    useEffect(() => {
+        if (state.currentJobStatus === 'running') {
+            if (!checkingGeneration) {
+                setCheckingGeneration(true);
+                pollJobStatusWithInterval(state.currentJobId);
+            }
         } else if (state.currentJobStatus === 'fetching') {
             fetchGeneration(state.currentJobId).then((response) => {
                 if (response.success) {

@@ -243,7 +243,7 @@ const Editor = () => {
       setConfirmationPopupData({
         title: "Image Generation Failed",
         message1: "Failed to generate image.",
-        message2: response.error,
+        message2: JSON.stringify(response.error),
         onCancel: () => {
           setConfirmationPopupData(null);
         },

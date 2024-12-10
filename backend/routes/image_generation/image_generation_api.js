@@ -57,7 +57,7 @@ router.post("/generate", [
     .optional()
     .trim()
     .isString()
-    .customSanitizer(value => parseInt(value))
+    .customSanitizer(value => parseInt(value) || undefined)
     .custom(value => {
       const size = parseInt(value);
       return validSizes.includes(size);
@@ -71,11 +71,18 @@ router.post("/generate", [
     .isInt()
     .withMessage('Seed must be an integer')
     // .customSanitizer(value => parseInt(value))
-    .default(() => Math.floor(Math.random() * 1000000000))
+    .default(() => Math.floor(Math.random() * 1000000000)),
+  check("model")
+    .optional()
+    .isString()
+    .trim()
+    .toLowerCase()
+    .custom(value => value === "sd" || value === "sdxl")
+    .default("sdxl")
 ], async (req, res) => {
   // optional prompt and pixel size query parameters: ?promt=pixel+art&size=16
   // if not provided defaults to pixel art and 16px
-  const { prompt, size, seed } = req.query;// || { prompt: "pixel art", size: 16 };
+  const { prompt, size, seed, model } = req.query;// || { prompt: "pixel art", size: 16 };
 
 
   const errors = validationResult(req);
@@ -106,50 +113,103 @@ router.post("/generate", [
   const jobId = uuidv4();
 
   // Generation Data payload
-  const data = {
-    "prompt": `${prompt}, ${size}bit pixel style, ${size}px, side view, pixelart, gamedev. game asset, pixelsprite, pixel-art, pixel_art, retro_artstyle, colorful, low-res, blocky, pixel art style, 16-bit graphics ### out of frame, duplicate, watermark, signature, text, error, deformed, sloppy, messy, blurry, noisy, highly detailed, ultra textured, photo, realisticlogo`,
-    "params": {
-      "cfg_scale": 7,
-      "seed": seed,
-      "sampler_name": "DDIM",
-      "height": generationResolution,
-      "width": generationResolution,
-      "post_processing": [],
-      "steps": 30,
-      "tiling": false,
-      "karras": true,
-      "hires_fix": false,
-      "clip_skip": 1,
-      "n": 1,
-      "loras": [
-        {
-          "name": "636318",
-          "model": 1,
-          "clip": 1,
-          "is_version": true
-        }
+  let data;
+
+  // sd 1.5 pixel art model:
+  if (model === "sd") {
+    data = {
+      "prompt": `${prompt}, ${size}bit pixel style, ${size}px, side view, pixelart, gamedev. game asset, pixelsprite, pixel-art, pixel_art, retro_artstyle, colorful, low-res, blocky, pixel art style, 16-bit graphics ### out of frame, duplicate, watermark, signature, text, error, deformed, sloppy, messy, blurry, noisy, highly detailed, ultra textured, photo, realisticlogo`,
+      "params": {
+        "cfg_scale": 7,
+        "seed": seed,
+        "sampler_name": "DDIM",
+        "height": generationResolution,
+        "width": generationResolution,
+        "post_processing": [],
+        "steps": 20,
+        "tiling": false,
+        "karras": true,
+        "hires_fix": false,
+        "clip_skip": 1,
+        "n": 1,
+        "loras": [
+          {
+            "name": "636318",
+            "model": 1,
+            "clip": 1,
+            "is_version": true
+          }
+        ],
+        "tis": [
+          {
+            "name": "4172",
+            "strength": 0.3,
+            "inject_ti": "prompt"
+          }
+        ]
+      },
+      "allow_downgrade": false,
+      "nsfw": false,
+      "censor_nsfw": true,
+      "trusted_workers": false,
+      "models": [
+        "AIO Pixel Art"
       ],
-      "tis": [
-        {
-          "name": "4172",
-          "strength": 0.3,
-          "inject_ti": "prompt"
-        }
-      ]
-    },
-    "allow_downgrade": false,
-    "nsfw": false,
-    "censor_nsfw": true,
-    "trusted_workers": false,
-    "models": [
-      "AIO Pixel Art"
-    ],
-    "r2": true,
-    "replacement_filter": true,
-    "shared": true,
-    "slow_workers": false,
-    "dry_run": false
-  };
+      "r2": true,
+      "replacement_filter": true,
+      "shared": true,
+      "slow_workers": false,
+      "dry_run": false
+    };
+  } else {
+    // sdxl pixel art model:
+    const closeup = size <= 32 ? "closeup," : "";
+    data = {
+      "prompt": `pixel-art, ${prompt}, 16px, ${closeup} low-res, blocky, pixel art style, 16-bit graphics###sloppy, messy, blurry, noisy, highly detailed, ultra textured, photo, realistic`,
+      "params": {
+        "cfg_scale": 2,
+        "seed": seed,
+        "sampler_name": "k_euler_a",
+        "height": generationResolution,
+        "width": generationResolution,
+        "post_processing": [],
+        "steps": 8,
+        "tiling": false,
+        "karras": true,
+        "hires_fix": false,
+        "clip_skip": 1,
+        "n": 1,
+        "loras": [
+          {
+            "name": "247778",
+            "model": 1,
+            "clip": 1,
+            "is_version": true
+          },
+          {
+            "name": "120096",
+            "model": 1,
+            "clip": 1,
+            "is_version": false
+          }
+        ]
+      },
+      "allow_downgrade": false,
+      "nsfw": false,
+      "censor_nsfw": true,
+      "trusted_workers": false,
+      "models": [
+        "AlbedoBase XL (SDXL)"
+      ],
+      "r2": true,
+      "replacement_filter": true,
+      "shared": true,
+      "slow_workers": false,
+      "dry_run": false
+    };
+  }
+
+
 
   // Making request to the api for image id
   try {
@@ -189,29 +249,43 @@ router.get("/poll/:jobId", async (req, res) => {
       return res.status(404).json({ success: false, error: "Image Job not found" });
     }
 
-    const response = await axios.get(`${baseUrl}/generate/status/${imageJob.generationId}`, header);
+    if (imageJob.status === "completed") {
+      return res.status(200).json({ success: true, status: "completed", image: imageJob.downloadUrl });
+    } else if (imageJob.status === "expired" || imageJob.status === "failed") {
+      return res.status(404).json({ success: false, error: "Image Job already failed" });
+    }
+    else {
+      const response = await axios.get(`${baseUrl}/generate/status/${imageJob.generationId}`, header);
 
-    if (response.data.done && response.data.waiting == 0) {
-      await updateImageJobStatus(jobId, "completed", response.data.generations[0].img);
-      return res.status(200).json({ success: true, status: "completed" });
+      if (response.data.done && response.data.waiting == 0) {
+        await updateImageJobStatus(jobId, "completed", response.data.generations[0].img);
+        return res.status(200).json({ success: true, status: "completed" });
+      }
+
+      res.status(200).json({
+        success: true,
+        status: "waiting",
+        // fill out all fields from response data
+        // ex
+        // processing (count of currently processing images),
+        // restarted 
+        // done (boolean for is completed),
+        // wait_time (time in seconds estimated to wait),
+        // queue_position: how many images are in front of this one
+        ...response.data
+
+      });
     }
 
-    res.status(200).json({
-      success: true,
-      status: "waiting",
-      // fill out all fields from response data
-      // ex
-      // processing (count of currently processing images),
-      // restarted 
-      // done (boolean for is completed),
-      // wait_time (time in seconds estimated to wait),
-      // queue_position: how many images are in front of this one
-      ...response.data
-
-    });
   } catch (e) {
     console.error("Error polling status: ", e.response ? e.response.data : e.message);
-    res.status(500).json({ success: false, error: "Internal server error" });
+    if (e.response && (e.response.status === 404 || e.response.data.rc == 'RequestNotFound')) {
+      await updateImageJobStatus(jobId, "expired", null);
+      return res.status(404).json({ success: false, error: "Image Job not found" });
+    } else {
+      await updateImageJobStatus(jobId, "failed", null);
+      res.status(500).json({ success: false, status: 500, error: "Internal server error" });
+    }
   }
 });
 
