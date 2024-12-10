@@ -29,7 +29,7 @@ const Canvas = forwardRef(
     //
     // State
     //
-    
+    const isDrawing = useRef(false);
     // reference to the canvas object for us to draw to
     const canvasRef = useRef(null);
     // how big a single pixel is on the actual rendering canvas:
@@ -255,7 +255,7 @@ const Canvas = forwardRef(
     // Handles the event of someone clicking on the canvas area
     // Currently only supports single click drawing
     async function handleCanvasClick(event) {
-  
+      if (!isDrawing.current && event.type !== "mousedown") return;
       console.log('clicked');
       const canvas = canvasRef.current;
 
@@ -314,10 +314,10 @@ const Canvas = forwardRef(
       // drawPixelAt(pixelX, pixelY, color, canvasData.width);
     }
 
-    function handleCanvasDrag(event) {
-      if (!isMouseDown) return;
-      handleCanvasClick(event)
-    }
+    // function handleCanvasDrag(event) {
+    //   if (!isMouseDown) return;
+    //   handleCanvasClick(event)
+    // }
 
     // Flood Fill Algorithm
     const floodFill = (x, y, targetColor, replacementColor) => {
@@ -372,32 +372,7 @@ const Canvas = forwardRef(
       console.log("Canvas data updated:", canvasData);
     }, [canvasData]);
     
-    useEffect(() => {
-      const setupCanvasEvents = () => {
-        const canvas = canvasRef.current;
-
-        canvas.addEventListener("mousedown", () => {
-          isMouseDown = true;
-        });
-
-        canvas.addEventListener("mouseup", () => {
-          isMouseDown = false;
-        });
-
-        canvas.addEventListener("mousemove", handleCanvasDrag);
-      };
-
-      setupCanvasEvents();
-      return () => {
-        // destructor
-        const canvas = canvasRef.current;
-        if (canvasRef.current) {
-          canvas.removeEventListener("mousedown", () => {});
-          canvas.removeEventListener("mouseup", () => {});
-          canvas.removeEventListener("mousemove", handleCanvasDrag);
-        }
-      };
-    }, [tool, brushColor, canvasData.width]);
+   
 
     useEffect(() => {
       const canvas = canvasRef.current;
@@ -459,7 +434,17 @@ const Canvas = forwardRef(
           ref={canvasRef}
           width={canvasRenderWidth}
           height={canvasRenderHeight}
-          onClick={handleCanvasClick}
+          onMouseDown={(e) => {
+          isDrawing.current = true;
+          handleCanvasClick(e);
+        }}
+        onMouseMove={handleCanvasClick}
+        onMouseUp={() => {
+          isDrawing.current = false;
+        }}
+        onMouseLeave={() => {
+          isDrawing.current = false;
+        }}
         ></canvas>
       </>
     );
