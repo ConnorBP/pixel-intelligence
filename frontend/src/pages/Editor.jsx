@@ -432,7 +432,7 @@ const Editor = () => {
     setBrushColor(color);
   };
   const contextMenuOptions = [
-    { text: "New Project", onClick: onCreateNewImageClicked },
+    { text: "Generate New", onClick: onCreateNewImageClicked },
     { text: "Save", onClick: onSaveClicked },
     { text: "Open", onClick: onImportProjectClicked },
 

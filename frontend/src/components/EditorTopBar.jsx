@@ -37,7 +37,7 @@ const EditorTopBar = ({
         <div className="top-controls">
 
           {/* create new image generation and canvas */}
-          <button className="tooltip" button-name="New Canvas" onClick={onCreateNewImageClicked}>
+          <button className="tooltip" button-name="Generate New" onClick={onCreateNewImageClicked}>
             <MdOutlineAddBox className="icon" />
           </button>
 
