@@ -1,6 +1,6 @@
 :root {
     --editor-canvas-padding: 8px;
-    --editor-canvas-scale: calc(100dvh - var(--top-toolbar-size) - var(--editor-canvas-padding));
+    --editor-canvas-scale: calc(100vh - var(--top-toolbar-size) - var(--editor-canvas-padding));
 }
 /* ensure that the editor canvas scales properly on portrait orientation */
 /* currently limited by the lack of calculation ability in media queries */
