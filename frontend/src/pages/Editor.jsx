@@ -46,7 +46,7 @@ const Editor = () => {
   // wether the grid lines are shown or not on the editor canvas
   const [gridLinesVisible, setGridLinesVisible] = useLocalStorage("gridLinesVisible", true);
   const [tool, setTool] = useLocalStorage("tool", "pencil");
-
+  const [showGridLines, setShowGridLines] = useLocalStorage("showGridLines",false);
   // file pickers
   // actual element is defined at the bottom of the file
   // this ref lets react refer to the element on the dom
@@ -170,6 +170,14 @@ const Editor = () => {
     }
   };
 
+
+  const toggleGride = () => {
+
+    setShowGridLines((prev) => !prev)
+   
+ 
+   
+  };
   // takes in a new square resolution and scales the current canvas data to it
   // warning: must be a function, and not a const closure
   // or else react will be stupid and not update canvasData state for it
@@ -445,6 +453,8 @@ const Editor = () => {
           gridLinesVisible={gridLinesVisible}
           tool={tool}
           onColorSelected={handleEyeDropperColor}
+          showGridLines={showGridLines} 
+          toggleGride={toggleGride} 
         />
       </div>
       {/* Hidden file input for opening images */}
