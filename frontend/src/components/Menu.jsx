@@ -44,7 +44,7 @@ function Menu({ menuOptions = testingItems }) {
   // console.log(listItems);
 
   return (
-    <div className="menu-container" ref={menuRef}>
+    <div className="menu-container tooltip" button-name="Menu" ref={menuRef}>
       <button className="menu-button" onClick={toggle}>
         <IoMdMenu className="icon" />
       </button>
