@@ -1,11 +1,10 @@
-import { useRef, useEffect, forwardRef, useImperativeHandle, useCallback } from "react";
+import { useRef, useEffect, forwardRef, useImperativeHandle, useCallback, useState } from "react";
 
 import "../css/Canvas.css";
 import {
   drawCheckeredBackground,
   drawPixelToCtx,
-  drawCheckeredPixel,
-  handleEyeDropper
+  drawCheckeredPixel
 } from "../utils";
 // eslint-disable-next-line react/display-name
 const Canvas = forwardRef(
@@ -16,28 +15,32 @@ const Canvas = forwardRef(
       canvasRenderWidth = 128, // determines the actual rendering of the pixels to the screen (including editor lines)
       canvasRenderHeight = 128,
       brushColor = "blue",
-      drawGridLines = true,
+      gridLinesVisible,
       gridLineWidth = 1,
       gridLineColor = "#000000",
-      tool,     
-      onColorSelected,
+      tool,
+      onColorSelected
     },
     ref
   ) => {
     //
     // State
     //
-    
+
     // reference to the canvas object for us to draw to
     const canvasRef = useRef(null);
+
+    // track drag state
+    let isMouseDown = useRef(false);
+
     // how big a single pixel is on the actual rendering canvas:
     // this should be calculated on demand
     // const pixelSize = canvasRenderWidth / canvasData.width;
 
     // updates the state of a pixel at specific coordinate
     // on the provided canvas data and returns it
-
     const updatePixelAt = (oldCanvas, x, y, color) => {
+
       console.log(`updatePixelAt called with  ${oldCanvas} ${x} ${y} ${color}`);
       // don't allow out of bounds access
       if (x >= oldCanvas.width || y >= oldCanvas.height) {
@@ -76,6 +79,7 @@ const Canvas = forwardRef(
     }
 
     function drawAllGridLines(canvas, editorPixelsW, editorPixelsH) {
+      if (!gridLinesVisible) return;
       // draw all grid lines on the canvas
       const context = canvas.getContext("2d");
 
@@ -91,6 +95,7 @@ const Canvas = forwardRef(
       }
     }
 
+
     // clears the canvas with a background grid
     // only clears the visual display by default, but you can make it clear the data too
     const clearCanvas = useCallback((
@@ -100,19 +105,21 @@ const Canvas = forwardRef(
       updateDataOnClear = false
     ) => {
       const context = canvas.getContext("2d");
-
+      if (!canvas) return;
       drawCheckeredBackground(
         context,
-        editorPixelsW*2,
-        editorPixelsH*2,
+        editorPixelsW * 2,
+        editorPixelsH * 2,
         canvas.width,
         canvas.height
       );
 
-      if (drawGridLines) {
+      if (gridLinesVisible) {
+
         // draw all grid lines on the canvas
         drawAllGridLines(canvas, editorPixelsW, editorPixelsH);
-      }
+      } 
+
       if (updateDataOnClear) {
         setCanvasData((oldCanvas) => {
           // deep copy (make react update)
@@ -121,12 +128,16 @@ const Canvas = forwardRef(
           return newCanvas;
         });
       }
+      // if (!showGridLines) {
+      //   drawAllGridLines(canvas, editorPixelsW, editorPixelsH);
+      // }
       // context.fill();
     });
 
     // attempt to load a provided canvas json representation
     // it is "try" because the loaded data can be tampered with by the user
     // or be incompatible due to updates
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     const tryLoadCanvas = (canvasData, storeOnLoad = false) => {
       console.info("loading canvas state with object: ", canvasData);
       try {
@@ -198,7 +209,7 @@ const Canvas = forwardRef(
           setCanvasData(canvasData);
         }
 
-        if (drawGridLines) {
+        if (gridLinesVisible) {
           // draw all grid lines on the canvas
           drawAllGridLines(canvas, canvasData.width, canvasData.height);
         }
@@ -210,18 +221,16 @@ const Canvas = forwardRef(
       // if nothing failed by here, it was a great success :)
       return true;
     };
-    let isMouseDown = false;
-    // let isMouseDown = false;
+
     // outputs a pixel to the display canvas (does not save)
     const drawPixelAt = useCallback((x, y, color, drawingPixelsWidth) => {
       // don't run on empty pixels
       if (color == null) {
         return;
       }
- 
       // calculate how big our "virtual pixels" are on the actual screen canvas pixel resolution
       const pixelSize = canvasRenderWidth / drawingPixelsWidth;
-    
+
       // reference the canvas context for drawing to
       const canvas = canvasRef.current;
       const context = canvas.getContext("2d");
@@ -229,21 +238,21 @@ const Canvas = forwardRef(
       // Draw a pixel at the clicked position
       drawPixelToCtx(context, x, y, color, pixelSize);
 
-      if (drawGridLines) {
+      if (gridLinesVisible) {
         fixGridLinesAt(context, x, y, pixelSize, canvas.width, canvas.height);
       }
+
     });
+
 
     // Handles the event of someone clicking on the canvas area
     // Currently only supports single click drawing
     async function handleCanvasClick(event) {
-  
-      console.log('clicked');
       const canvas = canvasRef.current;
 
       // Get the bounding rectangle of the canvas
       const rect = canvas.getBoundingClientRect();
-      
+
       const pixelSize = canvasRenderWidth / canvasData.width;
 
       // Get the position of the pixel that was clicked on
@@ -258,7 +267,7 @@ const Canvas = forwardRef(
 
       if (tool === "pencil") {
         color = brushColor;
-         
+
       } else if (tool === "eraser") {
         color = "#00000000";
         // update the display for that pixel with clearcolor
@@ -268,22 +277,16 @@ const Canvas = forwardRef(
         console.log("erasing");
       } else if (tool === "paint") {
 
-        const targetColor = canvasData.pixels[pixelX + pixelY  * canvasData.width];
+        const targetColor = canvasData.pixels[pixelX + pixelY * canvasData.width];
         if (targetColor === brushColor) return; // Already filled with the same color
         floodFill(pixelX, pixelY, targetColor, brushColor);
-
-      }else if (tool === "eyeDropper"){
-      
-        const color = await handleEyeDropper();
-        if (color) {
-        if (onColorSelected) {
-          onColorSelected(color); 
-        }
-       }
         return;
-      
+      } else {
+        // do nothing if no tool
+        console.warn("No tool selected"); // this shouldn't happen
+        return;
+      }
 
-     }
       // update the pixel in local storage
       setCanvasData((oldCanvas) => {
         return updatePixelAt(oldCanvas, pixelX, pixelY, color);
@@ -295,7 +298,7 @@ const Canvas = forwardRef(
     }
 
     function handleCanvasDrag(event) {
-      if (!isMouseDown) return;
+      if (!isMouseDown.current) return;
       handleCanvasClick(event)
     }
 
@@ -345,7 +348,7 @@ const Canvas = forwardRef(
         stack.push([currentX, currentY + 1]);
         stack.push([currentX, currentY - 1]);
       }
-    
+
     };
 
     useEffect(() => {
@@ -355,31 +358,25 @@ const Canvas = forwardRef(
 
 
     useEffect(() => {
-      const setupCanvasEvents = () => {
-        const canvas = canvasRef.current;
-
-        canvas.addEventListener("mousedown", () => {
-          isMouseDown = true;
+      const canvas = canvasRef.current;
+      if (canvas) {
+        const context = canvas.getContext("2d");
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        drawCheckeredBackground(
+          context,
+          canvasData.width * 2,
+          canvasData.height * 2,
+          canvas.width,
+          canvas.height
+        );
+        canvasData.pixels.forEach((color, index) => {
+          const x = index % canvasData.width;
+          const y = Math.floor(index / canvasData.width);
+          drawPixelToCtx(context, x, y, color, canvas.width / canvasData.width);
         });
-
-        canvas.addEventListener("mouseup", () => {
-          isMouseDown = false;
-        });
-
-        canvas.addEventListener("mousemove", handleCanvasDrag);
-      };
-
-      setupCanvasEvents();
-      return () => {
-        // destructor
-        const canvas = canvasRef.current;
-        if (canvasRef.current) {
-          canvas.removeEventListener("mousedown", () => {});
-          canvas.removeEventListener("mouseup", () => {});
-          canvas.removeEventListener("mousemove", handleCanvasDrag);
-        }
-      };
-    }, [tool, brushColor, canvasData.width]);
+        if(gridLinesVisible) drawAllGridLines(canvas, canvasData.width, canvasData.height);
+      }
+    }, [canvasData, gridLinesVisible]);
 
     // forward the draw single pixel function for efficiency
     useImperativeHandle(
@@ -405,7 +402,6 @@ const Canvas = forwardRef(
     // On Load
     useEffect(() => {
       tryLoadCanvas(canvasData);
-      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     // useEffect(() => {
@@ -420,7 +416,17 @@ const Canvas = forwardRef(
           ref={canvasRef}
           width={canvasRenderWidth}
           height={canvasRenderHeight}
-          onClick={handleCanvasClick}
+          onMouseDown={(e) => {
+            isMouseDown.current = true;
+            handleCanvasClick(e);
+          }}
+          onMouseMove={handleCanvasDrag}
+          onMouseUp={() => {
+            isMouseDown.current = false;
+          }}
+          onMouseLeave={() => {
+            isMouseDown.current = false;
+          }}
         ></canvas>
       </>
     );
