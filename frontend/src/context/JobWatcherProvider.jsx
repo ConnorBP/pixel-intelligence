@@ -1,4 +1,4 @@
-import React, { createContext, useCallback, useEffect, useReducer } from 'react';
+import { useCallback, useEffect, useReducer, useState } from 'react';
 import checkGeneration from '../api/checkGeneration';
 import fetchGeneration from '../api/fetchGeneration';
 
@@ -6,20 +6,24 @@ import { JobWatcherContext } from './useJobWatcher';
 import { getStorageValue } from '../hooks/useLocalStorage';
 
 const jobWatcherReducer = (state, action) => {
+    console.log('job watch update', JSON.stringify(action));
     switch (action.type) {
         case 'start':
             return {
                 ...state,
                 currentJobId: action.jobId,
+                canvasSize: action.canvasSize,
                 currentJobStatus: 'running',
                 currentJobSubmittedAt: Date.now(),
-                currentJobEta: null,
+                currentJobWaitTime: 0,
+                currentJobEta: 0,
                 currentJobResult: null,
             };
         case 'update':
             return {
                 ...state,
-                currentJobStatus: action.status,
+                lastRequestStatus: action.responseStatus,
+                currentJobWaitTime: action.wait_time,
                 currentJobEta: action.eta,
                 currentJobResult: action.result,
             };
@@ -40,6 +44,17 @@ const jobWatcherReducer = (state, action) => {
                 currentJobStatus: 'failed',
                 currentJobResult: action.error,
             };
+        case 'clear':
+            return {
+                ...state,
+                currentJobId: null,
+                canvasSize: null,
+                currentJobStatus: 'idle',
+                currentJobSubmittedAt: 0,
+                currentJobWaitTime: 0,
+                currentJobEta: 0,
+                currentJobResult: null,
+            };
         default:
             return state;
     }
@@ -52,12 +67,18 @@ export const JobWatcherProvider = ({ children, jobCheckIntervalMsMin = 5000, job
 
     const [state, dispatch] = useReducer(jobWatcherReducer, getStorageValue('currentJobStatus', {
         currentJobId: null,
+        canvasSize: null,
         currentJobStatus: 'idle',
-        currentJobSubmittedAt: null,
-        currentJobEta: null,
-        currentQueuePosition: null,
+        currentJobSubmittedAt: 0,
+        currentJobWaitTime: 0,
+        currentJobEta: 0,
+        currentQueuePosition: 0,
         currentJobResult: null,
     }));
+
+    // track if we already have a check in progress so we don't start multiple
+    // timeout recursions
+    const [checkingGeneration, setCheckingGeneration] = useState(false);
 
     // make sure job state persists across page reloads
     useEffect(() => {
@@ -72,7 +93,14 @@ export const JobWatcherProvider = ({ children, jobCheckIntervalMsMin = 5000, job
                 if (response.status === 'completed') {
                     dispatch({ type: 'fetch' });
                 } else {
-                    dispatch({ type: 'update', status: response.status, eta: response.eta, result: response.result });
+                    dispatch({
+                        type: 'update',
+                        responseStatus: response.status,
+                        wait_time: response.wait_time,
+                        eta: Date.now() + (response.wait_time*1000),
+                        position: response.queue_position,
+                        result: response.result
+                    });
                 }
             } else {
                 dispatch({ type: 'fail', error: response.error });
@@ -85,17 +113,34 @@ export const JobWatcherProvider = ({ children, jobCheckIntervalMsMin = 5000, job
     useEffect(() => {
         if (state.currentJobStatus === 'running') {
             // for now just use a fixed interval
-            const interval = setInterval(() => {
-                if (state.currentJobStatus === 'running') {
-                    pollJobStatus(state.currentJobId);
-                } else {
-                    // clear self interval if job is no longer running
-                    clearInterval(interval);
-                }
-            }, jobCheckIntervalMsMin);
+            function timeout() {
+                const timeOutLength = 
+                Math.min(
+                    Math.max(
+                        state.currentJobWaitTime || jobCheckIntervalMsMin,
+                        jobCheckIntervalMsMin
+                    ),
+                    jobCheckIntervalMsMax
+                );
+                setTimeout(() => {
+                    console.log('polling job status');
+                    if (state.currentJobStatus === 'running') {
+                        pollJobStatus(state.currentJobId);
+                        // if we are still running then call the next timeout
+                        if(checkGeneration) timeout();
+                    } else {
+                        setCheckingGeneration(false);
+                    }
+                }, timeOutLength);
+            }
+            // only start a new recursion if one is not already running
+            if(!checkGeneration) {
+                timeout();
+                setCheckingGeneration(true);
+            }
 
             // return the cleanup function as our useEffect destructor
-            return () => clearInterval(interval);
+            return () => setCheckingGeneration(false);
         } else if (state.currentJobStatus === 'fetching') {
             fetchGeneration(state.currentJobId).then((response) => {
                 if (response.success) {
@@ -108,12 +153,16 @@ export const JobWatcherProvider = ({ children, jobCheckIntervalMsMin = 5000, job
         }
     }, [state.currentJobStatus, state.currentJobId, pollJobStatus]);
 
-    const submitJob = (jobId) => {
-        dispatch({ type: 'start', jobId });
+    const submitJob = (jobId, canvasSize) => {
+        dispatch({ type: 'start', jobId, canvasSize });
+    };
+
+    const clearJob = () => {
+        dispatch({ type: 'clear' });
     };
 
     return (
-        <JobWatcherContext.Provider value={{ ...state, submitJob }}>
+        <JobWatcherContext.Provider value={{ ...state, submitJob, clearJob }}>
             {children}
         </JobWatcherContext.Provider>
     );

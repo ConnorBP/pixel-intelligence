@@ -19,26 +19,26 @@ export default async function fetchGeneration(jobId) {
             return { success: false, status: resp.status, error: resp.statusText };
         }
         const j = await resp.json();
-        if (j.success && j.downloadUrl) {
-            // now try to download the image result itself
-            const imageResp = await fetch(j.downloadUrl, {
-                method: 'GET',
-                credentials: 'include',
-                headers: {
-                    'Content-Type': 'application/octet-stream',
-                },
-                mode: 'cors'
-            });
-            if (!imageResp.ok) {
-                console.error('Error downloading image: ', imageResp);
-                return { success: false, status: imageResp.status, error: imageResp.statusText };
-            }
-            const imageBlob = await imageResp.blob();
-            j.imageBlob = imageBlob;
-        } else {
-            console.error('Invalid response from generation status: ', j);
-            return { success: false, status: 500, error: 'invalid response' };
-        }
+        console.log(JSON.stringify(j));
+        // if (j.success && j.downloadUrl) {
+        //     // now try to download the image result itself
+        //     const imageResp = await fetch(j.downloadUrl, {
+        //         method: 'GET',
+        //         // credentials: 'include',
+        //         headers: {
+        //             'Content-Type': 'application/octet-stream',
+        //         }
+        //     });
+        //     if (!imageResp.ok) {
+        //         console.error('Error downloading image: ', imageResp);
+        //         return { success: false, status: imageResp.status, error: imageResp.statusText };
+        //     }
+        //     const imageBlob = await imageResp.blob();
+        //     j.imageBlob = imageBlob;
+        // } else {
+        //     console.error('Invalid response from generation status: ', j);
+        //     return { success: false, status: 500, error: 'invalid response' };
+        // }
         return j;
     }
     catch (e) {

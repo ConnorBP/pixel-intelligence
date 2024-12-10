@@ -12,6 +12,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { SimpleImage, DownScaler, RGBAToHex, ExportPng, DownloadJson } from "../utils/index";
 import { uploadToGallery } from "../api";
 import generateImage from "../api/generateImage";
+import useJobWatcher from "../context/useJobWatcher";
 
 const Editor = () => {
   // brush colors are stored as html color codes
@@ -49,8 +50,8 @@ const Editor = () => {
   const [gridLinesVisible, setGridLinesVisible] = useLocalStorage("gridLinesVisible", true);
   const [tool, setTool] = useLocalStorage("tool", "pencil");
 
-  // current generation job id
-  const [generationJobId, setGenerationJobId] = useLocalStorage("generationJobId", null);
+  // for tracking current generation job id
+  const { submitJob, clearJob, currentJobStatus, currentJobResult, canvasSize } = useJobWatcher()
 
   // file pickers
   // actual element is defined at the bottom of the file
@@ -77,23 +78,7 @@ const Editor = () => {
     });
   }
 
-  const handleImageLoad = async (event) => {
-    const target = event.target;
-    const files = target.files;
-    // get the first image selected by file-picker
-    const base64 = await toBase64(files[0]);
-    const type = files[0].type;
-    const size = files[0].size;
-    const name = files[0].name;
-    console.log('loading file:', name, type, size);
-
-    if (files[0].type.substring(0, 5) != "image") {
-      alert("Invalid file type. Please select an image file.");
-      return;
-    }
-
-    // now process it into the canvas if possible
-
+  const loadBase64Image = (base64, w, h) => {
     var img = new Image();
     // img.crossOrigin = "Anonymous"; // Enable CORS so firefox will be nice
     img.onload = function () {
@@ -117,15 +102,15 @@ const Editor = () => {
         }
         const simp = new SimpleImage({ imageData });
         // this applies the k-means clustering centroid based downscaling algorithm to the image with 4 buckets and 10 iterations
-        let { kCentroid } = DownScaler.kCenter(simp, canvasData.width, canvasData.height, 4, 10);
+        let { kCentroid } = DownScaler.kCenter(simp, w, h, 4, 10);
 
         const newCanvasData = {
           pixels: kCentroid.pixels.map(({ r, g, b, a }) => {
             // console.log(`${r} ${g} ${b} ${a}`);
             return RGBAToHex(r, g, b, a)
           }),
-          width: canvasData.width,
-          height: canvasData.height,
+          width: w,
+          height: h,
         };
         setCanvasData(newCanvasData);
 
@@ -141,8 +126,26 @@ const Editor = () => {
       }
 
     }
-
     img.src = base64;
+  };
+
+  const handleImageLoad = async (event) => {
+    const target = event.target;
+    const files = target.files;
+    // get the first image selected by file-picker
+    const base64 = await toBase64(files[0]);
+    const type = files[0].type;
+    const size = files[0].size;
+    const name = files[0].name;
+    console.log('loading file:', name, type, size);
+
+    if (files[0].type.substring(0, 5) != "image") {
+      alert("Invalid file type. Please select an image file.");
+      return;
+    }
+
+    // now process it into the canvas if possible
+    loadBase64Image(base64, canvasData.width, canvasData.height);
   };
 
   const handleProjectDocumentLoad = async (event) => {
@@ -233,8 +236,8 @@ const Editor = () => {
     const response = await generateImage(newImage.name, newImage.canvasSize);
     console.log('generated image response:', JSON.stringify(response));
 
-    if(response.success) {
-      setGenerationJobId(response.jobId);
+    if (response.success) {
+      submitJob(response.jobId, newImage.canvasSize);
       return true;
     } else {
       setConfirmationPopupData({
@@ -339,9 +342,30 @@ const Editor = () => {
           setConfirmationPopupData(null);
         },
       })
-      // Add your logic to load the image data into the canvas here
     }
   }, [requestedImageLoad]);
+
+  // load the new image from the generation job when it completes
+  useEffect(() => {
+    if (currentJobStatus === 'completed' && currentJobResult && currentJobResult.success) {
+      console.log('job completed, loading new image:', currentJobResult);
+      setConfirmationPopupData({
+        title: "Generation " + currentJobStatus,
+        message1: "Would you like to load the image into the editor?",
+        message2: "This will overwrite the current canvas data.",
+        imageSrc: currentJobResult.imageBlob,
+        // imageSrc: currentJobResult.downloadUrl,
+        onCancel: () => {
+          setConfirmationPopupData(null);
+        },
+        onConfirm: () => {
+          loadBase64Image(currentJobResult.imageBlob, canvasSize || canvasData.width, canvasSize || canvasData.height);
+          setConfirmationPopupData(null);
+          clearJob();
+        },
+      })
+    }
+  }, [currentJobStatus, currentJobResult]);
 
   //
   // Editor Button Click Handlers
@@ -423,12 +447,11 @@ const Editor = () => {
 
   return (
     <div className="editor-container">
-
       <NewImagePopup
         isOpen={showNewImagePrompt}
         onClose={() => { setShowNewImagePrompt(false) }}
         onCreate={async (newImage) => {
-          if(await handleCreateNewImageConfirmed(newImage)) {
+          if (await handleCreateNewImageConfirmed(newImage)) {
             // close the prompt on success only
             setShowNewImagePrompt(false);
           }

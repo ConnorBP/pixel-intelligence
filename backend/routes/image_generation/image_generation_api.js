@@ -100,24 +100,24 @@ router.post("/generate", [
   // 64px canvas: 512 generated pixels
   // 128px canvas: 1024 generated pixels
 
-  const gnerationResolution = Math.max(size * 8, minimumGenerationSize);
+  const generationResolution = Math.max(size * 8, minimumGenerationSize);
 
   // Job ID for each job
   const jobId = uuidv4();
 
   // Generation Data payload
   const data = {
-    "prompt": `a ${size}bit pixel style ${prompt}, ${size}px, side view, pixelart, gamedev. game asset, pixelsprite, pixel-art, pixel_art, retro_artstyle, colorful, low-res, blocky, pixel art style, 16-bit graphics ### out of frame, duplicate, watermark, signature, text, error, deformed, sloppy, messy, blurry, noisy, highly detailed, ultra textured, photo, realisticlogo`,
+    "prompt": `${prompt}, ${size}bit pixel style, ${size}px, side view, pixelart, gamedev. game asset, pixelsprite, pixel-art, pixel_art, retro_artstyle, colorful, low-res, blocky, pixel art style, 16-bit graphics ### out of frame, duplicate, watermark, signature, text, error, deformed, sloppy, messy, blurry, noisy, highly detailed, ultra textured, photo, realisticlogo`,
     "params": {
       "cfg_scale": 7,
       "seed": seed,
       "sampler_name": "DDIM",
-      "height": gnerationResolution,
-      "width": gnerationResolution,
+      "height": generationResolution,
+      "width": generationResolution,
       "post_processing": [],
       "steps": 30,
       "tiling": false,
-      "karras": false,
+      "karras": true,
       "hires_fix": false,
       "clip_skip": 1,
       "n": 1,
@@ -132,7 +132,7 @@ router.post("/generate", [
       "tis": [
         {
           "name": "4172",
-          "strength": 0.4,
+          "strength": 0.3,
           "inject_ti": "prompt"
         }
       ]
@@ -140,7 +140,7 @@ router.post("/generate", [
     "allow_downgrade": false,
     "nsfw": false,
     "censor_nsfw": true,
-    "trusted_workers": true,
+    "trusted_workers": false,
     "models": [
       "AIO Pixel Art"
     ],
@@ -191,12 +191,24 @@ router.get("/poll/:jobId", async (req, res) => {
 
     const response = await axios.get(`${baseUrl}/generate/status/${imageJob.generationId}`, header);
 
-    if (response.data.done) {
+    if (response.data.done && response.data.waiting == 0) {
       await updateImageJobStatus(jobId, "completed", response.data.generations[0].img);
       return res.status(200).json({ success: true, status: "completed" });
     }
 
-    res.status(200).json({ success: true, status: response.data });
+    res.status(200).json({
+      success: true,
+      status: "waiting",
+      // fill out all fields from response data
+      // ex
+      // processing (count of currently processing images),
+      // restarted 
+      // done (boolean for is completed),
+      // wait_time (time in seconds estimated to wait),
+      // queue_position: how many images are in front of this one
+      ...response.data
+
+    });
   } catch (e) {
     console.error("Error polling status: ", e.response ? e.response.data : e.message);
     res.status(500).json({ success: false, error: "Internal server error" });
@@ -225,13 +237,23 @@ router.get("/download/:jobId", async (req, res) => {
         return res.status(404).json({ success: false, error: "Image is not ready yet." });
       }
       // res.redirect(imageJob.downloadURL);
-      res.status(200).json({ success: true, downloadUrl: imageJob.downloadUrl });
+
+      // Fetching the image from the downloadUrl
+      const response = await axios.get(imageJob.downloadUrl, {
+        responseType: 'arraybuffer'
+      });
+
+      const imageBlob = "data:image/png;base64," + Buffer.from(response.data, 'binary').toString('base64');
+
+      res.status(200).json({
+        success: true,
+        downloadUrl: imageJob.downloadUrl,
+        imageBlob
+      });
 
     } else {
       return res.status(500).json({ success: false, error: "Database connection failed." });
     }
-
-
 
   } catch (e) {
     console.error("Error downloading image: ", e.response ? e.response.data : e.message);

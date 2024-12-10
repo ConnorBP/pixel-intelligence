@@ -14,19 +14,19 @@ const JobWatcherOverlay = () => {
     return (
         <div className='job-watcher-overlay'>
             <h4>
-                Job {currentJobId} {currentJobStatus}
+                Job {JSON.stringify(currentJobId)} {JSON.stringify(currentJobStatus)}
             </h4>
             <p>
-                Eta: {currentJobEta}
+                Eta: {JSON.stringify(currentJobEta)}
             </p>
             <p>
-                Submitted at: {currentJobSubmittedAt}
+                Submitted at: {JSON.stringify(currentJobSubmittedAt)}
             </p>
             <p>
-                Queue position: {currentQueuePosition}
+                Queue position: {JSON.stringify(currentQueuePosition)}
             </p>
             <p>
-                Result: {currentJobResult}
+                Result: {JSON.stringify(currentJobResult)}
             </p>
         </div>
     )
