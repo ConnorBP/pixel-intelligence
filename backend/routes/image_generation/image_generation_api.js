@@ -8,9 +8,26 @@ const router = express.Router();
 const baseUrl = "https://stablehorde.net/api/v2";
 const apiKey = process.env.API_KEY;
 
-// Validation function for jobId
+/**
+ * Validates if the given jobId is in the correct format.
+ * Pretty sure job id is uuid4. Is hex digits and 36 characters long including hyphens.
+ * 
+ * The jobId is considered valid if it matches the following criteria:
+ * - Contains only lowercase letters (a-f), digits (0-9), and hyphens (-).
+ * 
+ * The regular expression breakdown:
+ * - ^ asserts the position at the start of the string.
+ * - [a-f0-9-]+ matches one or more characters that are either:
+ *   - a lowercase letter from a to f,
+ *   - a digit from 0 to 9,
+ *   - or a hyphen (-).
+ * - $ asserts the position at the end of the string.
+ * 
+ * @param {string} jobId - The jobId to validate.
+ * @returns {boolean} - Returns true if the jobId is valid, otherwise false.
+ */
 const isValidJobId = (jobId) => {
-  return /^[a-f0-9-]+$/.test(jobId);
+  return /^[a-f0-9-]+$/.test(jobId) && jobId.length === 36;
 }
 
 // Header parameters

@@ -1,6 +1,7 @@
 import { getApiEndpoint } from '../utils';
 
 // Fetches the current generation status from the API
+// the horde api version of this is rate limited to 10 requests per ip, and we should not hit that limit
 export default async function checkGenerationStatus(jobId) {
     let resp;
     try {
