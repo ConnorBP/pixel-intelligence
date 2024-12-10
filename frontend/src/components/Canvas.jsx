@@ -1,4 +1,4 @@
-import { useRef, useEffect, forwardRef, useImperativeHandle, useCallback,useState } from "react";
+import { useRef, useEffect, forwardRef, useImperativeHandle, useCallback, useState } from "react";
 
 import "../css/Canvas.css";
 import {
@@ -19,7 +19,7 @@ const Canvas = forwardRef(
       drawGridLines = true,
       gridLineWidth = 1,
       gridLineColor = "#000000",
-      tool,     
+      tool,
       onColorSelected,
       showGridLines,
       toggleGrid
@@ -35,13 +35,13 @@ const Canvas = forwardRef(
     // how big a single pixel is on the actual rendering canvas:
     // this should be calculated on demand
     // const pixelSize = canvasRenderWidth / canvasData.width;
-  
+
     const isDrawing = useRef(false);
 
     // updates the state of a pixel at specific coordinate
     // on the provided canvas data and returns it
     const updatePixelAt = (oldCanvas, x, y, color) => {
-   
+
       console.log(`updatePixelAt called with  ${oldCanvas} ${x} ${y} ${color}`);
       // don't allow out of bounds access
       if (x >= oldCanvas.width || y >= oldCanvas.height) {
@@ -70,7 +70,7 @@ const Canvas = forwardRef(
       context.lineTo(canvasW, -0.5 + y * gridSpacing);
       context.stroke();
     }
- 
+
     // fixes the grid lines on all four sides at a specific pixel coordinate
     function fixGridLinesAt(context, x, y, gridSpacing, canvasW, canvasH) {
       drawGridLineX(context, x, gridSpacing, canvasH);
@@ -78,9 +78,9 @@ const Canvas = forwardRef(
       drawGridLineX(context, x + 1, gridSpacing, canvasH);
       drawGridLineY(context, y + 1, gridSpacing, canvasW);
     }
-   
+
     function drawAllGridLines(canvas, editorPixelsW, editorPixelsH) {
-      if (!showGridLines) return; 
+      if (!showGridLines) return;
       // draw all grid lines on the canvas
       const context = canvas.getContext("2d");
 
@@ -95,7 +95,7 @@ const Canvas = forwardRef(
         drawGridLineY(context, y, gridSpacing, canvas.width);
       }
     }
-    
+
 
     // clears the canvas with a background grid
     // only clears the visual display by default, but you can make it clear the data too
@@ -109,20 +109,20 @@ const Canvas = forwardRef(
       if (!canvas) return;
       drawCheckeredBackground(
         context,
-        editorPixelsW*2,
-        editorPixelsH*2,
+        editorPixelsW * 2,
+        editorPixelsH * 2,
         canvas.width,
         canvas.height
       );
 
       if (showGridLines) {
-      
+
         // draw all grid lines on the canvas
         drawAllGridLines(canvas, editorPixelsW, editorPixelsH);
-      }else{
+      } else {
         toggleGrid()
       }
-    
+
       drawAllGridLines(canvas, editorPixelsW, editorPixelsH);
       if (updateDataOnClear) {
         setCanvasData((oldCanvas) => {
@@ -235,7 +235,7 @@ const Canvas = forwardRef(
       }
       // calculate how big our "virtual pixels" are on the actual screen canvas pixel resolution
       const pixelSize = canvasRenderWidth / drawingPixelsWidth;
-    
+
       // reference the canvas context for drawing to
       const canvas = canvasRef.current;
       const context = canvas.getContext("2d");
@@ -250,10 +250,10 @@ const Canvas = forwardRef(
       if (showGridLines) {
         fixGridLinesAt(context, x, y, pixelSize, canvas.width, canvas.height);
       }
-  
+
     });
 
-  
+
     // Handles the event of someone clicking on the canvas area
     // Currently only supports single click drawing
     async function handleCanvasClick(event) {
@@ -263,7 +263,7 @@ const Canvas = forwardRef(
 
       // Get the bounding rectangle of the canvas
       const rect = canvas.getBoundingClientRect();
-      
+
       const pixelSize = canvasRenderWidth / canvasData.width;
 
       // Get the position of the pixel that was clicked on
@@ -275,10 +275,10 @@ const Canvas = forwardRef(
         (((event.clientY - rect.top) / rect.height) * canvas.height) / pixelSize
       );
       let color; // Define the color for the current tool
-    
+
       if (tool === "pencil") {
         color = brushColor;
-         
+
       } else if (tool === "eraser") {
         color = "#00000000";
         // update the display for that pixel with clearcolor
@@ -288,24 +288,24 @@ const Canvas = forwardRef(
         console.log("erasing");
       } else if (tool === "paint") {
 
-        const targetColor = canvasData.pixels[pixelX + pixelY  * canvasData.width];
+        const targetColor = canvasData.pixels[pixelX + pixelY * canvasData.width];
         if (targetColor === brushColor) return; // Already filled with the same color
         floodFill(pixelX, pixelY, targetColor, brushColor);
         return;
-      }else if (tool === "eyeDropper"){
-      
+      } else if (tool === "eyeDropper") {
+
         const color = await handleEyeDropper();
         if (color) {
-        if (onColorSelected) {
-          onColorSelected(color); 
+          if (onColorSelected) {
+            onColorSelected(color);
+          }
         }
-       }
         return;
-     }else if (tool =="showGridLines"){
-      toggleGrid(); 
-     return;
+      } else if (tool == "showGridLines") {
+        toggleGrid();
+        return;
       }
-  
+
       // update the pixel in local storage
       setCanvasData((oldCanvas) => {
         return updatePixelAt(oldCanvas, pixelX, pixelY, color);
@@ -367,14 +367,14 @@ const Canvas = forwardRef(
         stack.push([currentX, currentY + 1]);
         stack.push([currentX, currentY - 1]);
       }
-    
+
     };
 
     useEffect(() => {
       console.log("Canvas data updated:", canvasData);
     }, [canvasData]);
-    
-   
+
+
 
     useEffect(() => {
       const canvas = canvasRef.current;
@@ -396,7 +396,7 @@ const Canvas = forwardRef(
         drawAllGridLines(canvas, canvasData.width, canvasData.height);
       }
     }, [canvasData, showGridLines]);
-    
+
     // forward the draw single pixel function for efficiency
     useImperativeHandle(
       ref,
@@ -417,7 +417,7 @@ const Canvas = forwardRef(
     //
     // Hooks
     //
-   
+
     // On Load
     useEffect(() => {
       tryLoadCanvas(canvasData);
@@ -437,16 +437,16 @@ const Canvas = forwardRef(
           width={canvasRenderWidth}
           height={canvasRenderHeight}
           onMouseDown={(e) => {
-          isDrawing.current = true;
-          handleCanvasClick(e);
-        }}
-        onMouseMove={handleCanvasClick}
-        onMouseUp={() => {
-          isDrawing.current = false;
-        }}
-        onMouseLeave={() => {
-          isDrawing.current = false;
-        }}
+            isDrawing.current = true;
+            handleCanvasClick(e);
+          }}
+          onMouseMove={handleCanvasClick}
+          onMouseUp={() => {
+            isDrawing.current = false;
+          }}
+          onMouseLeave={() => {
+            isDrawing.current = false;
+          }}
         ></canvas>
       </>
     );
