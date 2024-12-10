@@ -9,7 +9,7 @@ import ConfirmationPopup from "../components/ConfirmationPopup";
 import "../css/EditorPageCSS/Editor.css";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 import { useNavigate, useLocation } from "react-router-dom";
-import { SimpleImage, DownScaler, RGBAToHex, ExportPng, DownloadJson } from "../utils/index";
+import { SimpleImage, DownScaler, RGBAToHex, ExportPng, DownloadJson, handleEyeDropper } from "../utils/index";
 import { uploadToGallery } from "../api";
 import generateImage from "../api/generateImage";
 import useJobWatcher from "../context/useJobWatcher";
@@ -18,7 +18,6 @@ const Editor = () => {
   // brush colors are stored as html color codes
   const [brushColor, setBrushColor] = useLocalStorage("primaryBrushColor", "#000000");
   const [secondaryBrushColor, setSecondaryBrushColor] = useLocalStorage("secondaryBrushColor", "#FFFFFF");
-
 
   // navigation hook
   const nav = useNavigate();
@@ -49,7 +48,6 @@ const Editor = () => {
   // wether the grid lines are shown or not on the editor canvas
   const [gridLinesVisible, setGridLinesVisible] = useLocalStorage("gridLinesVisible", true);
   const [tool, setTool] = useLocalStorage("tool", "pencil");
-  const [showGridLines, setShowGridLines] = useLocalStorage("showGridLines",false);
 
   // for tracking current generation job id
   const { submitJob, clearJob, currentJobStatus, currentJobResult, canvasSize } = useJobWatcher()
@@ -181,8 +179,8 @@ const Editor = () => {
 
 
   const toggleGrid = () => {
-
-    setShowGridLines((prev) => !prev)
+    console.log('toggling grid lines');
+    setGridLinesVisible((prev) => !prev)
   };
   // takes in a new square resolution and scales the current canvas data to it
   // warning: must be a function, and not a const closure
@@ -515,6 +513,11 @@ const Editor = () => {
         setSelectedColor={setBrushColor}
         secondaryColor={secondaryBrushColor}
         setSecondaryColor={setSecondaryBrushColor}
+        onEyeDropperClicked={async ()=> {
+          await handleEyeDropper(handleEyeDropperColor);
+        }}
+        toggleGridLines={toggleGrid}
+        gridLinesVisible={gridLinesVisible}
         tool={tool}
         setTool={setTool}
 
@@ -529,9 +532,6 @@ const Editor = () => {
           canvasRenderHeight={CANVAS_RENDER_WIDTH}
           gridLinesVisible={gridLinesVisible}
           tool={tool}
-          onColorSelected={handleEyeDropperColor}
-          showGridLines={showGridLines} 
-          toggleGrid={toggleGrid} 
         />
       </div>
       {/* Hidden file input for opening images */}

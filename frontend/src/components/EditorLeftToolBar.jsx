@@ -1,10 +1,13 @@
 import "../css/EditorPageCSS/EditorLeftToolBar.css";
+import { useState } from "react";
 import ColorPickerToolbar from "./ColorPickerToolbar";
 import { FaEraser, FaPencilAlt, FaEyeDropper } from "react-icons/fa";
 import { PiPaintBucketFill } from "react-icons/pi";
 import { MdOutlineGridOn } from "react-icons/md";
 
-const EditorLeftToolBar = ({ selectedColor, setSelectedColor, secondaryColor, setSecondaryColor, tool, setTool }) => {
+const EditorLeftToolBar = ({ selectedColor, setSelectedColor, secondaryColor, setSecondaryColor, tool, setTool, onEyeDropperClicked, toggleGridLines, gridLinesVisible }) => {
+
+  const [colorPickerActive, setColorPickerActive] = useState(false);
 
   return (
     <div className="left-toolbar">
@@ -20,16 +23,23 @@ const EditorLeftToolBar = ({ selectedColor, setSelectedColor, secondaryColor, se
           button-name="Bucket Fill"
           onClick={() => setTool("paint")} ><PiPaintBucketFill /></button>
         <button
-          className={`icon ${tool === "eyeDropper" ? "active" : ""} tooltip-vertical`}
+          className={`icon ${colorPickerActive === true ? "active" : ""} tooltip-vertical`}
           button-name="Color Picker"
-          onClick={() => { setTool("eyeDropper") }}><FaEyeDropper /></button>
+          onClick={async ()=> {
+            if(onEyeDropperClicked) {
+              setColorPickerActive(true);
+              await onEyeDropperClicked();
+              setColorPickerActive(false);
+            }
+          
+          }}><FaEyeDropper /></button>
         <button
           className={`icon ${tool === "pencil" ? "active" : ""} tooltip-vertical`}
           button-name="Pencil"
           onClick={() => setTool("pencil")}><FaPencilAlt /></button>
-           <button
-          className={`icon ${tool === "showGridLines" ? "active" : ""}`}
-          onClick={() => setTool("showGridLines")}><MdOutlineGridOn /></button>
+        <button
+          className={`icon ${gridLinesVisible ? "active" : ""}`}
+          onClick={toggleGridLines}><MdOutlineGridOn /></button>
       </div>
       <div className="align-end toolbar-square">
         <ColorPickerToolbar

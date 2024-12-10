@@ -4,8 +4,7 @@ import "../css/Canvas.css";
 import {
   drawCheckeredBackground,
   drawPixelToCtx,
-  drawCheckeredPixel,
-  handleEyeDropper
+  drawCheckeredPixel
 } from "../utils";
 // eslint-disable-next-line react/display-name
 const Canvas = forwardRef(
@@ -16,13 +15,11 @@ const Canvas = forwardRef(
       canvasRenderWidth = 128, // determines the actual rendering of the pixels to the screen (including editor lines)
       canvasRenderHeight = 128,
       brushColor = "blue",
-      drawGridLines = true,
+      gridLinesVisible,
       gridLineWidth = 1,
       gridLineColor = "#000000",
       tool,
-      onColorSelected,
-      showGridLines,
-      toggleGrid
+      onColorSelected
     },
     ref
   ) => {
@@ -82,7 +79,7 @@ const Canvas = forwardRef(
     }
 
     function drawAllGridLines(canvas, editorPixelsW, editorPixelsH) {
-      if (!showGridLines) return;
+      if (!gridLinesVisible) return;
       // draw all grid lines on the canvas
       const context = canvas.getContext("2d");
 
@@ -117,15 +114,12 @@ const Canvas = forwardRef(
         canvas.height
       );
 
-      if (showGridLines) {
+      if (gridLinesVisible) {
 
         // draw all grid lines on the canvas
         drawAllGridLines(canvas, editorPixelsW, editorPixelsH);
-      } else {
-        toggleGrid()
-      }
+      } 
 
-      drawAllGridLines(canvas, editorPixelsW, editorPixelsH);
       if (updateDataOnClear) {
         setCanvasData((oldCanvas) => {
           // deep copy (make react update)
@@ -215,7 +209,7 @@ const Canvas = forwardRef(
           setCanvasData(canvasData);
         }
 
-        if (drawGridLines) {
+        if (gridLinesVisible) {
           // draw all grid lines on the canvas
           drawAllGridLines(canvas, canvasData.width, canvasData.height);
         }
@@ -244,11 +238,7 @@ const Canvas = forwardRef(
       // Draw a pixel at the clicked position
       drawPixelToCtx(context, x, y, color, pixelSize);
 
-      // if (drawGridLines) {
-      //   fixGridLinesAt(context, x, y, pixelSize, canvas.width, canvas.height);
-      // }
-      // else 
-      if (showGridLines) {
+      if (gridLinesVisible) {
         fixGridLinesAt(context, x, y, pixelSize, canvas.width, canvas.height);
       }
 
@@ -291,17 +281,9 @@ const Canvas = forwardRef(
         if (targetColor === brushColor) return; // Already filled with the same color
         floodFill(pixelX, pixelY, targetColor, brushColor);
         return;
-      } else if (tool === "eyeDropper") {
-
-        const color = await handleEyeDropper();
-        if (color) {
-          if (onColorSelected) {
-            onColorSelected(color);
-          }
-        }
-        return;
-      } else if (tool == "showGridLines") {
-        toggleGrid();
+      } else {
+        // do nothing if no tool
+        console.warn("No tool selected"); // this shouldn't happen
         return;
       }
 
@@ -392,9 +374,9 @@ const Canvas = forwardRef(
           const y = Math.floor(index / canvasData.width);
           drawPixelToCtx(context, x, y, color, canvas.width / canvasData.width);
         });
-        drawAllGridLines(canvas, canvasData.width, canvasData.height);
+        if(gridLinesVisible) drawAllGridLines(canvas, canvasData.width, canvasData.height);
       }
-    }, [canvasData, showGridLines]);
+    }, [canvasData, gridLinesVisible]);
 
     // forward the draw single pixel function for efficiency
     useImperativeHandle(
@@ -420,7 +402,6 @@ const Canvas = forwardRef(
     // On Load
     useEffect(() => {
       tryLoadCanvas(canvasData);
-      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     // useEffect(() => {
