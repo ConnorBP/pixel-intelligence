@@ -24,7 +24,7 @@ function Menu({ menuOptions = testingItems }) {
     // Function to handle clicks outside the menu
     let handler = (e) => {
       if (!menuRef.current.contains(e.target)) {
-        toggle();
+        setMenuOpen(false);
       }
     };
 
