@@ -12,12 +12,7 @@ const ShareImagePopUp = ({ isOpen, onClose, onShare }) => {
   const handleShare = () => {
     // call the share image callback
     onShare({ name, description, canvasSize });
-    // then call the close window callback
-    onClose();
-  };
-
-  const updatePreview = (size) => {
-    setCanvasSize(size);
+    // the caller is responsible for closing the popup
   };
 
   return (
@@ -46,7 +41,7 @@ const ShareImagePopUp = ({ isOpen, onClose, onShare }) => {
               {/* <img src="" alt="Image Preview" className="popup-preview-image" /> */}
               <div alt="Preview" className="" />
             </div>
-          
+
           </div>
           <div className="flex flex-end">
             <button onClick={onClose} className="button popup-button cancel-button">

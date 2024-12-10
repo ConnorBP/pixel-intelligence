@@ -11,11 +11,13 @@ import { useLocalStorage } from "../hooks/useLocalStorage";
 import { useNavigate, useLocation } from "react-router-dom";
 import { SimpleImage, DownScaler, RGBAToHex, ExportPng, DownloadJson } from "../utils/index";
 import { uploadToGallery } from "../api";
+import generateImage from "../api/generateImage";
 
 const Editor = () => {
   // brush colors are stored as html color codes
   const [brushColor, setBrushColor] = useLocalStorage("primaryBrushColor", "#000000");
   const [secondaryBrushColor, setSecondaryBrushColor] = useLocalStorage("secondaryBrushColor", "#FFFFFF");
+
 
   // navigation hook
   const nav = useNavigate();
@@ -46,6 +48,9 @@ const Editor = () => {
   // wether the grid lines are shown or not on the editor canvas
   const [gridLinesVisible, setGridLinesVisible] = useLocalStorage("gridLinesVisible", true);
   const [tool, setTool] = useLocalStorage("tool", "pencil");
+
+  // current generation job id
+  const [generationJobId, setGenerationJobId] = useLocalStorage("generationJobId", null);
 
   // file pickers
   // actual element is defined at the bottom of the file
@@ -222,8 +227,29 @@ const Editor = () => {
     }
   }
 
-  const handleCreateNewImageConfirmed = (newImage) => {
-    console.log("New Canvas Created:", newImage);
+  const handleCreateNewImageConfirmed = async (newImage) => {
+    console.log("New Canvas requested:", newImage);
+
+    const response = await generateImage(newImage.name, newImage.canvasSize);
+    console.log('generated image response:', JSON.stringify(response));
+
+    if(response.success) {
+      setGenerationJobId(response.jobId);
+      return true;
+    } else {
+      setConfirmationPopupData({
+        title: "Image Generation Failed",
+        message1: "Failed to generate image.",
+        message2: response.error,
+        onCancel: () => {
+          setConfirmationPopupData(null);
+        },
+        onConfirm: () => {
+          setConfirmationPopupData(null);
+        },
+      });
+      return false;
+    }
   };
 
   const handleShareImageConfirmed = async (shareImg) => {
@@ -266,12 +292,12 @@ const Editor = () => {
     // validate input before sending
     if (!canvasData.name || !canvasData.description) {
       displayFailedMessage("Failed to share image.", "Please provide a name and description.");
-      return;
+      return false;
     }
 
-    if(canvasData.name.length > 32 || canvasData.description.length > 256) {
+    if (canvasData.name.length > 32 || canvasData.description.length > 256) {
       displayFailedMessage("Failed to share image.", "Name must be less than 32 characters and description less than 256 characters.");
-      return;
+      return false;
     }
 
     try {
@@ -279,12 +305,15 @@ const Editor = () => {
       console.log('upload to gallery response:', resp);
       if (resp.success) {
         displaySuccessMessage();
+        return true;
       } else {
         displayFailedMessage();
+        return false;
       }
     } catch (err) {
       console.error('failed to upload to gallery:', err);
       displayFailedMessage();
+      return false;
     };
   };
 
@@ -394,25 +423,37 @@ const Editor = () => {
 
   return (
     <div className="editor-container">
-      {/* confirmation popup is above all the rest in case we decide to pass down the ability to activate it from children */}
-      <ConfirmationPopup popupData={confirmationPopupData} />
+
       <NewImagePopup
         isOpen={showNewImagePrompt}
         onClose={() => { setShowNewImagePrompt(false) }}
-        onCreate={(newImage) => {
-          handleCreateNewImageConfirmed(newImage);
-          setShowNewImagePrompt(false);
+        onCreate={async (newImage) => {
+          if(await handleCreateNewImageConfirmed(newImage)) {
+            // close the prompt on success only
+            setShowNewImagePrompt(false);
+          }
         }}
       />
       <ShareImagePopUp
         isOpen={showShareImagePrompt}
         onClose={() => { setShowShareImagePrompt(false) }}
-        onShare={(newImage) => {
-          handleShareImageConfirmed(newImage);
-          setShowShareImagePrompt(false);
+        onShare={async (newImage) => {
+          if (await handleShareImageConfirmed(newImage)) {
+            // close the share popup on success only
+            setShowShareImagePrompt(false);
+          }
         }} />
 
       <ScaleImagePopup isOpen={showResizePrompt} setIsOpen={setShowResizePrompt} onConfirm={handleResize} currentCanvasSize={canvasData.width} />
+
+      {/* 
+        confirmation popup is above all the rest
+        in case we decide to pass down the ability
+        to activate it from children.
+        Seems the most recent component gets vertical priority
+      */}
+      <ConfirmationPopup popupData={confirmationPopupData} />
+
       <EditorTopBar
         contextMenuOptions={contextMenuOptions}
         onImportImageClicked={onImportImageClicked}
