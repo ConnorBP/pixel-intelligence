@@ -30,10 +30,12 @@ function Menu({ menuOptions = testingItems }) {
 
     // Add as mouse click event listener to the entire document
     document.addEventListener("mousedown", handler);
+    document.addEventListener("touchstart", handler); // For mobile phones
 
     // Remove the event listener
     return () => {
       document.removeEventListener("mousedown", handler);
+      document.removeEventListener("touchstart", handler);
     }
   })
 
