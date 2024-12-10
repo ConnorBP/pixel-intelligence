@@ -10,7 +10,6 @@
   top: var(--top-toolbar-size);
   left: 0;
   background-color: rgba(100, 100, 100, 0.6);
-  overflow-x: hidden;
   display: flex;
   flex-direction: column;
 }
