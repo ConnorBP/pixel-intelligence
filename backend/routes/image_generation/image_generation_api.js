@@ -165,7 +165,7 @@ router.post("/generate", [
     // sdxl pixel art model:
     const closeup = size <= 32 ? "closeup," : "";
     data = {
-      "prompt": `pixel-art, ${prompt}, 16px, ${closeup} low-res, blocky, pixel art style, 16-bit graphics###sloppy, messy, blurry, noisy, highly detailed, ultra textured, photo, realistic`,
+      "prompt": `pixel-art, ${prompt}, ${size}px, ${closeup} low-res, blocky, pixel art style, 16-bit graphics###sloppy, messy, blurry, noisy, highly detailed, ultra textured, photo, realistic`,
       "params": {
         "cfg_scale": 2,
         "seed": seed,

@@ -4,6 +4,7 @@ import fetchGeneration from '../api/fetchGeneration';
 
 import { JobWatcherContext } from './useJobWatcher';
 import { getStorageValue } from '../hooks/useLocalStorage';
+import useRecursiveTimeout from '../hooks/useRecursiveHook';
 
 const jobWatcherReducer = (state, action) => {
     console.log('job watch update', JSON.stringify(action));
@@ -63,7 +64,7 @@ const jobWatcherReducer = (state, action) => {
 // this is the job watcher provider.
 // it takes in a minimum and maximum interval for checking the job status
 // the actual time waited between checks may vary depending on the eta in the job status response
-export const JobWatcherProvider = ({ children, jobCheckIntervalMsMin = 5000, jobCheckIntervalMsMax = 30000 }) => {
+export const JobWatcherProvider = ({ children, jobCheckIntervalMsMin = 10000, jobCheckIntervalMsMax = 30000 }) => {
 
     const [state, dispatch] = useReducer(jobWatcherReducer, getStorageValue('currentJobStatus', {
         currentJobId: null,
@@ -79,6 +80,21 @@ export const JobWatcherProvider = ({ children, jobCheckIntervalMsMin = 5000, job
     // track if we already have a check in progress so we don't start multiple
     // timeout recursions
     const [checkingGeneration, setCheckingGeneration] = useState(false);
+    const [currentTimeoutLength, setCurrentTimeoutLength] = useState(jobCheckIntervalMsMin);
+
+    // update timeoutLength when jobWaitTime changes
+    useEffect(() => {
+        console.log('updating timeout length. Wait time is: ', state.currentJobWaitTime);
+        const timeOutLength =
+        Math.min(
+            Math.max(
+                state.currentJobWaitTime || jobCheckIntervalMsMin,
+                jobCheckIntervalMsMin
+            ),
+            jobCheckIntervalMsMax
+        );
+        setCurrentTimeoutLength(timeOutLength);
+    }, [jobCheckIntervalMsMin, jobCheckIntervalMsMax, state.currentJobWaitTime]);
 
     // make sure job state persists across page reloads
     useEffect(() => {
@@ -93,6 +109,7 @@ export const JobWatcherProvider = ({ children, jobCheckIntervalMsMin = 5000, job
                 if (response.status === 'completed') {
                     dispatch({ type: 'fetch' });
                 } else {
+                    console.log("updating with response: " + JSON.stringify(response));
                     dispatch({
                         type: 'update',
                         responseStatus: response.status,
@@ -110,33 +127,21 @@ export const JobWatcherProvider = ({ children, jobCheckIntervalMsMin = 5000, job
         }
     }, []);
 
-    const pollJobStatusWithInterval = useCallback((jobId) => {
+    useRecursiveTimeout(async () => {
         if (state.currentJobStatus === 'running') {
-            const timeOutLength =
-                Math.min(
-                    Math.max(
-                        state.currentJobWaitTime || jobCheckIntervalMsMin,
-                        jobCheckIntervalMsMin
-                    ),
-                    jobCheckIntervalMsMax
-                );
-            setTimeout(() => {
-                console.log('polling job status');
-                if (state.currentJobStatus === 'running') {
-                    console.log('polling job status in timeout');
-                    pollJobStatus(state.currentJobId);
-                }
-            }, timeOutLength);
+            console.log('polling job status');
+            await pollJobStatus(state.currentJobId);
         } else {
-            setCheckingGeneration(false);
+            console.log('ending poll');
+            return true;
         }
-    }, [state.currentJobStatus, state.currentJobId, , state.currentJobWaitTime, jobCheckIntervalMsMin, jobCheckIntervalMsMax.pollJobStatus]);
+    }, currentTimeoutLength, [state.currentJobStatus, state.currentJobId]);
 
     useEffect(() => {
         if (state.currentJobStatus === 'running') {
             if (!checkingGeneration) {
                 setCheckingGeneration(true);
-                pollJobStatusWithInterval(state.currentJobId);
+                
             }
         } else if (state.currentJobStatus === 'fetching') {
             fetchGeneration(state.currentJobId).then((response) => {
@@ -146,7 +151,6 @@ export const JobWatcherProvider = ({ children, jobCheckIntervalMsMin = 5000, job
                     dispatch({ type: 'fail', error: response.error });
                 }
             });
-
         }
     }, [state.currentJobStatus, state.currentJobId, pollJobStatus]);
 

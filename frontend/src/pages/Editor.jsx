@@ -233,7 +233,7 @@ const Editor = () => {
   const handleCreateNewImageConfirmed = async (newImage) => {
     console.log("New Canvas requested:", newImage);
 
-    const response = await generateImage(newImage.name, newImage.canvasSize);
+    const response = await generateImage(newImage.description, newImage.canvasSize);
     console.log('generated image response:', JSON.stringify(response));
 
     if (response.success) {

@@ -8,6 +8,7 @@ const JobWatcherOverlay = () => {
         currentJobId,
         currentJobResult,
         currentJobStatus,
+        currentJobWaitTime,
         currentJobSubmittedAt,
         currentQueuePosition
     } = useJobWatcher();
@@ -17,10 +18,13 @@ const JobWatcherOverlay = () => {
                 Job {JSON.stringify(currentJobId)} {JSON.stringify(currentJobStatus)}
             </h4>
             <p>
-                Eta: {JSON.stringify(currentJobEta)}
+                Eta: {currentJobEta ? new Date(currentJobEta).toLocaleTimeString() : 'N/A'}
             </p>
             <p>
-                Submitted at: {JSON.stringify(currentJobSubmittedAt)}
+                Wait Time: {JSON.stringify(currentJobWaitTime)}
+            </p>
+            <p>
+                Submitted at: {currentJobSubmittedAt ? new Date(currentJobSubmittedAt).toLocaleTimeString() : 'N/A'}
             </p>
             <p>
                 Queue position: {JSON.stringify(currentQueuePosition)}

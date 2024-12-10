@@ -11,6 +11,7 @@ export const useJobWatcher = () => {
         currentJobStatus,
         currentJobSubmittedAt,
         currentJobEta,
+        currentJobWaitTime,
         currentQueuePosition,
         currentJobResult,
         submitJob,
@@ -23,6 +24,7 @@ export const useJobWatcher = () => {
         canvasSize, // stores the size of the canvas that the job is for
         currentJobSubmittedAt, // stores utc timestamp of when the job was submitted
         currentJobEta, // stores utc timestamp of when the job is expected to complete
+        currentJobWaitTime,
         currentQueuePosition, // stores the current position in the queue if the job is still running
         currentJobResult, // stores the result of the job if it has completed, or the error if it failed
         submitJob, // function to submit a new job id
