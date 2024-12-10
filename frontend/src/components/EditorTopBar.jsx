@@ -37,38 +37,38 @@ const EditorTopBar = ({
         <div className="top-controls">
 
           {/* create new image generation and canvas */}
-          <button onClick={onCreateNewImageClicked}>
+          <button className="tooltip" button-name="Generate New" onClick={onCreateNewImageClicked}>
             <MdOutlineAddBox className="icon" />
           </button>
 
           {/* save json file to disc */}
-          <button onClick={onSaveClicked}>
+          <button className="tooltip" button-name="Save JSON" onClick={onSaveClicked}>
             <RiSave3Line className="icon" />
           </button>
 
           {/* import a canvas data json from disc */}
-          <button onClick={onImportProjectClicked}>
+          <button className="tooltip" button-name="Import JSON" onClick={onImportProjectClicked}>
             <FaRegFolderOpen className="icon" />
           </button>
 
           {/* import an image from disc */}
-          <button onClick={onImportImageClicked}>
+          <button className="tooltip" button-name="Import Image" onClick={onImportImageClicked}>
             <FaFileImport className="icon" />
           </button>
 
 
           {/* export image */}
-          <button onClick={onImageExportClicked}>
+          <button className="tooltip" button-name="Export Image" onClick={onImageExportClicked}>
             <IoIosDownload className="icon" />
           </button>
 
           {/* resize canvas */}
-          <button onClick={onResizeImageClicked}>
+          <button className="tooltip" button-name="Resize Canvas" onClick={onResizeImageClicked}>
             <GiResize className="icon" />
           </button>
 
           {/* clear canvas */}
-          <button onClick={() => {
+          <button className="tooltip" button-name="Clear Canvas" onClick={() => {
             setPopupInfo(
               {
                 title: "WARNING",
@@ -85,7 +85,7 @@ const EditorTopBar = ({
           }}><FaTrashCan /></button>
 
           {/* share */}
-          <button onClick={onShareCurrentCanvasClicked}><FaShareFromSquare /></button>
+          <button className="tooltip" button-name="Share" onClick={onShareCurrentCanvasClicked}><FaShareFromSquare /></button>
 
         </div>
 

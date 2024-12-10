@@ -86,6 +86,58 @@
   display: inline;
 }
 
+/* Tooltip container */
+.tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+/* Tooltip text (hidden by default) */
+.tooltip::before {
+  content: attr(button-name); /* Tooltip text from attribute */
+  position: absolute;
+  top: calc(100% + 0.5em); /* Position below the button */
+  left: 50%;
+  transform: translateX(-50%) translateY(-10px);
+  background-color: rgba(0, 0, 0, 0.85);
+  color: white;
+  padding: 0.5em 1em;
+  font-size: 0.9em;
+  font-weight: 500;
+  white-space: nowrap;
+  border-radius: 6px;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease-in-out;
+  pointer-events: none; /* Prevent accidental hover */
+  z-index: 100; /* Ensure tooltip is above other elements */
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Tooltip arrow */
+.tooltip::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 6px;
+  border-style: solid;
+  border-color: rgba(0, 0, 0, 0.85) transparent transparent transparent;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease-in-out;
+  z-index: 100;
+}
+
+/* Show tooltip on hover */
+.tooltip:hover::before, 
+.tooltip:hover::after {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0); /* Slide effect */
+}
+
 @media screen and (max-width: 728px) {
   .small-hidden {
     display: none !important;

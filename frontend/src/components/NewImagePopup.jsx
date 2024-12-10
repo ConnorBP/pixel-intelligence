@@ -6,17 +6,12 @@ const NewImagePopup = ({ isOpen, onClose, onCreate }) => {
   if (!isOpen) { return (<></>); }
 
   const [description, setDescription] = useState("");
-  const [canvasSize, setCanvasSize] = useState("16x16");
+  const [canvasSize, setCanvasSize] = useState(64);
 
   const handleCreate = () => {
     // call the create image callback
     onCreate({ description, canvasSize });
-    // then call the close window callback
-    onClose();
-  };
-
-  const updatePreview = (size) => {
-    setCanvasSize(size);
+    // the caller is responsible for closing the popup
   };
 
   return (
@@ -42,13 +37,13 @@ const NewImagePopup = ({ isOpen, onClose, onCreate }) => {
               <label className="popup-label">Canvas Size:</label>
               <select
                 value={canvasSize}
-                onChange={(e) => updatePreview(e.target.value)}
+                onChange={(e) => setCanvasSize(e.target.value)}
                 className="select"
               >
-                <option value="08x08">08x08</option>
-                <option value="16x16">16x16</option>
-                <option value="32x32">32x32</option>
-                <option value="64x64">64x64</option>
+                <option value={8}>08x08</option>
+                <option value={16}>16x16</option>
+                <option value={32}>32x32</option>
+                <option value={64}>64x64</option>
               </select>
             </div>
           </div>
