@@ -16,7 +16,7 @@ export default async function generateImage(prompt, size, seed) {
         });
         if (!resp.ok) {
             console.error('Error requesting image generation: ', resp);
-            return {success:false, status: resp.status, error: resp.statusText};
+            return {success:false, status: resp.status, ...await resp.json()};
         }
         const j = await resp.json();
         return j;

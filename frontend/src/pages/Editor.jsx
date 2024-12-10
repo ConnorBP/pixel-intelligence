@@ -233,6 +233,21 @@ const Editor = () => {
   const handleCreateNewImageConfirmed = async (newImage) => {
     console.log("New Canvas requested:", newImage);
 
+    if(newImage.description.length > 64) {
+      setConfirmationPopupData({
+        title: "Image Generation Failed",
+        message1: "Failed to generate image.",
+        message2: "Description must be less than 64 characters.",
+        onCancel: () => {
+          setConfirmationPopupData(null);
+        },
+        onConfirm: () => {
+          setConfirmationPopupData(null);
+        },
+      });
+      return false;
+    }
+
     const response = await generateImage(newImage.description, newImage.canvasSize);
     console.log('generated image response:', JSON.stringify(response));
 
