@@ -40,7 +40,6 @@ const Canvas = forwardRef(
     // updates the state of a pixel at specific coordinate
     // on the provided canvas data and returns it
     const updatePixelAt = (oldCanvas, x, y, color) => {
-
       console.log(`updatePixelAt called with  ${oldCanvas} ${x} ${y} ${color}`);
       // don't allow out of bounds access
       if (x >= oldCanvas.width || y >= oldCanvas.height) {
@@ -115,7 +114,6 @@ const Canvas = forwardRef(
       );
 
       if (gridLinesVisible) {
-
         // draw all grid lines on the canvas
         drawAllGridLines(canvas, editorPixelsW, editorPixelsH);
       } 

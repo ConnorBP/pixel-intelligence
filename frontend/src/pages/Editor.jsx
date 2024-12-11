@@ -46,7 +46,7 @@ const Editor = () => {
   // canvas pixel data
   const [canvasData, setCanvasData] = useLocalStorage("canvas", defaultCanvas);
   // wether the grid lines are shown or not on the editor canvas
-  const [gridLinesVisible, setGridLinesVisible] = useLocalStorage("gridLinesVisible", true);
+  const [gridLinesVisible, setGridLinesVisible] = useLocalStorage("gridLinesVisible", false);
   const [tool, setTool] = useLocalStorage("tool", "pencil");
 
   // for tracking current generation job id
@@ -179,7 +179,7 @@ const Editor = () => {
 
 
   const toggleGrid = () => {
-    console.log('toggling grid lines');
+ 
     setGridLinesVisible((prev) => !prev)
   };
   // takes in a new square resolution and scales the current canvas data to it
