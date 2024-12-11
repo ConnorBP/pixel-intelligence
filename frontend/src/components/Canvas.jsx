@@ -41,7 +41,7 @@ const Canvas = forwardRef(
     // on the provided canvas data and returns it
     const updatePixelAt = (oldCanvas, x, y, color) => {
 
-      console.log(`updatePixelAt called with  ${oldCanvas} ${x} ${y} ${color}`);
+      // console.log(`updatePixelAt called with  ${oldCanvas} ${x} ${y} ${color}`);
       // don't allow out of bounds access
       if (x >= oldCanvas.width || y >= oldCanvas.height) {
         console.error(
@@ -86,7 +86,6 @@ const Canvas = forwardRef(
       const gridSpacing = canvas.width / editorPixelsW;
 
       context.lineWidth = gridLineWidth;
-      console.log("drawing grid lines");
       for (let x = 0; x < editorPixelsW; x++) {
         drawGridLineX(context, x, gridSpacing, canvas.height);
       }
@@ -138,7 +137,7 @@ const Canvas = forwardRef(
     // it is "try" because the loaded data can be tampered with by the user
     // or be incompatible due to updates
     const tryLoadCanvas = (canvasData, storeOnLoad = false) => {
-      console.info("loading canvas state with object: ", canvasData);
+      // console.info("loading canvas state with object: ", canvasData);
       try {
         // catch some bad inputs
         if (!canvasData) {
@@ -247,7 +246,6 @@ const Canvas = forwardRef(
     // Handles the event of someone clicking on the canvas area
     // Currently only supports single click drawing
     async function handleCanvasClick(event) {
-      console.log("handling canvas click ", event);
       const canvas = canvasRef.current;
 
       // Get the bounding rectangle of the canvas
@@ -397,12 +395,6 @@ const Canvas = forwardRef(
       }
 
     };
-
-    useEffect(() => {
-      console.log("Canvas data updated:", canvasData);
-    }, [canvasData]);
-
-
 
     useEffect(() => {
       const canvas = canvasRef.current;
