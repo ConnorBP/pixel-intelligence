@@ -92,7 +92,7 @@ const EditorTopBar = ({
         <button className="align-end mobile-hidden" onClick={() => navigate("/")}>
           <RiArrowGoBackLine className="icon mobile-hidden" /> <div className="inline small-hidden">Back to Gallery</div>
         </button>
-      </div >
+      </div>
     </>
   );
 };

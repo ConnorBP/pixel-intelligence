@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { IoMdMenu } from "react-icons/io";
 import "../css/Menu.css";
 import ContextMenuItem from "./ContextMenuItem";
+import tabHandler from "../hooks/tabHandler";
 
 const testingItems = [
   { text: "New Todo", onClick: () => alert('todo') },
@@ -38,16 +39,16 @@ function Menu({ menuOptions = testingItems }) {
       document.removeEventListener("touchstart", handler);
     }
   })
-
+  tabHandler(menuRef, setMenuOpen);
   const listItems = menuOptions.map(({ text, onClick }, idx) => {
     // console.log(`mapping item ${idx} ${text}`);
-    return <ContextMenuItem onClick={() => { toggle(); onClick(); }} key={`${text} ${idx}`}>{text}</ContextMenuItem>;
+    return <ContextMenuItem onClick={() => { toggle(); onClick();}} key={`${text} ${idx}`}>{text}</ContextMenuItem>;
   });
   // console.log(listItems);
 
   return (
     <div className="menu-container" ref={menuRef}>
-      <button className={`menu-button ${menuOpen ? "" : "tooltip"}`} button-name="Menu" onClick={toggle}>
+      <button className={`menu-button ${menuOpen ? "" : "tooltip"}`} button-name="Menu" onClick={toggle} tabIndex={0}>
         <IoMdMenu className="icon" />
       </button>
       {menuOpen && (
