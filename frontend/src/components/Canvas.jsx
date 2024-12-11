@@ -248,6 +248,7 @@ const Canvas = forwardRef(
     // Handles the event of someone clicking on the canvas area
     // Currently only supports single click drawing
     async function handleCanvasClick(event) {
+      console.log("handling canvas click ", event);
       const canvas = canvasRef.current;
 
       // Get the bounding rectangle of the canvas
@@ -297,9 +298,15 @@ const Canvas = forwardRef(
       // drawPixelAt(pixelX, pixelY, color, canvasData.width);
     }
 
-    function handleCanvasDrag(event) {
+    async function handleCanvasDrag(event) {
+      if (event.type === "touchmove") {
+        const touch = event.touches[0];
+        // inject mobile touch event coordinates to same structure as mouse event
+        event.clientX = touch.clientX;
+        event.clientY = touch.clientY;
+      }
       if (!isMouseDown.current) return;
-      handleCanvasClick(event)
+      await handleCanvasClick(event);
     }
 
     // Flood Fill Algorithm
@@ -425,6 +432,17 @@ const Canvas = forwardRef(
             isMouseDown.current = false;
           }}
           onMouseLeave={() => {
+            isMouseDown.current = false;
+          }}
+          onTouchMove={handleCanvasDrag}
+          onTouchStart={(e) => {
+            isMouseDown.current = true;
+            handleCanvasClick(e);
+          }}
+          onTouchCancel={() => {
+            isMouseDown.current = false;
+          }}
+          onTouchEnd={() => {
             isMouseDown.current = false;
           }}
         ></canvas>
