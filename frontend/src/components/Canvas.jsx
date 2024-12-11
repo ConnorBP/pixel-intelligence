@@ -117,7 +117,7 @@ const Canvas = forwardRef(
       if (gridLinesVisible) {
         // draw all grid lines on the canvas
         drawAllGridLines(canvas, editorPixelsW, editorPixelsH);
-      } 
+      }
 
       if (updateDataOnClear) {
         setCanvasData((oldCanvas) => {
@@ -127,9 +127,6 @@ const Canvas = forwardRef(
           return newCanvas;
         });
       }
-      // if (!showGridLines) {
-      //   drawAllGridLines(canvas, editorPixelsW, editorPixelsH);
-      // }
       // context.fill();
     });
 
