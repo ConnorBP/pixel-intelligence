@@ -221,7 +221,12 @@ router.post("/generate", [
       generationId: response.data.id,
       status: "pending",
       downloadUrl: null,
-      createdAt: new Date()
+      createdAt: new Date(),
+      prompt,
+      generationResolution,
+      pixelArtSize: size,
+      seed,
+      model
     });
 
     res.status(202).json({ success: true, jobId });
