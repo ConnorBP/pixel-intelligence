@@ -6,7 +6,7 @@ import {
   drawPixelToCtx,
   drawCheckeredPixel
 } from "../utils";
-// eslint-disable-next-line react/display-name
+
 const Canvas = forwardRef(
   (
     {
@@ -137,7 +137,6 @@ const Canvas = forwardRef(
     // attempt to load a provided canvas json representation
     // it is "try" because the loaded data can be tampered with by the user
     // or be incompatible due to updates
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     const tryLoadCanvas = (canvasData, storeOnLoad = false) => {
       console.info("loading canvas state with object: ", canvasData);
       try {
