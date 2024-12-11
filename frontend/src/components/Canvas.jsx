@@ -1,4 +1,4 @@
-import { useRef, useEffect, forwardRef, useImperativeHandle, useCallback, useState } from "react";
+import { useRef, useEffect, forwardRef, useImperativeHandle, useCallback } from "react";
 
 import "../css/Canvas.css";
 import {

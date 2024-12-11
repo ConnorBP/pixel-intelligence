@@ -1,5 +1,6 @@
 import { useState, useRef } from "react";
 import "../css/NewImagePopup.css";
+import popUpTabHandler from "../hooks/popUpTabHandler";
 
 const ScaleImagePopup = ({ isOpen, setIsOpen = (val)=>{}, onCancel = ()=>{}, onConfirm = ()=>{}, currentCanvasSize = 16 }) => {
     if (!isOpen) return (<></>);
@@ -14,15 +15,24 @@ const ScaleImagePopup = ({ isOpen, setIsOpen = (val)=>{}, onCancel = ()=>{}, onC
         setCanvasSize(newSize);
     };
 
+    popUpTabHandler({
+        tabPopupRef: canvasRef,
+        isOpen,
+        onClose: () => {
+          setIsOpen(false);
+          onCancel();
+        },
+      });
+    
 
     return (
         <div className="popup-overlay">
-            <div className="popup-box">
+            <div className="popup-box" ref={canvasRef} tabIndex={-1}>
                 <h3 className="popup-title">Resize Image Canvas</h3>
                 <div className="popup-line"></div>
                 <div className="popup-form">
                     <label className="popup-label">Scale the current image to</label>
-                    <div className="popup-preview-wrapper flex-between">
+                    <div className="popup-preview-wrapper flex-between" >
                         {/* todo add preview */}
                         {/* <div className="popup-preview"> 
                             <canvas
