@@ -17,10 +17,11 @@ router.post("/upload",
   async (req, res) => {
     try {
 
-      const errors = validationResult(req);
-      if (!errors.isEmpty()) {
-        return res.status(400).json({ success: false, error: "Validation error", errors: errors.array() });
-      }
+      // if we add any non json params:
+      // const errors = validationResult(req);
+      // if (!errors.isEmpty()) {
+      //   return res.status(400).json({ success: false, error: "Validation error", errors: errors.array() });
+      // }
 
       const canvasData = req.body;
 
@@ -41,6 +42,7 @@ router.post("/upload",
           // manually destructured for security purposes
           name: canvasData.name,
           description: canvasData.description,
+          author: canvasData.author,
           pixels: canvasData.pixels,
           width: canvasData.width,
           height: canvasData.height,

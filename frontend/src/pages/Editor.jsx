@@ -295,8 +295,8 @@ const Editor = () => {
 
     canvasData.name = shareImg.name;
     canvasData.description = shareImg.description;
-    canvasData.author = 'unknown';
-    canvasData.tags = ['test', 'image'];
+    canvasData.author = shareImg.author || "unknown";
+    canvasData.tags = ['test', 'image']; // todo implement tags support on backend
     console.log('sharing canvas data:', canvasData);
     // send the canvas data to the server
 

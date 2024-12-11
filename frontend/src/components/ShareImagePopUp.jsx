@@ -1,4 +1,4 @@
-import { useState,useRef} from "react";
+import { useState, useRef } from "react";
 import "../css/ShareImagePopup.css";
 import popUpTabHadler from "../hooks/popUpTabHandler";
 const ShareImagePopUp = ({ isOpen, onClose, onShare }) => {
@@ -7,15 +7,15 @@ const ShareImagePopUp = ({ isOpen, onClose, onShare }) => {
 
   const [description, setDescription] = useState("");
   const [name, setName] = useState("");
-  const [canvasSize, setCanvasSize] = useState("16x16");
+  const [author, setAuthor] = useState("");
   const tabPopupRef = useRef(null);
 
   const handleShare = () => {
     // call the share image callback
-    onShare({ name, description, canvasSize });
+    onShare({ name, description, author });
     // the caller is responsible for closing the popup
   };
-  popUpTabHadler({ tabPopupRef, isOpen,onClose})
+  popUpTabHadler({ tabPopupRef, isOpen, onClose })
 
   return (
     <div className="popup-overlay">
@@ -30,13 +30,23 @@ const ShareImagePopUp = ({ isOpen, onClose, onShare }) => {
             value={name}
             onChange={(e) => setName(e.target.value)}
             className="input"
+            maxLength={32}
           />
           <input
             type="text"
-            placeholder="Describe what your image will be..."
+            placeholder="Describe your image..."
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             className="input"
+            maxLength={255}
+          />
+          <input
+            type="text"
+            placeholder="What is your name?"
+            value={author}
+            onChange={(e) => setAuthor(e.target.value)}
+            className="input"
+            maxLength={32}
           />
           <div className="popup-preview-wrapper">
             <div className="popup-preview">
