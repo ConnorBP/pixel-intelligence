@@ -298,15 +298,56 @@ const Canvas = forwardRef(
       // drawPixelAt(pixelX, pixelY, color, canvasData.width);
     }
 
+    // store the last position of the mouse for interpolation
+    let oldPos = null;
+    // how many times to draw between last and current position
+    const interpolationResolution = 8;
+
+    // Handles the event of someone dragging the mouse (or their finger) on the canvas area
     async function handleCanvasDrag(event) {
+      
       if (event.type === "touchmove") {
         const touch = event.touches[0];
         // inject mobile touch event coordinates to same structure as mouse event
         event.clientX = touch.clientX;
         event.clientY = touch.clientY;
       }
+      // console.log(`OldPos: ${JSON.stringify(oldPos)} currentPos: ${event.clientX} ${event.clientY}`);
       if (!isMouseDown.current) return;
+
       await handleCanvasClick(event);
+
+      // draw extra pixels between the last and current position
+      if (oldPos) {
+        // Get the vector between the last and current cursor position
+        const diff = { x: event.clientX - oldPos.x, y: event.clientY - oldPos.y };
+        const step = { x: diff.x / interpolationResolution, y: diff.y / interpolationResolution };
+
+        // in the future the resolution to interpolate with could be determined by this:
+        // const dist = Math.sqrt(diff.x * diff.x + diff.y * diff.y);
+
+        // simulate extra clicks between the last and current cursor position
+        for (let i = 0; i < interpolationResolution; i++) {
+          const x = oldPos.x + step.x * i;
+          const y = oldPos.y + step.y * i;
+          event.clientX = x;
+          event.clientY = y;
+          await handleCanvasClick(event);
+        }
+      }
+
+      oldPos = { x: event.clientX, y: event.clientY };
+    }
+
+    function initDrag(e) {
+      oldPos = null;
+      isMouseDown.current = true;
+      handleCanvasClick(e);
+    }
+
+    function endDrag() {
+      oldPos = null;
+      isMouseDown.current = false;
     }
 
     // Flood Fill Algorithm
@@ -423,28 +464,14 @@ const Canvas = forwardRef(
           ref={canvasRef}
           width={canvasRenderWidth}
           height={canvasRenderHeight}
-          onMouseDown={(e) => {
-            isMouseDown.current = true;
-            handleCanvasClick(e);
-          }}
+          onMouseDown={initDrag}
           onMouseMove={handleCanvasDrag}
-          onMouseUp={() => {
-            isMouseDown.current = false;
-          }}
-          onMouseLeave={() => {
-            isMouseDown.current = false;
-          }}
+          onMouseUp={endDrag}
+          onMouseLeave={endDrag}
           onTouchMove={handleCanvasDrag}
-          onTouchStart={(e) => {
-            isMouseDown.current = true;
-            handleCanvasClick(e);
-          }}
-          onTouchCancel={() => {
-            isMouseDown.current = false;
-          }}
-          onTouchEnd={() => {
-            isMouseDown.current = false;
-          }}
+          onTouchStart={initDrag}
+          onTouchCancel={endDrag}
+          onTouchEnd={endDrag}
         ></canvas>
       </>
     );
