@@ -3,7 +3,7 @@ import Canvas from "../components/Canvas";
 import EditorLeftToolBar from "../components/EditorLeftToolBar";
 import EditorTopBar from "../components/EditorTopBar";
 import NewImagePopup from "../components/NewImagePopup";
-import ShareImagePopUp from "../components/ShareImagePopUp";
+import ShareImagePopUp from "../components/ShareImagePopup";
 import ScaleImagePopup from "../components/ScaleImagePopup";
 import ConfirmationPopup from "../components/ConfirmationPopup";
 import "../css/EditorPageCSS/Editor.css";
