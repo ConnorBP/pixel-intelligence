@@ -252,6 +252,23 @@ const Editor = () => {
       return false;
     }
 
+    // check if a job is already in progress
+    // we only allow one at a time
+    if(currentJobStatus!=='idle' && currentJobStatus!=='completed') {
+      setConfirmationPopupData({
+        title: "Image Generation Failed",
+        message1: "Failed to generate image.",
+        message2: "A generation job is already in progress.",
+        onCancel: () => {
+          setConfirmationPopupData(null);
+        },
+        onConfirm: () => {
+          setConfirmationPopupData(null);
+        },
+      });
+      return false;
+    }
+
     const response = await generateImage(newImage.description, newImage.canvasSize);
     console.log('generated image response:', JSON.stringify(response));
 
