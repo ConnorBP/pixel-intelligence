@@ -42,6 +42,7 @@ const Canvas = forwardRef(
     const updatePixelAt = (oldCanvas, x, y, color) => {
 
       // console.log(`updatePixelAt called with  ${oldCanvas} ${x} ${y} ${color}`);
+
       // don't allow out of bounds access
       if (x >= oldCanvas.width || y >= oldCanvas.height) {
         // console.error(
@@ -114,7 +115,6 @@ const Canvas = forwardRef(
       );
 
       if (gridLinesVisible) {
-
         // draw all grid lines on the canvas
         drawAllGridLines(canvas, editorPixelsW, editorPixelsH);
       } 
