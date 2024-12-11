@@ -1,6 +1,6 @@
 :root {
   --left-toolbar-size: 8em;
-  --left-toolbar-height: calc(100% - (var(--top-toolbar-size)));
+  --left-toolbar-height: calc(100dvh - (var(--top-toolbar-size)));
 }
 
 .left-toolbar {
