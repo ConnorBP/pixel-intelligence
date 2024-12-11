@@ -1,19 +1,29 @@
 import { useState, useRef } from "react";
+import { ThreeDots } from "react-loader-spinner";
 import "../css/ShareImagePopup.css";
 // import popUpTabHadler from "../hooks/popUpTabHandler";
 const ShareImagePopUp = ({ isOpen, onClose, onShare }) => {
-  if (!isOpen) { return (<></>); }
+  if (!isOpen) {
+    return <></>;
+  }
 
   const [description, setDescription] = useState("");
   const [name, setName] = useState("");
   const [author, setAuthor] = useState("");
+  const [waitingForResponse, setWaitingForResponse] = useState(false);
 
   const tabPopupRef = useRef(null);
   // popUpTabHadler({ tabPopupRef, isOpen, onClose })
 
-  const handleShare = () => {
+  const handleShare = async () => {
+    // don't double send the request
+    if (waitingForResponse) {
+      return false;
+    }
     // call the share image callback
-    onShare({ name, description, author });
+    setWaitingForResponse(true);
+    await onShare({ name, description, author });
+    setWaitingForResponse(false);
     // the caller is responsible for closing the popup
   };
 
@@ -53,14 +63,25 @@ const ShareImagePopUp = ({ isOpen, onClose, onShare }) => {
               {/* <img src="" alt="Image Preview" className="popup-preview-image" /> */}
               <div alt="Preview" className="" />
             </div>
-
           </div>
           <div className="flex flex-end">
-            <button onClick={onClose} className="button popup-button cancel-button">
+            <button
+              onClick={onClose}
+              disabled={waitingForResponse}
+              className="button popup-button cancel-button"
+            >
               Cancel
             </button>
-            <button onClick={handleShare} className="button popup-button create-button">
-              Share
+            <button
+              onClick={handleShare}
+              disabled={waitingForResponse}
+              className="button popup-button create-button"
+            >
+              {waitingForResponse ? (
+                <ThreeDots color="var(--text-color)" height="100%" />
+              ) : (
+                "Share"
+              )}
             </button>
           </div>
         </div>

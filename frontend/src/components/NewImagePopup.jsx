@@ -1,11 +1,12 @@
 import { useState, useRef } from "react";
-import { ThreeDots } from 'react-loader-spinner';
+import { ThreeDots } from "react-loader-spinner";
 import "../css/NewImagePopup.css";
 // import popUpTabHadler from "../hooks/popUpTabHandler";
 
 const NewImagePopup = ({ isOpen, onClose, onCreate }) => {
-
-  if (!isOpen) { return (<></>); }
+  if (!isOpen) {
+    return <></>;
+  }
 
   const [description, setDescription] = useState("");
   const [canvasSize, setCanvasSize] = useState(64);
@@ -60,11 +61,23 @@ const NewImagePopup = ({ isOpen, onClose, onCreate }) => {
             </div>
           </div>
           <div className="flex flex-end">
-            <button onClick={onClose} className="button popup-button cancel-button">
+            <button
+              onClick={onClose}
+              disabled={waitingForResponse}
+              className="button popup-button cancel-button"
+            >
               Cancel
             </button>
-            <button onClick={handleCreate} disabled={waitingForResponse} className="button popup-button create-button">
-            {waitingForResponse ? <ThreeDots color="var(--text-color)" height="100%"/> : 'Create'}
+            <button
+              onClick={handleCreate}
+              disabled={waitingForResponse}
+              className="button popup-button create-button"
+            >
+              {waitingForResponse ? (
+                <ThreeDots color="var(--text-color)" height="100%" />
+              ) : (
+                "Create"
+              )}
             </button>
           </div>
         </div>
