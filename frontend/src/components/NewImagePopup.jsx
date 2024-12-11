@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState,useRef } from "react";
 import "../css/NewImagePopup.css";
+import popUpTabHadler from "../hooks/popUpTabHandler";
 
 const NewImagePopup = ({ isOpen, onClose, onCreate }) => {
 
@@ -7,16 +8,16 @@ const NewImagePopup = ({ isOpen, onClose, onCreate }) => {
 
   const [description, setDescription] = useState("");
   const [canvasSize, setCanvasSize] = useState(64);
-
+  const tabPopupRef = useRef(null);
   const handleCreate = () => {
     // call the create image callback
     onCreate({ description, canvasSize });
     // the caller is responsible for closing the popup
   };
-
+  popUpTabHadler({ tabPopupRef, isOpen: onCreate, onClose})
   return (
     <div className="popup-overlay">
-      <div className="popup-box">
+      <div className="popup-box" ref={tabPopupRef} tabIndex={-1}>
         <h3 className="popup-title">New Image</h3>
         <div className="popup-line"></div>
         <div className="popup-form">

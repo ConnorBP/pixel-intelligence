@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState,useRef} from "react";
 import "../css/ShareImagePopup.css";
-
+import popUpTabHadler from "../hooks/popUpTabHandler";
 const ShareImagePopUp = ({ isOpen, onClose, onShare }) => {
 
   if (!isOpen) { return (<></>); }
@@ -8,16 +8,18 @@ const ShareImagePopUp = ({ isOpen, onClose, onShare }) => {
   const [description, setDescription] = useState("");
   const [name, setName] = useState("");
   const [canvasSize, setCanvasSize] = useState("16x16");
+  const tabPopupRef = useRef(null);
 
   const handleShare = () => {
     // call the share image callback
     onShare({ name, description, canvasSize });
     // the caller is responsible for closing the popup
   };
+  popUpTabHadler({ tabPopupRef, isOpen,onClose})
 
   return (
     <div className="popup-overlay">
-      <div className="popup-box">
+      <div className="popup-box" ref={tabPopupRef} tabIndex={-1}>
         <h3 className="popup-title">Share Image</h3>
         <div className="popup-line"></div>
         <div className="popup-form">
