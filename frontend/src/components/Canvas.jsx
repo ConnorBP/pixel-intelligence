@@ -114,7 +114,7 @@ const Canvas = forwardRef(
         canvas.height
       );
 
-      if (!gridLinesVisible) {
+      if (gridLinesVisible) {
         // draw all grid lines on the canvas
         drawAllGridLines(canvas, editorPixelsW, editorPixelsH);
       }
