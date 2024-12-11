@@ -37,8 +37,11 @@ router.post("/upload", authenticate, async (req, res) => {
       }
     );
 
+    // get the id of the insertion
+    result.insertedId = result.insertedId.toString();
+
     // Returning success code if there is no error
-    return res.status(200).json({ success: true, message: "Canvas uploaded successfully." })
+    return res.status(200).json({ success: true, message: "Canvas uploaded successfully.", id: result.insertedId });
   } catch (e) {
     console.error('Error uploading canvas data to the database:', e.stack || e);
     res.status(500).json({ success: false, error: 'Internal Server Error in upload route' });
