@@ -3,6 +3,7 @@ import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
 import { query, check, validationResult } from "express-validator";
 import { saveImageJobData, getImageJobData, updateImageJobStatus, connectToDB, doesJobIdExist } from "../database/dbService.js";
+import { authenticate } from "../auth/authentication.js";
 
 const router = express.Router();
 const baseUrl = "https://stablehorde.net/api/v2";
@@ -43,6 +44,7 @@ const validSizes = [8, 16, 32, 64];
 
 // POST route to start image generation
 router.post("/generate", [
+  authenticate,
   // filter the input
   query("prompt")
     .optional()
@@ -238,108 +240,130 @@ router.post("/generate", [
 });
 
 // GET request to poll generation status
-router.get("/poll/:jobId", async (req, res) => {
-  const { jobId } = req.params;
-  // console.log("Job ID: " + jobId);
+router.get("/poll/:jobId",
+  [
+    authenticate,
+    check('jobId').isString().isUUID()
+  ],
+  async (req, res) => {
 
-  // Checking if the job id format is valid or not
-  if (!isValidJobId(jobId)) {
-    return res.status(400).json({ success: false, error: "Invalid job Id." });
-  }
-
-  try {
-    const imageJob = await getImageJobData(jobId);
-
-    if (!imageJob) {
-      return res.status(404).json({ success: false, error: "Image Job not found" });
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ success: false, error: "Validation error", errors: errors.array() });
     }
 
-    if (imageJob.status === "completed") {
-      return res.status(200).json({ success: true, status: "completed", image: imageJob.downloadUrl });
-    } else if (imageJob.status === "expired" || imageJob.status === "failed") {
-      return res.status(404).json({ success: false, error: "Image Job already failed" });
-    }
-    else {
-      const response = await axios.get(`${baseUrl}/generate/status/${imageJob.generationId}`, header);
+    const { jobId } = req.params;
+    // console.log("Job ID: " + jobId);
 
-      if (response.data.done && response.data.waiting == 0) {
-        await updateImageJobStatus(jobId, "completed", response.data.generations[0].img);
-        return res.status(200).json({ success: true, status: "completed" });
-      }
-
-      res.status(200).json({
-        success: true,
-        status: "waiting",
-        // fill out all fields from response data
-        // ex
-        // processing (count of currently processing images),
-        // restarted 
-        // done (boolean for is completed),
-        // wait_time (time in seconds estimated to wait),
-        // queue_position: how many images are in front of this one
-        ...response.data
-
-      });
+    // Checking if the job id format is valid or not
+    if (!isValidJobId(jobId)) {
+      return res.status(400).json({ success: false, error: "Invalid job Id." });
     }
 
-  } catch (e) {
-    console.error("Error polling status: ", e.response ? e.response.data : e.message);
-    if (e.response && (e.response.status === 404 || e.response.data.rc == 'RequestNotFound')) {
-      await updateImageJobStatus(jobId, "expired", null);
-      return res.status(404).json({ success: false, error: "Image Job not found" });
-    } else {
-      await updateImageJobStatus(jobId, "failed", null);
-      res.status(500).json({ success: false, status: 500, error: "Internal server error" });
-    }
-  }
-});
-
-// GET request to download the image
-router.get("/download/:jobId", async (req, res) => {
-  const { jobId } = req.params;
-  console.log("Job ID: " + jobId);
-  // Checking if the job id format is valid or not
-  if (!isValidJobId(jobId)) {
-    return res.status(400).json({ success: false, error: "Invalid job Id." });
-  }
-  let db;
-  try {
-    db = await connectToDB();
-    if (db) {
-      if (!doesJobIdExist(jobId, db)) {
-        db.client.close();
-        return res.status(404).json({ success: false, error: "Image Job not found" });
-      }
+    try {
       const imageJob = await getImageJobData(jobId);
 
-      if (imageJob.status !== "completed") {
-        return res.status(404).json({ success: false, error: "Image is not ready yet." });
+      if (!imageJob) {
+        return res.status(404).json({ success: false, error: "Image Job not found" });
       }
-      // res.redirect(imageJob.downloadURL);
 
-      // Fetching the image from the downloadUrl
-      const response = await axios.get(imageJob.downloadUrl, {
-        responseType: 'arraybuffer'
-      });
+      if (imageJob.status === "completed") {
+        return res.status(200).json({ success: true, status: "completed", image: imageJob.downloadUrl });
+      } else if (imageJob.status === "expired" || imageJob.status === "failed") {
+        return res.status(404).json({ success: false, error: "Image Job already failed" });
+      }
+      else {
+        const response = await axios.get(`${baseUrl}/generate/status/${imageJob.generationId}`, header);
 
-      const imageBlob = "data:image/png;base64," + Buffer.from(response.data, 'binary').toString('base64');
+        if (response.data.done && response.data.waiting == 0) {
+          await updateImageJobStatus(jobId, "completed", response.data.generations[0].img);
+          return res.status(200).json({ success: true, status: "completed" });
+        }
 
-      res.status(200).json({
-        success: true,
-        downloadUrl: imageJob.downloadUrl,
-        imageBlob
-      });
+        res.status(200).json({
+          success: true,
+          status: "waiting",
+          // fill out all fields from response data
+          // ex
+          // processing (count of currently processing images),
+          // restarted 
+          // done (boolean for is completed),
+          // wait_time (time in seconds estimated to wait),
+          // queue_position: how many images are in front of this one
+          ...response.data
 
-    } else {
-      return res.status(500).json({ success: false, error: "Database connection failed." });
+        });
+      }
+
+    } catch (e) {
+      console.error("Error polling status: ", e.response ? e.response.data : e.message);
+      if (e.response && (e.response.status === 404 || e.response.data.rc == 'RequestNotFound')) {
+        await updateImageJobStatus(jobId, "expired", null);
+        return res.status(404).json({ success: false, error: "Image Job not found" });
+      } else {
+        await updateImageJobStatus(jobId, "failed", null);
+        res.status(500).json({ success: false, status: 500, error: "Internal server error" });
+      }
+    }
+  });
+
+// GET request to download the image
+router.get("/download/:jobId",
+  [
+    authenticate,
+    check('jobId').isString().isUUID()
+  ],
+  async (req, res) => {
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ success: false, error: "Validation error", errors: errors.array() });
     }
 
-  } catch (e) {
-    console.error("Error downloading image: ", e.response ? e.response.data : e.message);
-    res.status(500).json({ success: false, error: "Internal server error" });
-  } finally {
-    if (db) db.client.close();
-  }
-});
+    const { jobId } = req.params;
+    console.log("Job ID: " + jobId);
+    // Checking if the job id format is valid or not
+    if (!isValidJobId(jobId)) {
+      return res.status(400).json({ success: false, error: "Invalid job Id." });
+    }
+    let db;
+    try {
+      db = await connectToDB();
+      if (db) {
+        if (!doesJobIdExist(jobId, db)) {
+          db.client.close();
+          return res.status(404).json({ success: false, error: "Image Job not found" });
+        }
+        const imageJob = await getImageJobData(jobId);
+
+        if (imageJob.status !== "completed") {
+          return res.status(404).json({ success: false, error: "Image is not ready yet." });
+        }
+        // res.redirect(imageJob.downloadURL);
+
+        // Fetching the image from the downloadUrl
+        const response = await axios.get(imageJob.downloadUrl, {
+          responseType: 'arraybuffer'
+        });
+
+        const imageBlob = "data:image/png;base64," + Buffer.from(response.data, 'binary').toString('base64');
+
+        res.status(200).json({
+          success: true,
+          downloadUrl: imageJob.downloadUrl,
+          imageBlob
+        });
+
+      } else {
+        return res.status(500).json({ success: false, error: "Database connection failed." });
+      }
+
+    } catch (e) {
+      console.error("Error downloading image: ", e.response ? e.response.data : e.message);
+      res.status(500).json({ success: false, error: "Internal server error" });
+    } finally {
+      if (db) db.client.close();
+    }
+  });
 
 export default router;
