@@ -44,9 +44,9 @@ const Canvas = forwardRef(
       // console.log(`updatePixelAt called with  ${oldCanvas} ${x} ${y} ${color}`);
       // don't allow out of bounds access
       if (x >= oldCanvas.width || y >= oldCanvas.height) {
-        console.error(
-          `X ${x} Y ${y} is out of bounds in canvas of size: {${x}, ${y}}`
-        );
+        // console.error(
+        //   `X ${x} Y ${y} is out of bounds in canvas of size: {${x}, ${y}}`
+        // );
         return oldCanvas;
       }
       const newCanvas = { ...oldCanvas };
@@ -253,6 +253,11 @@ const Canvas = forwardRef(
 
       const pixelSize = canvasRenderWidth / canvasData.width;
 
+      // prevent events outside of the canvas
+      if(event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) {
+        return;
+      }
+
       // Get the position of the pixel that was clicked on
       const pixelX = Math.floor(
         (((event.clientX - rect.left) / rect.width) * canvas.width) / pixelSize
@@ -298,11 +303,10 @@ const Canvas = forwardRef(
     // store the last position of the mouse for interpolation
     let oldPos = null;
     // how many times to draw between last and current position
-    const interpolationResolution = 8;
+    const interpolationResolution = 16;
 
     // Handles the event of someone dragging the mouse (or their finger) on the canvas area
     async function handleCanvasDrag(event) {
-      
       if (event.type === "touchmove") {
         const touch = event.touches[0];
         // inject mobile touch event coordinates to same structure as mouse event
