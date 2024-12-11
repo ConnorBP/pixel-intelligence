@@ -1,4 +1,5 @@
-import { useState,useRef } from "react";
+import { useState, useRef } from "react";
+import { ThreeDots } from 'react-loader-spinner';
 import "../css/NewImagePopup.css";
 import popUpTabHadler from "../hooks/popUpTabHandler";
 
@@ -9,12 +10,19 @@ const NewImagePopup = ({ isOpen, onClose, onCreate }) => {
   const [description, setDescription] = useState("");
   const [canvasSize, setCanvasSize] = useState(64);
   const tabPopupRef = useRef(null);
-  const handleCreate = () => {
+  const [waitingForResponse, setWaitingForResponse] = useState(false);
+
+  const handleCreate = async () => {
     // call the create image callback
-    onCreate({ description, canvasSize });
+    if (waitingForResponse) {
+      return false;
+    }
+    setWaitingForResponse(true);
+    await onCreate({ description, canvasSize });
+    setWaitingForResponse(false);
     // the caller is responsible for closing the popup
   };
-  popUpTabHadler({ tabPopupRef, isOpen: onCreate, onClose})
+  popUpTabHadler({ tabPopupRef, isOpen: onCreate, onClose })
   return (
     <div className="popup-overlay">
       <div className="popup-box" ref={tabPopupRef} tabIndex={-1}>
@@ -52,8 +60,8 @@ const NewImagePopup = ({ isOpen, onClose, onCreate }) => {
             <button onClick={onClose} className="button popup-button cancel-button">
               Cancel
             </button>
-            <button onClick={handleCreate} className="button popup-button create-button">
-              Create
+            <button onClick={handleCreate} disabled={waitingForResponse} className="button popup-button create-button">
+            {waitingForResponse ? <ThreeDots color="var(--text-color)" height="100%"/> : 'Create'}
             </button>
           </div>
         </div>
