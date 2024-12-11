@@ -14,6 +14,11 @@ const EditorLeftToolBar = ({ selectedColor, setSelectedColor, secondaryColor, se
       <div className="icon-container">
         {/* editor buttons go here */}
         <button
+          className={`icon ${tool === "pencil" ? "active" : ""} tooltip-vertical`}
+          button-name="Pencil"
+          onClick={() => setTool("pencil")}><FaPencilAlt />
+        </button>
+        <button
           className={`icon ${tool === "eraser" ? "active" : ""} tooltip-vertical`}
           button-name="Eraser"
           onClick={() => { setTool("eraser") }}><FaEraser />
@@ -32,15 +37,15 @@ const EditorLeftToolBar = ({ selectedColor, setSelectedColor, secondaryColor, se
               setColorPickerActive(false);
             }
 
-          }}><FaEyeDropper /></button>
-        <button
-          className={`icon ${tool === "pencil" ? "active" : ""} tooltip-vertical`}
-          button-name="Pencil"
-          onClick={() => setTool("pencil")}><FaPencilAlt /></button>
+          }}>
+          <FaEyeDropper />
+        </button>
         <button
           className={`icon ${gridLinesVisible ? "active" : ""} tooltip-vertical`}
           button-name="Grid"
-          onClick={toggleGridLines}><MdOutlineGridOn /></button>
+          onClick={toggleGridLines}>
+          <MdOutlineGridOn />
+        </button>
       </div>
       <div className="align-end toolbar-square">
         <ColorPickerToolbar

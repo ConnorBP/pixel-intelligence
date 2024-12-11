@@ -6,7 +6,7 @@ import {
   drawPixelToCtx,
   drawCheckeredPixel
 } from "../utils";
-// eslint-disable-next-line react/display-name
+
 const Canvas = forwardRef(
   (
     {
@@ -137,7 +137,6 @@ const Canvas = forwardRef(
     // attempt to load a provided canvas json representation
     // it is "try" because the loaded data can be tampered with by the user
     // or be incompatible due to updates
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     const tryLoadCanvas = (canvasData, storeOnLoad = false) => {
       console.info("loading canvas state with object: ", canvasData);
       try {
@@ -248,6 +247,7 @@ const Canvas = forwardRef(
     // Handles the event of someone clicking on the canvas area
     // Currently only supports single click drawing
     async function handleCanvasClick(event) {
+      console.log("handling canvas click ", event);
       const canvas = canvasRef.current;
 
       // Get the bounding rectangle of the canvas
@@ -297,9 +297,56 @@ const Canvas = forwardRef(
       // drawPixelAt(pixelX, pixelY, color, canvasData.width);
     }
 
-    function handleCanvasDrag(event) {
+    // store the last position of the mouse for interpolation
+    let oldPos = null;
+    // how many times to draw between last and current position
+    const interpolationResolution = 8;
+
+    // Handles the event of someone dragging the mouse (or their finger) on the canvas area
+    async function handleCanvasDrag(event) {
+      
+      if (event.type === "touchmove") {
+        const touch = event.touches[0];
+        // inject mobile touch event coordinates to same structure as mouse event
+        event.clientX = touch.clientX;
+        event.clientY = touch.clientY;
+      }
+      // console.log(`OldPos: ${JSON.stringify(oldPos)} currentPos: ${event.clientX} ${event.clientY}`);
       if (!isMouseDown.current) return;
-      handleCanvasClick(event)
+
+      await handleCanvasClick(event);
+
+      // draw extra pixels between the last and current position
+      if (oldPos) {
+        // Get the vector between the last and current cursor position
+        const diff = { x: event.clientX - oldPos.x, y: event.clientY - oldPos.y };
+        const step = { x: diff.x / interpolationResolution, y: diff.y / interpolationResolution };
+
+        // in the future the resolution to interpolate with could be determined by this:
+        // const dist = Math.sqrt(diff.x * diff.x + diff.y * diff.y);
+
+        // simulate extra clicks between the last and current cursor position
+        for (let i = 0; i < interpolationResolution; i++) {
+          const x = oldPos.x + step.x * i;
+          const y = oldPos.y + step.y * i;
+          event.clientX = x;
+          event.clientY = y;
+          await handleCanvasClick(event);
+        }
+      }
+
+      oldPos = { x: event.clientX, y: event.clientY };
+    }
+
+    function initDrag(e) {
+      oldPos = null;
+      isMouseDown.current = true;
+      handleCanvasClick(e);
+    }
+
+    function endDrag() {
+      oldPos = null;
+      isMouseDown.current = false;
     }
 
     // Flood Fill Algorithm
@@ -416,17 +463,14 @@ const Canvas = forwardRef(
           ref={canvasRef}
           width={canvasRenderWidth}
           height={canvasRenderHeight}
-          onMouseDown={(e) => {
-            isMouseDown.current = true;
-            handleCanvasClick(e);
-          }}
+          onMouseDown={initDrag}
           onMouseMove={handleCanvasDrag}
-          onMouseUp={() => {
-            isMouseDown.current = false;
-          }}
-          onMouseLeave={() => {
-            isMouseDown.current = false;
-          }}
+          onMouseUp={endDrag}
+          onMouseLeave={endDrag}
+          onTouchMove={handleCanvasDrag}
+          onTouchStart={initDrag}
+          onTouchCancel={endDrag}
+          onTouchEnd={endDrag}
         ></canvas>
       </>
     );
