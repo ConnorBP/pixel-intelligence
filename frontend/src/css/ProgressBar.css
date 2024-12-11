@@ -1,0 +1,35 @@
+.progress-bar-container {
+    width: 100%;
+    border-radius: 2.5pt;
+    overflow: hidden;
+    -webkit-border-radius: 2.5pt;
+    -moz-border-radius: 2.5pt;
+    -ms-border-radius: 2.5pt;
+    -o-border-radius: 2.5pt;
+    position:relative;
+}
+
+.progress-bar-background {
+    background-color: var(--popup-bg);
+    width: 100%;
+    position: relative;
+}
+
+.progress-bar-fill {
+    height: 10px;
+    background-color: var(--primary-color);
+    position: relative;
+}
+
+.progress-bar-text {
+    position: absolute;
+    top: 0px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 100%;
+    /* background: linear-gradient(to right, #6f9fdd, var(--text-color)); */
+    background-color: var(--text-color);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
