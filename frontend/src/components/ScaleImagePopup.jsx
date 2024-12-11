@@ -1,73 +1,93 @@
 import { useState, useRef } from "react";
-import "../css/NewImagePopup.css";
-// import popUpTabHandler from "../hooks/popUpTabHandler";
+import { ThreeDots } from "react-loader-spinner";
+import "../css/ShareImagePopup.css";
+// import popUpTabHadler from "../hooks/popUpTabHandler";
+const ShareImagePopUp = ({ isOpen, onClose, onShare }) => {
+  if (!isOpen) {
+    return <></>;
+  }
 
-const ScaleImagePopup = ({ isOpen, setIsOpen = (val)=>{}, onCancel = ()=>{}, onConfirm = ()=>{}, currentCanvasSize = 16 }) => {
-    if (!isOpen) return (<></>);
+  const [description, setDescription] = useState("");
+  const [name, setName] = useState("");
+  const [author, setAuthor] = useState("");
+  const [waitingForResponse, setWaitingForResponse] = useState(false);
 
-    const [canvasSize, setCanvasSize] = useState(currentCanvasSize);
-    const canvasRef = useRef(null);
+  const tabPopupRef = useRef(null);
+  // popUpTabHadler({ tabPopupRef, isOpen, onClose })
 
-    const updateSizePreview = (newSize) => {
-        if (canvasSize != newSize) {
-            // scale image to preview
-        }
-        setCanvasSize(newSize);
-    };
+  const handleShare = async () => {
+    // don't double send the request
+    if (waitingForResponse) {
+      return false;
+    }
+    // call the share image callback
+    setWaitingForResponse(true);
+    await onShare({ name, description, author });
+    setWaitingForResponse(false);
+    // the caller is responsible for closing the popup
+  };
 
-    // popUpTabHandler({
-    //     tabPopupRef: canvasRef,
-    //     isOpen,
-    //     onClose: () => {
-    //       setIsOpen(false);
-    //       onCancel();
-    //     },
-    //   });
-    
-
-    return (
-        <div className="popup-overlay">
-            <div className="popup-box" ref={canvasRef} tabIndex={-1}>
-                <h3 className="popup-title">Resize Image Canvas</h3>
-                <div className="popup-line"></div>
-                <div className="popup-form">
-                    <label className="popup-label">Scale the current image to</label>
-                    <div className="popup-preview-wrapper flex-between" >
-                        {/* todo add preview */}
-                        {/* <div className="popup-preview"> 
-                            <canvas
-                                className="preview-canvas"
-                                ref={canvasRef}
-                                width={64}
-                                height={64}
-                            ></canvas>
-                        </div> */}
-                        <div className="popup-canvas-size">
-                            <label className="popup-label">Canvas Size:</label>
-                            <select
-                                value={canvasSize}
-                                onChange={(e) => updateSizePreview(e.target.value)}
-                                className="select"
-                            >
-                                <option value={8}>08x08</option>
-                                <option value={16}>16x16</option>
-                                <option value={32}>32x32</option>
-                                <option value={64}>64x64</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div className="flex flex-end">
-                        <button onClick={() => { setIsOpen(false); onCancel(); }} className="button popup-button cancel-button">
-                            Cancel
-                        </button>
-                        <button onClick={() => { setIsOpen(false); onConfirm(canvasSize); }} className="button popup-button create-button">
-                            Resize
-                        </button>
-                    </div>
-                </div>
+  return (
+    <div className="popup-overlay">
+      <div className="popup-box" ref={tabPopupRef} tabIndex={-1}>
+        <h3 className="popup-title">Share Image</h3>
+        <div className="popup-line"></div>
+        <div className="popup-form">
+          <label className="popup-label">What would you like to Share?</label>
+          <input
+            type="text"
+            placeholder="What is the name of the image..."
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className="input"
+            maxLength={32}
+          />
+          <input
+            type="text"
+            placeholder="Describe your image..."
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            className="input"
+            maxLength={255}
+          />
+          <input
+            type="text"
+            placeholder="What is your name?"
+            value={author}
+            onChange={(e) => setAuthor(e.target.value)}
+            className="input"
+            maxLength={32}
+          />
+          <div className="popup-preview-wrapper">
+            <div className="popup-preview">
+              {/* <img src="" alt="Image Preview" className="popup-preview-image" /> */}
+              <div alt="Preview" className="" />
             </div>
+          </div>
+          <div className="flex flex-end">
+            <button
+              onClick={onClose}
+              disabled={waitingForResponse}
+              className="button popup-button cancel-button"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={handleShare}
+              disabled={waitingForResponse}
+              className="button popup-button create-button"
+            >
+              {waitingForResponse ? (
+                <ThreeDots color="var(--text-color)" height="100%" />
+              ) : (
+                "Share"
+              )}
+            </button>
+          </div>
         </div>
-    );
+      </div>
+    </div>
+  );
 };
 
-export default ScaleImagePopup;
+export default ShareImagePopUp;
