@@ -1,7 +1,7 @@
 import { useState, useRef } from "react";
 import { ThreeDots } from 'react-loader-spinner';
 import "../css/NewImagePopup.css";
-import popUpTabHadler from "../hooks/popUpTabHandler";
+// import popUpTabHadler from "../hooks/popUpTabHandler";
 
 const NewImagePopup = ({ isOpen, onClose, onCreate }) => {
 
@@ -13,7 +13,7 @@ const NewImagePopup = ({ isOpen, onClose, onCreate }) => {
   const [waitingForResponse, setWaitingForResponse] = useState(false);
 
   const tabPopupRef = useRef(null);
-  popUpTabHadler({ tabPopupRef, isOpen: onCreate, onClose })
+  // popUpTabHadler({ tabPopupRef, isOpen: onCreate, onClose })
 
   const handleCreate = async () => {
     // call the create image callback

@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import '../css/ConfirmationPopup.css'
 import { useRef } from "react";
-import popUpTabHadler from "../hooks/popUpTabHandler";
+// import popUpTabHadler from "../hooks/popUpTabHandler";
 // pass into popup a structure like this:
 // {
 //   title,
@@ -21,7 +21,7 @@ function ConfirmationPopup({ popupData }) {
   if (!popupData) return null;
 
   const tabPopupRef = useRef(null);
-  popUpTabHadler({ tabPopupRef, isOpen: popupData.onConfirm, onClose: popupData.onCancel})
+  // popUpTabHadler({ tabPopupRef, isOpen: popupData.onConfirm, onClose: popupData.onCancel})
 
   return (
     <div className="alert-overlay">

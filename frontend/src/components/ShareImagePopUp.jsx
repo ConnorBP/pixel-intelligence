@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import "../css/ShareImagePopup.css";
-import popUpTabHadler from "../hooks/popUpTabHandler";
+// import popUpTabHadler from "../hooks/popUpTabHandler";
 const ShareImagePopUp = ({ isOpen, onClose, onShare }) => {
   if (!isOpen) { return (<></>); }
 
@@ -9,7 +9,7 @@ const ShareImagePopUp = ({ isOpen, onClose, onShare }) => {
   const [author, setAuthor] = useState("");
 
   const tabPopupRef = useRef(null);
-  popUpTabHadler({ tabPopupRef, isOpen, onClose })
+  // popUpTabHadler({ tabPopupRef, isOpen, onClose })
 
   const handleShare = () => {
     // call the share image callback
