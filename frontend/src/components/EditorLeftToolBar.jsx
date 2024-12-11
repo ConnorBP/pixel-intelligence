@@ -25,20 +25,21 @@ const EditorLeftToolBar = ({ selectedColor, setSelectedColor, secondaryColor, se
         <button
           className={`icon ${colorPickerActive === true ? "active" : ""} tooltip-vertical`}
           button-name="Color Picker"
-          onClick={async ()=> {
-            if(onEyeDropperClicked) {
+          onClick={async () => {
+            if (onEyeDropperClicked) {
               setColorPickerActive(true);
               await onEyeDropperClicked();
               setColorPickerActive(false);
             }
-          
+
           }}><FaEyeDropper /></button>
         <button
           className={`icon ${tool === "pencil" ? "active" : ""} tooltip-vertical`}
           button-name="Pencil"
           onClick={() => setTool("pencil")}><FaPencilAlt /></button>
         <button
-          className={`icon ${gridLinesVisible ? "active" : ""}`}
+          className={`icon ${gridLinesVisible ? "active" : ""} tooltip-vertical`}
+          button-name="Grid"
           onClick={toggleGridLines}><MdOutlineGridOn /></button>
       </div>
       <div className="align-end toolbar-square">

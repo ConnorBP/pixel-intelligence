@@ -1,6 +1,6 @@
 :root {
   --left-toolbar-size: 8em;
-  --left-toolbar-height: calc(100% - (var(--top-toolbar-size)));
+  --left-toolbar-height: calc(100dvh - (var(--top-toolbar-size)));
 }
 
 .left-toolbar {
@@ -16,6 +16,7 @@
 
 .icon-container {
   padding-left: 2px;
+
 }
 
 .icon-container .icon {
@@ -31,6 +32,10 @@
 
 .icon-container .icon>* {
   padding: 0.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
 }
 
 .icon-container .icon:hover {
