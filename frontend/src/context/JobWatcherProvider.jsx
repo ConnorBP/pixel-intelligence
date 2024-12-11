@@ -116,12 +116,14 @@ export const JobWatcherProvider = ({ children, jobCheckIntervalMsMin = 10000, jo
                 if (response.status === 'completed') {
                     dispatch({ type: 'fetch' });
                 } else {
-                    console.log("updating with response: " + JSON.stringify(response));
+                    // console.log("updating with response: " + JSON.stringify(response));
+                    const time = ( parseInt(new Date().getTime() || 0) + ((parseInt(response.wait_time) || 0) * 1000));
+                    // console.log(`time till expected generation finish is: ${time} Date is: ${new Date(time)} wait time is: ${response.wait_time}`);
                     dispatch({
                         type: 'update',
                         responseStatus: response.status,
                         wait_time: response.wait_time,
-                        eta: Date.now() + (response.wait_time * 1000),
+                        eta: time,
                         position: response.queue_position,
                         result: response.result
                     });

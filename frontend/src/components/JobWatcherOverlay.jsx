@@ -24,11 +24,12 @@ const JobWatcherOverlay = () => {
     // const [testEndTime, setTestEndTime] = React.useState(Date.now() + 10000);
 
     const updatePercent = () => {
-        console.log('updating percent');
+        // console.log('updating percent');
+        let percent = 0;
         if (currentJobEta && currentJobSubmittedAt) {
             const totalWaitTime = currentJobEta - currentJobSubmittedAt;
             const currentWaitTime = Date.now() - currentJobSubmittedAt;
-            const percent = currentWaitTime / totalWaitTime;
+            percent = currentWaitTime / totalWaitTime;
             setCurrentPercent(percent);
         }
         // const totalWaitTime = testEndTime - testStartTime;

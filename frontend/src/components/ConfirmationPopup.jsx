@@ -16,7 +16,10 @@ import popUpTabHadler from "../hooks/popUpTabHandler";
 // remember to always set the popup to null in your callbacks to hide it.
 
 function ConfirmationPopup({ popupData }) {
-  if (!popupData) return <></>;
+  // hook must never be conditional
+
+  if (!popupData) return null;
+
   const tabPopupRef = useRef(null);
   popUpTabHadler({ tabPopupRef, isOpen: popupData.onConfirm, onClose: popupData.onCancel})
 

@@ -4,12 +4,14 @@ import "../css/NewImagePopup.css";
 import popUpTabHadler from "../hooks/popUpTabHandler";
 
 const NewImagePopup = ({ isOpen, onClose, onCreate }) => {
+  const tabPopupRef = useRef(null);
+  popUpTabHadler({ tabPopupRef, isOpen: onCreate, onClose })
 
   if (!isOpen) { return (<></>); }
 
   const [description, setDescription] = useState("");
   const [canvasSize, setCanvasSize] = useState(64);
-  const tabPopupRef = useRef(null);
+
   const [waitingForResponse, setWaitingForResponse] = useState(false);
 
   const handleCreate = async () => {
@@ -22,7 +24,7 @@ const NewImagePopup = ({ isOpen, onClose, onCreate }) => {
     setWaitingForResponse(false);
     // the caller is responsible for closing the popup
   };
-  popUpTabHadler({ tabPopupRef, isOpen: onCreate, onClose })
+
   return (
     <div className="popup-overlay">
       <div className="popup-box" ref={tabPopupRef} tabIndex={-1}>

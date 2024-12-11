@@ -18,6 +18,7 @@ export default async function checkGeneration(jobId) {
             return { success: false, status: resp.status, error: resp.statusText };
         }
         const j = await resp.json();
+        console.log('got generation status: ', j);
         return j;
     }
     catch (e) {

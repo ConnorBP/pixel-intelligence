@@ -96,7 +96,8 @@ router.post("/generate", [
 
   // debug verification
   // console.log(`promt, size, seed, model: ${prompt}, ${size}, ${seed}, ${model}`);
-  // return res.status(200).json({ success: false, message: "Image generation disabled" });
+  // return res.status(200).json({ success: true, message: "Image generation disabled" });
+
 
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -257,7 +258,18 @@ router.get("/poll/:jobId",
     check('jobId').isString().isUUID()
   ],
   async (req, res) => {
-
+    // return res.status(200).json({ 
+    //   success: true,
+    //   message: "Image generation disabled",
+    //   success: true,
+    //   status: "waiting",
+    //   processing: 1,
+    //   restarted: false,
+    //   done: false,
+    //   wait_time: 65,
+    //   queue_position: 42
+    // });
+    
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ success: false, error: "Validation error", errors: errors.array() });

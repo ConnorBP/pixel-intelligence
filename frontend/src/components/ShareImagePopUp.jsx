@@ -2,20 +2,20 @@ import { useState, useRef } from "react";
 import "../css/ShareImagePopup.css";
 import popUpTabHadler from "../hooks/popUpTabHandler";
 const ShareImagePopUp = ({ isOpen, onClose, onShare }) => {
-
+  const tabPopupRef = useRef(null);
+  popUpTabHadler({ tabPopupRef, isOpen, onClose })
   if (!isOpen) { return (<></>); }
 
   const [description, setDescription] = useState("");
   const [name, setName] = useState("");
   const [author, setAuthor] = useState("");
-  const tabPopupRef = useRef(null);
+
 
   const handleShare = () => {
     // call the share image callback
     onShare({ name, description, author });
     // the caller is responsible for closing the popup
   };
-  popUpTabHadler({ tabPopupRef, isOpen, onClose })
 
   return (
     <div className="popup-overlay">
