@@ -54,6 +54,7 @@ function popUpTabHandler({ tabPopupRef, isOpen, onClose }) {
       document.removeEventListener("mousedown", handleBackgroundClick);
     };
   }, [isOpen, tabPopupRef, onClose]);
+
 }
 
 export default popUpTabHandler;
