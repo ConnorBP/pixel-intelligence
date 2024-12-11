@@ -40,7 +40,14 @@ const header = {
   }
 }
 
-const validSizes = [8, 16, 32, 64];
+// Valid pixel sizes
+// we are removing 8px because the models are having trouble with it
+const validSizes = [
+  // 8,
+  16, 
+  32, 
+  64
+];
 
 // POST route to start image generation
 router.post("/generate", [
@@ -90,9 +97,10 @@ router.post("/generate", [
   // set some defaults:
   prompt = prompt || "pixel art";
   size = size || 16;
-  model = model || "sdxl";
+  model = model || "sdxl";//(size <= 32 ? "sd" : "sdxl");
   // seed must be a string:
   seed = JSON.stringify(seed || Math.floor(Math.random() * 1000000000));
+  const closeup = size <= 32 ? "closeup, " : "";
 
   // debug verification
   // console.log(`promt, size, seed, model: ${prompt}, ${size}, ${seed}, ${model}`);
@@ -105,7 +113,7 @@ router.post("/generate", [
   }
 
   if (!validSizes.includes(parseInt(size))) {
-    return res.status(400).json({ success: false, error: "Invalid pixel size. Valid sizes are 8, 16, 32, 64." });
+    return res.status(400).json({ success: false, error: `Invalid pixel size. Valid sizes are: ${validSizes.toString()}.` });
   }
 
   // we don't go lower than 256px because then the images turn out a bloody mess
@@ -132,7 +140,7 @@ router.post("/generate", [
   // sd 1.5 pixel art model:
   if (model === "sd") {
     data = {
-      "prompt": `${prompt}, ${size}bit pixel style, ${size}px, side view, pixelart, gamedev. game asset, pixelsprite, pixel-art, pixel_art, retro_artstyle, colorful, low-res, blocky, pixel art style, 16-bit graphics ### out of frame, duplicate, watermark, signature, text, error, deformed, sloppy, messy, blurry, noisy, highly detailed, ultra textured, photo, realisticlogo`,
+      "prompt": `pixel_art, ${prompt}, ${size}px, 8bit pixel style, ${size}px, ${closeup}side view, pixelart, gamedev. game asset, pixelsprite, pixel-art, pixel_art, retro_artstyle, colorful, low-res, blocky, pixel art style, 16-bit graphics ### out of frame, duplicate, watermark, signature, text, error, deformed, sloppy, messy, blurry, noisy, highly detailed, ultra textured, photo, realisticlogo`,
       "params": {
         "cfg_scale": 7,
         "seed": seed,
@@ -177,7 +185,7 @@ router.post("/generate", [
     };
   } else {
     // sdxl pixel art model:
-    const closeup = size <= 32 ? "closeup," : "";
+    
     data = {
       "prompt": `pixel-art, ${prompt}, ${size}px, ${closeup} low-res, blocky, pixel art style, 16-bit graphics###sloppy, messy, blurry, noisy, highly detailed, ultra textured, photo, realistic`,
       "params": {
@@ -205,6 +213,12 @@ router.post("/generate", [
             "model": 1,
             "clip": 1,
             "is_version": false
+          },
+          {
+            "name": "636318",
+            "model": 1,
+            "clip": 1,
+            "is_version": true
           }
         ]
       },
