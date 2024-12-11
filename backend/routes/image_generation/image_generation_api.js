@@ -52,8 +52,8 @@ router.post("/generate", [
     .trim()
     .customSanitizer(value => value?.replace(/[^a-zA-Z0-9 ]/g, ''))
     .isLength({ min: 1, max: 64 })
-    .withMessage('Prompt must be between 1 and 32 characters')
-    .default("pixel art"),
+    .withMessage('Prompt must be between 1 and 32 characters'),
+    // .default("pixel art"),
 
   query("size")
     .optional()
@@ -64,28 +64,37 @@ router.post("/generate", [
       const size = parseInt(value);
       return validSizes.includes(size);
     })
-    .withMessage(`Size must be one of: ${validSizes.join(', ')}`)
-    .default(16),
+    .withMessage(`Size must be one of: ${validSizes.join(', ')}`),
+    // .default(16),
 
   check("seed")
-    .optional()
+    .optional() // cannot have both optional and default
     .trim()
     .isInt()
-    .withMessage('Seed must be an integer')
-    // .customSanitizer(value => parseInt(value))
-    .default(() => Math.floor(Math.random() * 1000000000)),
+    .withMessage('Seed must be an integer'),
+  // .customSanitizer(value => parseInt(value))
+  // .default(() => Math.floor(Math.random() * 1000000000)),
   check("model")
-    .optional()
     .isString()
     .trim()
     .toLowerCase()
     .custom(value => value === "sd" || value === "sdxl")
-    .default("sdxl")
+    .optional(), // optional has to be seperate from default
+  // check("model").default("sdxl")
 ], async (req, res) => {
   // optional prompt and pixel size query parameters: ?promt=pixel+art&size=16
   // if not provided defaults to pixel art and 16px
-  const { prompt, size, seed, model } = req.query;// || { prompt: "pixel art", size: 16 };
+  let { prompt, size, seed, model } = req.query;
 
+  // set some defaults:
+  prompt = prompt || "pixel art";
+  size = size || 16;
+  model = model || "sdxl";
+  seed = seed || Math.floor(Math.random() * 1000000000);
+
+  // debug verification
+  // console.log(`promt, size, seed, model: ${prompt}, ${size}, ${seed}, ${model}`);
+  // return res.status(200).json({ success: false, message: "Image generation disabled" });
 
   const errors = validationResult(req);
   if (!errors.isEmpty()) {

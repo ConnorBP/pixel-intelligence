@@ -254,7 +254,7 @@ const Editor = () => {
 
     // check if a job is already in progress
     // we only allow one at a time
-    if(currentJobStatus!=='idle' && currentJobStatus!=='completed') {
+    if(currentJobStatus!=='idle' && currentJobStatus!=='completed' && currentJobStatus!=='failed') {
       setConfirmationPopupData({
         title: "Image Generation Failed",
         message1: "Failed to generate image.",
