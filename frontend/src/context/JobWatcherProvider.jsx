@@ -45,6 +45,12 @@ const jobWatcherReducer = (state, action) => {
                 currentJobStatus: 'failed',
                 currentJobResult: action.error,
             };
+            case 'timeout':
+            return {
+                ...state,
+                currentJobResult: action.error,
+                currentJobWaitTime: action.wait_time,
+            };
         case 'clear':
             return {
                 ...state,
@@ -88,7 +94,7 @@ export const JobWatcherProvider = ({ children, jobCheckIntervalMsMin = 10000, jo
         const timeOutLength =
         Math.min(
             Math.max(
-                state.currentJobWaitTime || jobCheckIntervalMsMin,
+                (state.currentJobWaitTime * 1000) || jobCheckIntervalMsMin,
                 jobCheckIntervalMsMin
             ),
             jobCheckIntervalMsMax
@@ -120,10 +126,15 @@ export const JobWatcherProvider = ({ children, jobCheckIntervalMsMin = 10000, jo
                     });
                 }
             } else {
+                console.error('Error (inside try) polling job status:', error);
                 dispatch({ type: 'fail', error: response.error });
             }
         } catch (error) {
-            dispatch({ type: 'fail', error: error.message });
+
+            // dispatch({ type: 'fail', error: error.message });
+             // dispatch({ type: 'timeout', error: response.error,wait_time: 60 });
+            console.error('Error polling job status:', error);
+            setCurrentTimeoutLength(60000);
         }
     }, []);
 
