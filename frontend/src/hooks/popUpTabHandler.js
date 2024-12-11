@@ -38,6 +38,22 @@ function popUpTabHandler({ tabPopupRef, isOpen, onClose }) {
       tabPopupRef.current.querySelector("select, button")?.focus();
     }
   }, [isOpen]);
+  
+  useEffect(() => {
+    if (!isOpen || !tabPopupRef?.current) return;
+
+    const handleBackgroundClick = (e) => {
+      if (tabPopupRef.current && !tabPopupRef.current.contains(e.target)) {
+        onClose();
+      }
+    };
+
+    document.addEventListener("mousedown", handleBackgroundClick);
+
+    return () => {
+      document.removeEventListener("mousedown", handleBackgroundClick);
+    };
+  }, [isOpen, tabPopupRef, onClose]);
 }
 
 export default popUpTabHandler;
