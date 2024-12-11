@@ -179,7 +179,7 @@ const Editor = () => {
 
 
   const toggleGrid = () => {
-    console.log('toggling grid lines');
+ 
     setGridLinesVisible((prev) => !prev)
   };
   // takes in a new square resolution and scales the current canvas data to it

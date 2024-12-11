@@ -41,12 +41,13 @@ const Canvas = forwardRef(
     // on the provided canvas data and returns it
     const updatePixelAt = (oldCanvas, x, y, color) => {
 
-      console.log(`updatePixelAt called with  ${oldCanvas} ${x} ${y} ${color}`);
+      // console.log(`updatePixelAt called with  ${oldCanvas} ${x} ${y} ${color}`);
+
       // don't allow out of bounds access
       if (x >= oldCanvas.width || y >= oldCanvas.height) {
-        console.error(
-          `X ${x} Y ${y} is out of bounds in canvas of size: {${x}, ${y}}`
-        );
+        // console.error(
+        //   `X ${x} Y ${y} is out of bounds in canvas of size: {${x}, ${y}}`
+        // );
         return oldCanvas;
       }
       const newCanvas = { ...oldCanvas };
@@ -86,7 +87,6 @@ const Canvas = forwardRef(
       const gridSpacing = canvas.width / editorPixelsW;
 
       context.lineWidth = gridLineWidth;
-      console.log("drawing grid lines");
       for (let x = 0; x < editorPixelsW; x++) {
         drawGridLineX(context, x, gridSpacing, canvas.height);
       }
@@ -134,7 +134,7 @@ const Canvas = forwardRef(
     // it is "try" because the loaded data can be tampered with by the user
     // or be incompatible due to updates
     const tryLoadCanvas = (canvasData, storeOnLoad = false) => {
-      console.info("loading canvas state with object: ", canvasData);
+      // console.info("loading canvas state with object: ", canvasData);
       try {
         // catch some bad inputs
         if (!canvasData) {
@@ -243,13 +243,17 @@ const Canvas = forwardRef(
     // Handles the event of someone clicking on the canvas area
     // Currently only supports single click drawing
     async function handleCanvasClick(event) {
-      console.log("handling canvas click ", event);
       const canvas = canvasRef.current;
 
       // Get the bounding rectangle of the canvas
       const rect = canvas.getBoundingClientRect();
 
       const pixelSize = canvasRenderWidth / canvasData.width;
+
+      // prevent events outside of the canvas
+      if(event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) {
+        return;
+      }
 
       // Get the position of the pixel that was clicked on
       const pixelX = Math.floor(
@@ -296,11 +300,10 @@ const Canvas = forwardRef(
     // store the last position of the mouse for interpolation
     let oldPos = null;
     // how many times to draw between last and current position
-    const interpolationResolution = 8;
+    const interpolationResolution = 16;
 
     // Handles the event of someone dragging the mouse (or their finger) on the canvas area
     async function handleCanvasDrag(event) {
-      
       if (event.type === "touchmove") {
         const touch = event.touches[0];
         // inject mobile touch event coordinates to same structure as mouse event
@@ -393,12 +396,6 @@ const Canvas = forwardRef(
       }
 
     };
-
-    useEffect(() => {
-      console.log("Canvas data updated:", canvasData);
-    }, [canvasData]);
-
-
 
     useEffect(() => {
       const canvas = canvasRef.current;
