@@ -53,27 +53,28 @@ router.post("/generate", [
     .customSanitizer(value => value?.replace(/[^a-zA-Z0-9 ]/g, ''))
     .isLength({ min: 1, max: 64 })
     .withMessage('Prompt must be between 1 and 32 characters'),
-    // .default("pixel art"),
+  // .default("pixel art"),
 
   query("size")
     .optional()
-    .trim()
     .isString()
+    .trim()
     .customSanitizer(value => parseInt(value) || undefined)
     .custom(value => {
       const size = parseInt(value);
       return validSizes.includes(size);
     })
     .withMessage(`Size must be one of: ${validSizes.join(', ')}`),
-    // .default(16),
+  // .default(16),
 
   check("seed")
-    .optional() // cannot have both optional and default
+    .optional()
+    .isString()
     .trim()
-    .isInt()
-    .withMessage('Seed must be an integer'),
-  // .customSanitizer(value => parseInt(value))
-  // .default(() => Math.floor(Math.random() * 1000000000)),
+    .customSanitizer(value => parseInt(value) || undefined),
+    // .isInt()
+    // .withMessage('Seed must be an integer')
+    // .default(() => Math.floor(Math.random() * 1000000000)),
   check("model")
     .isString()
     .trim()
@@ -90,7 +91,8 @@ router.post("/generate", [
   prompt = prompt || "pixel art";
   size = size || 16;
   model = model || "sdxl";
-  seed = seed || Math.floor(Math.random() * 1000000000);
+  // seed must be a string:
+  seed = JSON.stringify(seed || Math.floor(Math.random() * 1000000000));
 
   // debug verification
   // console.log(`promt, size, seed, model: ${prompt}, ${size}, ${seed}, ${model}`);
@@ -277,7 +279,7 @@ router.get("/poll/:jobId",
       }
 
       if (imageJob.status === "completed") {
-        return res.status(200).json({ success: true, status: "completed", image: imageJob.downloadUrl });
+        return res.status(200).json({ success: true, status: "completed" });
       } else if (imageJob.status === "expired" || imageJob.status === "failed") {
         return res.status(404).json({ success: false, error: "Image Job already failed" });
       }
