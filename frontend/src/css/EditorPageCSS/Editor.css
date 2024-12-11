@@ -1,5 +1,7 @@
 .editor-container {
     width: 100%;
+    height: -webkit-fill-available;
+    touch-action: none; /* Prevent touch gestures like scrolling */
 }
 
 .canvas-container {
