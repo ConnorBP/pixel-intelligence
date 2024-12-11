@@ -4,8 +4,6 @@ import "../css/NewImagePopup.css";
 import popUpTabHadler from "../hooks/popUpTabHandler";
 
 const NewImagePopup = ({ isOpen, onClose, onCreate }) => {
-  const tabPopupRef = useRef(null);
-  popUpTabHadler({ tabPopupRef, isOpen: onCreate, onClose })
 
   if (!isOpen) { return (<></>); }
 
@@ -13,6 +11,9 @@ const NewImagePopup = ({ isOpen, onClose, onCreate }) => {
   const [canvasSize, setCanvasSize] = useState(64);
 
   const [waitingForResponse, setWaitingForResponse] = useState(false);
+
+  const tabPopupRef = useRef(null);
+  popUpTabHadler({ tabPopupRef, isOpen: onCreate, onClose })
 
   const handleCreate = async () => {
     // call the create image callback
