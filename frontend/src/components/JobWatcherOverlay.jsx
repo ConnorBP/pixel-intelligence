@@ -21,7 +21,6 @@ const JobWatcherOverlay = () => {
         currentJobWaitTime,
         currentJobSubmittedAt,
         currentQueuePosition,
-        clearJob
     } = useJobWatcher();
 
     const [currentPercent, setCurrentPercent] = React.useState(0);
