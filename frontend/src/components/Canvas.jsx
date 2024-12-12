@@ -31,22 +31,6 @@ const Canvas = forwardRef(
     // reference to the canvas object for us to draw to
     const canvasRef = useRef(null);
 
-    // a list of batch updates to be applied to the canvas by a drag event
-    const pixelUpdatesRef = useRef([]);
-
-    // helper to make use state update of array cleaner looking
-    const queuePixelUpdate = (x, y, color) => {
-      if (!pixelUpdatesRef.current) {
-        pixelUpdatesRef.current = [];
-      }
-      pixelUpdatesRef.current.push({ x, y, color });
-      // setPixelUpdates((prevUpdates) => [...prevUpdates, { x: x, y: y, color }]);
-    };
-
-    const clearPixelUpdates = () => {
-      pixelUpdatesRef.current = [];
-    }
-
     // track drag state
     let isMouseDown = useRef(false);
 
@@ -334,52 +318,20 @@ const Canvas = forwardRef(
       }
 
       // update the pixel in local storage
-      // setCanvasData((oldCanvas) => {
-      //   return updatePixelAt(oldCanvas, pixelX, pixelY, color);
-      // });
-      // queue the pixel for update instead
-      queuePixelUpdate(pixelX, pixelY, color);
-      // draw to the pixel on the canvas for display
+      setCanvasData((oldCanvas) => {
+        return updatePixelAt(oldCanvas, pixelX, pixelY, color);
+      });
       drawPixelAt(pixelX, pixelY, color, canvasData.width);
-    }
 
-
-    // Interpolation logic using Bresenham's line algorithm
-    function interpolate(start, end, drawFunction) {
-      const dx = Math.abs(end.x - start.x);
-      const dy = Math.abs(end.y - start.y);
-      const sx = start.x < end.x ? 1 : -1;
-      const sy = start.y < end.y ? 1 : -1;
-      let err = dx - dy;
-
-      while (true) {
-        // Create a synthetic event for the interpolated point
-        const syntheticEvent = new MouseEvent('mousemove', {
-          clientX: start.x,
-          clientY: start.y,
-        });
-
-        // Call the draw function with the synthetic event
-        drawFunction(syntheticEvent);
-
-        // end interpolation if we reached the end point
-        if (start.x === end.x && start.y === end.y) break;
-        const e2 = err * 2;
-        if (e2 > -dy) {
-          err -= dy;
-          start.x += sx;
-        }
-        if (e2 < dx) {
-          err += dx;
-          start.y += sy;
-        }
-      }
+      // draw to the pixel on the canvas for display
+      // drawPixelAt(pixelX, pixelY, color, canvasData.width);
     }
 
     // store the last position of the mouse for interpolation
     let oldPos = null;
     // how many times to draw between last and current position
     const interpolationResolution = 16;
+
     // Handles the event of someone dragging the mouse (or their finger) on the canvas area
     async function handleCanvasDrag(event) {
       if (event.type === "touchmove") {
@@ -395,60 +347,39 @@ const Canvas = forwardRef(
 
       // draw extra pixels between the last and current position
       if (oldPos) {
-        interpolate(oldPos, { x: event.clientX, y: event.clientY }, handleCanvasClick);
-        // // Get the vector between the last and current cursor position
-        // const diff = { x: event.clientX - oldPos.x, y: event.clientY - oldPos.y };
-        // const step = { x: diff.x / interpolationResolution, y: diff.y / interpolationResolution };
+        // Get the vector between the last and current cursor position
+        const diff = { x: event.clientX - oldPos.x, y: event.clientY - oldPos.y };
+        const step = { x: diff.x / interpolationResolution, y: diff.y / interpolationResolution };
 
-        // // in the future the resolution to interpolate with could be determined by this:
-        // // const dist = Math.sqrt(diff.x * diff.x + diff.y * diff.y);
+        // in the future the resolution to interpolate with could be determined by this:
+        // const dist = Math.sqrt(diff.x * diff.x + diff.y * diff.y);
 
-        // // simulate extra clicks between the last and current cursor position
-        // for (let i = 0; i < interpolationResolution; i++) {
-        //   const x = oldPos.x + step.x * i;
-        //   const y = oldPos.y + step.y * i;
-        //   event.clientX = x;
-        //   event.clientY = y;
-        //   await handleCanvasClick(event);
-        // }
+        // simulate extra clicks between the last and current cursor position
+        for (let i = 0; i < interpolationResolution; i++) {
+          const x = oldPos.x + step.x * i;
+          const y = oldPos.y + step.y * i;
+          event.clientX = x;
+          event.clientY = y;
+          await handleCanvasClick(event);
+        }
       }
 
       oldPos = { x: event.clientX, y: event.clientY };
     }
 
-
-    // Handles the event of someone clicking on the canvas area
     function initDrag(e) {
       oldPos = null;
       isMouseDown.current = true;
       handleCanvasClick(e);
     }
 
-    // Handles the event of someone releasing the mouse button
     function endDrag() {
       oldPos = null;
       isMouseDown.current = false;
-      // apply all queued pixel updates 
-      applyPixelUpdates();
-      
     }
 
-    const applyPixelUpdates = () => {
-      if (!pixelUpdatesRef.current || pixelUpdatesRef.current.length <= 0) {
-        return;
-      }
-      setCanvasData((oldCanvas) => {
-        let newCanvas = { ...oldCanvas };
-        pixelUpdatesRef.current.forEach(({ x, y, color }) => {
-          newCanvas = updatePixelAt(newCanvas, x, y, color);
-        });
-        clearPixelUpdates();
-        return newCanvas;
-      });
-    };
-
     // Flood Fill Algorithm
-    function floodFill(x, y, targetColor, replacementColor) {
+    const floodFill = (x, y, targetColor, replacementColor) => {
       const isBackgroundColor = "#00000000"
       if (
         // targetColor === replacementColor ||
@@ -500,10 +431,9 @@ const Canvas = forwardRef(
 
         // Fill the current pixel
         visited.add(index);
-        // setCanvasData((oldCanvas) =>
-        //   updatePixelAt(oldCanvas, currentX, currentY, replacementColor)
-        // );
-        queuePixelUpdate(currentX, currentY, replacementColor);
+        setCanvasData((oldCanvas) =>
+          updatePixelAt(oldCanvas, currentX, currentY, replacementColor)
+        );
         drawPixelAt(currentX, currentY, replacementColor, width);
 
         // Add neighbors to the stack
@@ -512,8 +442,7 @@ const Canvas = forwardRef(
         stack.push([currentX, currentY + 1]);
         stack.push([currentX, currentY - 1]);
       }
-      // console.log("Flood Fill Complete ", pixelUpdatesRef.current);
-      applyPixelUpdates();
+
     };
 
     useEffect(() => {

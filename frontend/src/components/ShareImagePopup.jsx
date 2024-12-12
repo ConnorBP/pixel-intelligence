@@ -2,7 +2,7 @@ import { useState, useRef } from "react";
 import { ThreeDots } from "react-loader-spinner";
 import "../css/ShareImagePopup.css";
 // import popUpTabHadler from "../hooks/popUpTabHandler";
-const ShareImagePopUp = ({ isOpen, onClose, onShare, imgSrc }) => {
+const ShareImagePopUp = ({ isOpen, onClose, onShare }) => {
   if (!isOpen) {
     return <></>;
   }
@@ -42,7 +42,6 @@ const ShareImagePopUp = ({ isOpen, onClose, onShare, imgSrc }) => {
             className="input"
             maxLength={32}
           />
-          <label className="popup-label">What is it?</label>
           <input
             type="text"
             placeholder="Describe your image..."
@@ -51,7 +50,6 @@ const ShareImagePopUp = ({ isOpen, onClose, onShare, imgSrc }) => {
             className="input"
             maxLength={255}
           />
-          <label className="popup-label">Who are you? (Optional)</label>
           <input
             type="text"
             placeholder="What is your name?"
@@ -60,13 +58,12 @@ const ShareImagePopUp = ({ isOpen, onClose, onShare, imgSrc }) => {
             className="input"
             maxLength={32}
           />
-          {imgSrc && (
-            <div className="popup-preview-wrapper">
-              <div className="popup-preview">
-                <img src={imgSrc} alt="Image Preview" className="popup-preview-image" />
-              </div>
+          <div className="popup-preview-wrapper">
+            <div className="popup-preview">
+              {/* <img src="" alt="Image Preview" className="popup-preview-image" /> */}
+              <div alt="Preview" className="" />
             </div>
-          )}
+          </div>
           <div className="flex flex-end">
             <button
               onClick={onClose}

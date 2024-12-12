@@ -1,6 +1,5 @@
 import { useState, useRef } from "react";
 import "../css/NewImagePopup.css";
-import SizeSelector from "./SizeSelector";
 // import popUpTabHandler from "../hooks/popUpTabHandler";
 
 const ScaleImagePopup = ({ isOpen, setIsOpen = (val)=>{}, onCancel = ()=>{}, onConfirm = ()=>{}, currentCanvasSize = 16 }) => {
@@ -43,7 +42,19 @@ const ScaleImagePopup = ({ isOpen, setIsOpen = (val)=>{}, onCancel = ()=>{}, onC
                                 height={64}
                             ></canvas>
                         </div> */}
-                        <SizeSelector currentSize={canvasSize} updateSize={updateSizePreview} />
+                        <div className="popup-canvas-size">
+                            <label className="popup-label">Canvas Size:</label>
+                            <select
+                                value={canvasSize}
+                                onChange={(e) => updateSizePreview(e.target.value)}
+                                className="select"
+                            >
+                                <option value={8}>08x08</option>
+                                <option value={16}>16x16</option>
+                                <option value={32}>32x32</option>
+                                <option value={64}>64x64</option>
+                            </select>
+                        </div>
                     </div>
                     <div className="flex flex-end">
                         <button onClick={() => { setIsOpen(false); onCancel(); }} className="button popup-button cancel-button">

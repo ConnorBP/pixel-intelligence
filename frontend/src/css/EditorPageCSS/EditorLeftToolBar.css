@@ -1,7 +1,6 @@
 :root {
   --left-toolbar-size: 8em;
-  /* apple is hella dumb. 100dvh breaks on safari desktop and 100vh breaks on mobile */
-  --left-toolbar-height: min(calc(100dvh - (var(--top-toolbar-size))), calc(100vh - (var(--top-toolbar-size))));
+  --left-toolbar-height: calc(100dvh - (var(--top-toolbar-size)));
 }
 
 .left-toolbar {
@@ -13,7 +12,6 @@
   background-color: rgba(100, 100, 100, 0.6);
   display: flex;
   flex-direction: column;
-  /* justify-content: space-between; */
 }
 
 .icon-container {

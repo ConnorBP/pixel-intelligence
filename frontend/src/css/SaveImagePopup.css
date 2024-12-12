@@ -57,7 +57,7 @@
   height: 80px;
   border: 1px solid var(--border-color);
   border-radius: var(--border-radius);
-  /* background: #fff; */
+  background: #fff;
   display: flex;
   align-items: center;
   justify-content: center;

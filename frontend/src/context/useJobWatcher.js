@@ -14,7 +14,6 @@ export const useJobWatcher = () => {
         currentJobWaitTime,
         currentQueuePosition,
         currentJobResult,
-        currentTimeoutLength,
         submitJob,
         clearJob,
     } = useContext(JobWatcherContext);
@@ -28,7 +27,6 @@ export const useJobWatcher = () => {
         currentJobWaitTime,
         currentQueuePosition, // stores the current position in the queue if the job is still running
         currentJobResult, // stores the result of the job if it has completed, or the error if it failed
-        currentTimeoutLength, // how long until we will next poll the api for an update
         submitJob, // function to submit a new job id
         clearJob, // function to clear the current job data once done with it
     };

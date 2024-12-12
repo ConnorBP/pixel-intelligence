@@ -43,10 +43,10 @@ const NewImagePopup = ({ isOpen, onClose, onCreate }) => {
             className="input"
           />
           <div className="popup-preview-wrapper">
-            {/* <div className="popup-preview">
-              <img src="" alt="Image Preview" className="popup-preview-image" />
+            <div className="popup-preview">
+              {/* <img src="" alt="Image Preview" className="popup-preview-image" /> */}
               <div alt="Preview" className="" />
-            </div> */}
+            </div>
             <div className="popup-canvas-size">
               <label className="popup-label">Canvas Size:</label>
               <select
