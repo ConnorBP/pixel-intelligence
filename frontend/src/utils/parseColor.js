@@ -2,6 +2,7 @@
 // based on https://stackoverflow.com/a/21966100
 // does not currently handle hex alpha #RRGGBBAA, so we shall add it
 export default (in_str) => {
+    if(!in_str) return [0,0,0,0];
     try {
     let input = in_str;
     // console.log(`parsing ${input}`);

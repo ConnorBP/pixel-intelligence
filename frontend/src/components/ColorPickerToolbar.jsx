@@ -25,6 +25,8 @@ function ColorPickerToolbar({
       <input
         className="color-pick-first"
         type="color"
+        alpha
+        colorspace="limited-srgb alpha"
         value={primaryColor}
         onChange={(e) => setPrimaryColor(e.target.value)}
       />

@@ -48,6 +48,7 @@ const Editor = () => {
   // wether the grid lines are shown or not on the editor canvas
   const [gridLinesVisible, setGridLinesVisible] = useLocalStorage("gridLinesVisible", false);
   const [tool, setTool] = useLocalStorage("tool", "pencil");
+  const [previousTool, setPreviousTool] = useState(null);
 
   // for tracking current generation job id
   const { submitJob, clearJob, currentJobStatus, currentJobResult, canvasSize } = useJobWatcher()
@@ -179,7 +180,7 @@ const Editor = () => {
 
 
   const toggleGrid = () => {
- 
+
     setGridLinesVisible((prev) => !prev)
   };
   // takes in a new square resolution and scales the current canvas data to it
@@ -237,7 +238,7 @@ const Editor = () => {
   const handleCreateNewImageConfirmed = async (newImage) => {
     console.log("New Canvas requested:", newImage);
 
-    if(newImage.description.length > 64) {
+    if (newImage.description.length > 64) {
       setConfirmationPopupData({
         title: "Image Generation Failed",
         message1: "Failed to generate image.",
@@ -254,7 +255,7 @@ const Editor = () => {
 
     // check if a job is already in progress
     // we only allow one at a time
-    if(currentJobStatus!=='idle' && currentJobStatus!=='completed' && currentJobStatus!=='failed') {
+    if (currentJobStatus !== 'idle' && currentJobStatus !== 'completed' && currentJobStatus !== 'failed') {
       setConfirmationPopupData({
         title: "Image Generation Failed",
         message1: "Failed to generate image.",
@@ -464,9 +465,17 @@ const Editor = () => {
   };
   const handleEyeDropperColor = (color) => {
     console.log("color from canvas:", color);
-
+    // reset the tool choice to the previous tool in tool mode
+    if (!("EyeDropper" in window)) {
+      if (previousTool != undefined && previousTool !== 'eyedropper') {
+        setTool(previousTool)
+      } else {
+        setTool("pencil");
+      }
+    }
     setBrushColor(color);
   };
+
   const contextMenuOptions = [
     { text: "Generate New", onClick: onCreateNewImageClicked },
     { text: "Save", onClick: onSaveClicked },
@@ -530,14 +539,14 @@ const Editor = () => {
         setSelectedColor={setBrushColor}
         secondaryColor={secondaryBrushColor}
         setSecondaryColor={setSecondaryBrushColor}
-        onEyeDropperClicked={async ()=> {
+        onEyeDropperClicked={async () => {
           await handleEyeDropper(handleEyeDropperColor);
         }}
         toggleGridLines={toggleGrid}
         gridLinesVisible={gridLinesVisible}
         tool={tool}
         setTool={setTool}
-
+        setPreviousTool={setPreviousTool}
       />
       <div className="canvas-container">
         <Canvas
@@ -549,6 +558,7 @@ const Editor = () => {
           canvasRenderHeight={CANVAS_RENDER_WIDTH}
           gridLinesVisible={gridLinesVisible}
           tool={tool}
+          onColorSelected={handleEyeDropperColor}
         />
       </div>
       {/* Hidden file input for opening images */}
