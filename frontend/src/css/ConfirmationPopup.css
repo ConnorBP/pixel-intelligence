@@ -69,6 +69,16 @@
   color: white;
 }
 
+.popup-image {
+  width: 100%;
+  height: auto;
+  border-radius: var(--border-radius);
+  -webkit-border-radius: var(--border-radius);
+  -moz-border-radius: var(--border-radius);
+  -ms-border-radius: var(--border-radius);
+  -o-border-radius: var(--border-radius);
+}
+
 /* dark mode compatibility */
 @media (prefers-color-scheme: dark) {
   .alert-overlay {
