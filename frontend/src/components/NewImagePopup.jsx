@@ -39,6 +39,7 @@ const NewImagePopup = ({ isOpen, onClose, onCreate }) => {
             placeholder="Describe what your image will be..."
             value={description}
             onChange={(e) => setDescription(e.target.value)}
+            maxLength={64}
             className="input"
           />
           <div className="popup-preview-wrapper">
