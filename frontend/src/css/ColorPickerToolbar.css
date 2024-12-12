@@ -99,8 +99,8 @@
 
 @media screen and (max-width: 632px) {
   :root {
-      --color-box-size: 80px; 
-      --mini-box-size: 20px;
+    --color-box-size: 28px;
+    --mini-box-size: 8px;
   }
 
   .color-container {
