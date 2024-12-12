@@ -3,6 +3,7 @@ import "../css/ProgressToastOverlay.css";
 import useJobWatcher from '../context/useJobWatcher';
 import ProgressBar from './ProgressBar';
 import useRecursiveTimeout from '../hooks/useRecursiveHook';
+import "../css/ClearJobOverlay.css";
 
 // how many milliseconds to wait before updating the percent display
 const updatePercentEvery = 300;
@@ -14,11 +15,13 @@ const ProgressToastOverlay = () => {
         currentJobStatus,
         currentJobSubmittedAt,
         currentQueuePosition,
-        currentTimeoutLength
+        currentTimeoutLength,
+        clearJob
     } = useJobWatcher();
 
     const [currentPercent, setCurrentPercent] = useState(0);
     const [timeRemaining, setTimeRemaining] = useState("N/A");
+    const [showCancelJobPopup, setShowCancelJobPopup] = useState(false);
     const [nextPollTime, setNextPollTime] = useState(new Date().getTime() + currentTimeoutLength);
 
     useEffect(() => {
@@ -56,7 +59,7 @@ const ProgressToastOverlay = () => {
     // update on timer (and reset it if currentJobEta or currentJobSubmittedAt changes)
     useRecursiveTimeout(updatePercent, updatePercentEvery, [currentJobEta, currentJobSubmittedAt, nextPollTime]);
 
-    if(currentJobStatus === 'fetching') {
+    if (currentJobStatus === 'fetching') {
         return (
             <div className='progress-toast-overlay'>
                 <h6>Done. Fetching...</h6>
@@ -64,7 +67,7 @@ const ProgressToastOverlay = () => {
         );
     }
 
-    if(currentJobStatus !== 'running') {
+    if (currentJobStatus !== 'running') {
         return null;
     }
 
@@ -73,7 +76,44 @@ const ProgressToastOverlay = () => {
             <div>Rendering... {currentQueuePosition > 1 ? `#${currentQueuePosition} in queue` : ''}</div>
             <div> eta: {timeRemaining}</div>
             <ProgressBar percent={currentPercent} />
-        </div>
+            <button
+                className="clear-job-btn"
+                onClick={() => {
+                    console.log("Cancel button clicked, showing popup...");
+                    setShowCancelJobPopup(true);
+                }}
+            >
+                Cancel
+            </button>
+            {/* Custom Job Popup Overlay */}
+            {
+                showCancelJobPopup && (
+                    <div className="clear-job-popup-overlay">
+                        <div className="popup-content">
+                            <h3>Confirm Image Job Cancellation!</h3>
+                            <p>Are you sure you want to clear the current image generation job?</p>
+                            <div className='popup-actions'>
+                                <button
+                                    className="confirm-btn"
+                                    onClick={() => {
+                                        clearJob();
+                                        setShowCancelJobPopup(false);
+                                    }}
+                                >
+                                    Yes
+                                </button>
+                                <button
+                                    className="cancel-btn"
+                                    onClick={() => setShowCancelJobPopup(false)}
+                                >
+                                    No
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )
+            }
+        </div >
     )
 }
 

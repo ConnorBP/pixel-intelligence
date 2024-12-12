@@ -4,6 +4,7 @@ export const dbStringURL = process.env.MONGO_DB_STRING; // Database connection s
 export const dbName = process.env.DATABASE_NAME; // Database Name
 export const canvasCollection = process.env.CANVAS_COLLECTION; // Canvas Collection Name
 export const imageJobsCollection = process.env.IMAGE_JOBS_COLLECTION; // Image Jobs Collection
+export const maxErrorRetries = process.env.Max_ERROR_RETRIES; // Max Error Retries user have 
 
 
 //********** DATABASE CONNECTION **********//
@@ -121,6 +122,26 @@ export const updateImageJobStatus = async (jobId, status, downloadUrl) => {
     } catch (e) {
         console.error("Error updating image job data: ", e.stack || e);
         throw new Error("Failed to retrieve job data.");
+    } finally {
+        db.client.close();
+    }
+};
+
+
+// Cancel Image Job:  Not using this at this moment 
+export const cancelImageJob = async (jobId) => {
+    const db = await connectToDB();
+    try{
+        const collection = db.collection(imageJobsCollection);
+        const result = await collection.updateOne(
+            {jobId},
+            { $set: { status: "canceled"} }
+        );
+        console.log(`Job ${jobId} cancelled.`);
+        return result;
+    } catch (e) {
+        console.error("Error cancelling image job: ", e.stack || e);
+        throw new Error("Failed to cancel job..");
     } finally {
         db.client.close();
     }

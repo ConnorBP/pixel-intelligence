@@ -2,7 +2,7 @@ import express from "express";
 import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
 import { query, check, validationResult } from "express-validator";
-import { saveImageJobData, getImageJobData, updateImageJobStatus, connectToDB, doesJobIdExist } from "../database/dbService.js";
+import { saveImageJobData, getImageJobData, updateImageJobStatus, connectToDB, doesJobIdExist, cancelImageJob} from "../database/dbService.js";
 import { authenticate } from "../auth/authentication.js";
 
 const router = express.Router();
@@ -297,7 +297,7 @@ router.get("/poll/:jobId",
       return res.status(400).json({ success: false, error: "Invalid job Id." });
     }
 
-    try {
+    try {     
       const imageJob = await getImageJobData(jobId);
 
       if (!imageJob) {
@@ -343,6 +343,39 @@ router.get("/poll/:jobId",
       }
     }
   });
+
+// Cancel Image Job: Not using this route at this moment
+router.post("cancel/:jobId",
+  [
+    authenticate,
+    check('jobId').isString().isUUID()
+  ],
+  async (req, res) => {
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ success: false, error: "Validation error", errors: errors.array() });
+    }
+
+    const { jobId } = req.params;
+    // Checking if the job id format is valid or not
+    if (!isValidJobId(jobId)) {
+      return res.status(400).json({ success: false, error: "Invalid job Id." });
+    }
+
+    try {
+        const result = await cancelImageJob(jobId);
+      if(result) {
+        res.status(200).json({ message: `Job ${jobId} canceled successfully` });
+      } else {
+        res.status(404).json({ error: `Job ${jobId} not found or already completed` });
+      }
+    } catch(e) {
+      console.error("Error canceling job: ", e.response ? e.response.data : e.message);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  } 
+);
 
 // GET request to download the image
 router.get("/download/:jobId",

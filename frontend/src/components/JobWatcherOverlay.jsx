@@ -9,7 +9,7 @@ const updatePercentEvery = 300;
 
 const JobWatcherOverlay = () => {
     // only show job watcher overlay on development build
-    if(import.meta.env.MODE !== 'development') {
+    if (import.meta.env.MODE !== 'development') {
         return null;
     }
 
@@ -20,7 +20,7 @@ const JobWatcherOverlay = () => {
         currentJobStatus,
         currentJobWaitTime,
         currentJobSubmittedAt,
-        currentQueuePosition
+        currentQueuePosition,
     } = useJobWatcher();
 
     const [currentPercent, setCurrentPercent] = React.useState(0);

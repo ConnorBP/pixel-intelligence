@@ -24,3 +24,13 @@
 .progress-toast-overlay, .progress-toast-overlay >* {
     pointer-events: none;
 }
+
+/* Allow pointer events specifically for the Cancel button */
+.clear-job-btn, confirm-btn, cancel-btn {
+    pointer-events: auto !important;
+}
+
+/* Allow pointer events on the popup overlay and its contents */
+.clear-job-popup-overlay, .popup-content, .popup-actions, .confirm-btn, .cancel-btn {
+    pointer-events: auto !important;
+}
