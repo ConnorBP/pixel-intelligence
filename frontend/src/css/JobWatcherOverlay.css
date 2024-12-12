@@ -1,6 +1,6 @@
 .job-watcher-overlay {
     position: fixed;
-    bottom: 0;
+    bottom: 50%;
     right: 0;
     padding-left: 8pt;
     padding-right: 8pt;
