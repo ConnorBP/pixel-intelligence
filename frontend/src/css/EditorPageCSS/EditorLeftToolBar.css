@@ -15,8 +15,10 @@
 }
 
 .icon-container {
+  display: flex;
+  flex-wrap: wrap;
   padding-left: 2px;
-
+  max-width: var(--left-toolbar-size);
 }
 
 .icon-container .icon {
@@ -28,6 +30,10 @@
   -moz-border-radius: 30%;
   -ms-border-radius: 30%;
   -o-border-radius: 30%;
+  width: 45%;
+  height: auto;
+  font-size: 100%;
+
 }
 
 .icon-container .icon>* {
@@ -35,7 +41,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 100%;
+  /* height: 100%; */
 }
 
 .icon-container .icon:hover {
@@ -69,24 +75,33 @@
 
 /* Tooltip text (hidden by default) */
 .tooltip-vertical::before {
-  content: attr(button-name); /* Tooltip text from attribute */
+  content: attr(button-name);
+  /* Tooltip text from attribute */
   position: absolute;
   top: 50%;
-  left: calc(100% + 0.5em); /* Position the tooltip to the right of the button */
-  transform: translateY(-50%); /* Center vertically */
-  background-color: rgba(0, 0, 0, 0.85); /* Make tooltip more transparent */
+  left: calc(100% + 0.5em);
+  /* Position the tooltip to the right of the button */
+  transform: translateY(-50%);
+  /* Center vertically */
+  background-color: rgba(0, 0, 0, 0.85);
+  /* Make tooltip more transparent */
   color: white;
   padding: 0.5em 1em;
-  font-size: 0.6em; /* Ensure font size is consistent */
-  font-family: "Pixelify Sans", sans-serif; /* Match the font family */
-  font-weight: 500; /* Match the font weight */
+  font-size: 0.6em;
+  /* Ensure font size is consistent */
+  font-family: "Pixelify Sans", sans-serif;
+  /* Match the font family */
+  font-weight: 500;
+  /* Match the font weight */
   white-space: nowrap;
   border-radius: 6px;
   opacity: 0;
   visibility: hidden;
   transition: all 0.3s ease-in-out;
-  pointer-events: none; /* Prevent accidental hover */
-  z-index: 100; /* Ensure tooltip is above other elements */
+  pointer-events: none;
+  /* Prevent accidental hover */
+  z-index: 100;
+  /* Ensure tooltip is above other elements */
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
 }
 
@@ -95,11 +110,13 @@
   content: "";
   position: absolute;
   top: 50%;
-  right: -11px; /* Position the triangle on the right side of the tooltip */
+  right: -11px;
+  /* Position the triangle on the right side of the tooltip */
   transform: translateY(-50%);
   border-width: 6px;
   border-style: solid;
-  border-color: transparent transparent transparent rgba(0, 0, 0, 0.85); /* Change color to match tooltip transparency */
+  border-color: transparent transparent transparent rgba(0, 0, 0, 0.85);
+  /* Change color to match tooltip transparency */
   opacity: 0;
   visibility: hidden;
   transition: all 0.3s ease-in-out;
@@ -107,16 +124,18 @@
 }
 
 /* Show tooltip on hover */
-.tooltip-vertical:hover::before, 
+.tooltip-vertical:hover::before,
 .tooltip-vertical:hover::after {
   opacity: 1;
   visibility: visible;
-  transform: translateY(-50%) translateX(0); /* Tooltip slide-in effect */
+  transform: translateY(-50%) translateX(0);
+  /* Tooltip slide-in effect */
 }
 
 /* Optional: Adjust tooltip positioning for left-side */
 .tooltip-vertical-left::before {
-  left: calc(-100% - 0.5em); /* Position the tooltip to the left of the button */
+  left: calc(-100% - 0.5em);
+  /* Position the tooltip to the left of the button */
 }
 
 .tooltip-vertical-left::after {
@@ -132,4 +151,11 @@
     --left-toolbar-size: 3em;
   }
 
+  .left-toolbar .toolbar-square {
+    height: calc(var(--left-toolbar-size) * 4);
+  }
+
+  .icon-container .icon {
+    width: 100%;
+  }
 }
