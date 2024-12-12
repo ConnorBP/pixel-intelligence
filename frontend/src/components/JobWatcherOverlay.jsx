@@ -8,6 +8,11 @@ import useRecursiveTimeout from '../hooks/useRecursiveHook';
 const updatePercentEvery = 300;
 
 const JobWatcherOverlay = () => {
+    // only show job watcher overlay on development build
+    if(import.meta.env.MODE !== 'development') {
+        return null;
+    }
+
     const {
         currentJobEta,
         currentJobId,
