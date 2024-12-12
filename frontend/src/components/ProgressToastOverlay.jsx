@@ -11,13 +11,22 @@ const extraTimeBufferFactor = 1.2;
 const ProgressToastOverlay = () => {
     const {
         currentJobEta,
-        currentJobId,
-        currentJobResult,
         currentJobStatus,
-        currentJobWaitTime,
         currentJobSubmittedAt,
         currentQueuePosition
     } = useJobWatcher();
+
+    if(currentJobStatus === 'fetching') {
+        return (
+            <div className='progress-toast-overlay'>
+                <h6>Done. Fetching...</h6>
+            </div>
+        );
+    }
+
+    if(currentJobStatus !== 'running') {
+        return null;
+    }
 
     const [currentPercent, setCurrentPercent] = useState(0);
     const [timeRemaining, setTimeRemaining] = useState("N/A");
@@ -31,7 +40,7 @@ const ProgressToastOverlay = () => {
             totalWaitTime *= extraTimeBufferFactor;
             const currentWaitTime = new Date().getTime() - currentJobSubmittedAt;
 
-            const timeUntilEta = currentJobEta - new Date().getTime();
+            var timeUntilEta = currentJobEta - new Date().getTime();
             timeUntilEta *= extraTimeBufferFactor;
 
             // update the display of time remaining
@@ -55,7 +64,7 @@ const ProgressToastOverlay = () => {
 
     return (
         <div className='progress-toast-overlay'>
-            <div>Rendering...</div>
+            <div>Rendering... {currentQueuePosition > 1 ? `#${currentQueuePosition} in queue` : ''}</div>
             <div> eta: {timeRemaining}</div>
             <ProgressBar percent={currentPercent} />
         </div>
