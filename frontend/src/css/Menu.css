@@ -55,12 +55,6 @@
   justify-content: center;
 }
 
-.one-hundo-pw {
-  width: 100%;
-  height: auto;
-  font-size: 100%;
-}
-
 .menuBox li {
   border-bottom: 2px solid #b0a9a9;
   display: flex;
