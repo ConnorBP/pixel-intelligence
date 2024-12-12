@@ -53,7 +53,11 @@ const NewImagePopup = ({ isOpen, onClose, onCreate }) => {
                 onChange={(e) => setCanvasSize(e.target.value)}
                 className="select"
               >
-                <option value={8}>08x08</option>
+                {/*
+                we are disabling 8x8 generation for now as the results are pretty consistently terrible with the current model.
+                Depending on the image output, the users may always downscale the image to 8x8 if they want.
+                */}
+                {/* <option value={8}>08x08</option> */}
                 <option value={16}>16x16</option>
                 <option value={32}>32x32</option>
                 <option value={64}>64x64</option>
