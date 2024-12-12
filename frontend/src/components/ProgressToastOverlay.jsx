@@ -15,6 +15,7 @@ const ProgressToastOverlay = () => {
         currentJobStatus,
         currentJobSubmittedAt,
         currentQueuePosition,
+        currentTimeoutLength,
         clearJob
     } = useJobWatcher();
 
