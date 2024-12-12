@@ -27,7 +27,9 @@ const JobWatcherOverlay = () => {
         // console.log('updating percent');
         let percent = 0;
         if (currentJobEta && currentJobSubmittedAt) {
-            const totalWaitTime = currentJobEta - currentJobSubmittedAt;
+            var totalWaitTime = currentJobEta - currentJobSubmittedAt;
+            // add an extra buffer to the total wait time estimate
+            totalWaitTime *= 1.1;
             const currentWaitTime = new Date().getTime() - currentJobSubmittedAt;
             percent = currentWaitTime / totalWaitTime;
             setCurrentPercent(percent);
