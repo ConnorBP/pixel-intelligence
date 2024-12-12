@@ -44,6 +44,11 @@ function Gallery() {
     };
 
     useEffect(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, [location]);
+     
+
+    useEffect(() => {
         let newPage = parseInt(searchPage) || 1;
         // console.log(`${newPage} ${galleryStateCache.page} ${galleryStateCache.lastRefresh} ${new Date().getTime() - galleryCacheInvalidationTime}`);
         
