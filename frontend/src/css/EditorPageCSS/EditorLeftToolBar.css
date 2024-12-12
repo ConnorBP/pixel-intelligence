@@ -132,4 +132,8 @@
     --left-toolbar-size: 3em;
   }
 
+  .left-toolbar .toolbar-square {
+    height: calc(var(--left-toolbar-size) * 4);
+  }
+
 }
