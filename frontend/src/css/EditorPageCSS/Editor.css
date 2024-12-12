@@ -2,10 +2,17 @@
     width: 100%;
     height: -webkit-fill-available;
     touch-action: none; /* Prevent touch gestures like scrolling */
+    user-select: none;
 }
 
 .canvas-container {
     /* add padding room for toolbar */
     padding-left: var(--left-toolbar-size);
     z-index: 0;
-}   
+    user-select: none;
+}
+
+.editor-canvas {
+    touch-action: none;
+    user-select: none;
+}
