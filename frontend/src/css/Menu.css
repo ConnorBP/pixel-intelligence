@@ -45,8 +45,9 @@
   /* z-index: 1000; */
 }
 .icon {
-  font-size: 20px;
+  font-size: 16pt;
   background-color: transparent;
+  aspect-ratio: 1 / 1;
 }
 
 .menuBox li {
