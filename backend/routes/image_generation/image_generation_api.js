@@ -2,7 +2,7 @@ import express from "express";
 import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
 import { query, check, validationResult } from "express-validator";
-import { saveImageJobData, getImageJobData, updateImageJobStatus, connectToDB, doesJobIdExist, cancelImageJob, jobErrorCounter } from "../database/dbService.js";
+import { saveImageJobData, getImageJobData, updateImageJobStatus, connectToDB, doesJobIdExist, cancelImageJob} from "../database/dbService.js";
 import { authenticate } from "../auth/authentication.js";
 
 const router = express.Router();
@@ -353,7 +353,7 @@ router.get("/poll/:jobId",
   });
 
 // Cancel Image Job
-app.post("cancel/:jobId",
+router.post("cancel/:jobId",
   [
     authenticate,
     check('jobId').isString().isUUID()
