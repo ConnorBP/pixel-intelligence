@@ -14,7 +14,8 @@ const ProgressToastOverlay = () => {
         currentJobEta,
         currentJobStatus,
         currentJobSubmittedAt,
-        currentQueuePosition
+        currentQueuePosition,
+        clearJob
     } = useJobWatcher();
 
     const [currentPercent, setCurrentPercent] = useState(0);
