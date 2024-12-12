@@ -39,7 +39,7 @@
   appearance: none;
   background-color: transparent;
   cursor: pointer;
-  margin-top: 15px; 
+  margin-top: 15px;
   margin-left: 15px;
   z-index: 1;
 }
@@ -60,7 +60,7 @@
   z-index: 3;
 }
 
-.btn-color-change >* {
+.btn-color-change>* {
   min-width: var(--mini-box-size);
   min-height: var(--mini-box-size);
 }
@@ -99,8 +99,48 @@
 
 @media screen and (max-width: 632px) {
   :root {
-    --color-box-size: 20px;
-    --mini-box-size: 4px;
+    --color-box-size: 28px;
+    --mini-box-size: 8px;
   }
-  
+
+  .color-container {
+    padding: 0px;
+    margin: 0px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    padding: 1em;
+    width: 100%;
+    height: auto;
+  }
+
+  .color-pick-first,
+  .color-pick-second {
+    width: 100%;
+    max-width: var(--color-box-size);
+    height: var(--color-box-size);
+    margin: 5px 0;
+    border-radius: 8px;
+  }
+
+  .btn-color-change {
+    width: calc(var(--mini-box-size) * 3);
+    height: calc(var(--mini-box-size) * 3);
+    border-radius: 50%;
+  }
+
+  .color-display-box {
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
+    gap: 10px;
+  }
+
+  .color-display-first,
+  .color-display-second {
+    width: var(--mini-box-size);
+    height: var(--mini-box-size);
+    border-radius: 50%;
+  }
 }
