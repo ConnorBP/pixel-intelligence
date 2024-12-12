@@ -31,6 +31,22 @@ const Canvas = forwardRef(
     // reference to the canvas object for us to draw to
     const canvasRef = useRef(null);
 
+    // a list of batch updates to be applied to the canvas by a drag event
+    const pixelUpdatesRef = useRef([]);
+
+    // helper to make use state update of array cleaner looking
+    const queuePixelUpdate = (x, y, color) => {
+      if (!pixelUpdatesRef.current) {
+        pixelUpdatesRef.current = [];
+      }
+      pixelUpdatesRef.current.push({ x, y, color });
+      // setPixelUpdates((prevUpdates) => [...prevUpdates, { x: x, y: y, color }]);
+    };
+
+    const clearPixelUpdates = () => {
+      pixelUpdatesRef.current = [];
+    }
+
     // track drag state
     let isMouseDown = useRef(false);
 
@@ -318,13 +334,13 @@ const Canvas = forwardRef(
       }
 
       // update the pixel in local storage
-      setCanvasData((oldCanvas) => {
-        return updatePixelAt(oldCanvas, pixelX, pixelY, color);
-      });
-      drawPixelAt(pixelX, pixelY, color, canvasData.width);
-
+      // setCanvasData((oldCanvas) => {
+      //   return updatePixelAt(oldCanvas, pixelX, pixelY, color);
+      // });
+      // queue the pixel for update instead
+      queuePixelUpdate(pixelX, pixelY, color);
       // draw to the pixel on the canvas for display
-      // drawPixelAt(pixelX, pixelY, color, canvasData.width);
+      drawPixelAt(pixelX, pixelY, color, canvasData.width);
     }
 
 
@@ -412,10 +428,27 @@ const Canvas = forwardRef(
     function endDrag() {
       oldPos = null;
       isMouseDown.current = false;
+      // apply all queued pixel updates 
+      applyPixelUpdates();
+      
     }
 
+    const applyPixelUpdates = () => {
+      if (!pixelUpdatesRef.current || pixelUpdatesRef.current.length <= 0) {
+        return;
+      }
+      setCanvasData((oldCanvas) => {
+        let newCanvas = { ...oldCanvas };
+        pixelUpdatesRef.current.forEach(({ x, y, color }) => {
+          newCanvas = updatePixelAt(newCanvas, x, y, color);
+        });
+        clearPixelUpdates();
+        return newCanvas;
+      });
+    };
+
     // Flood Fill Algorithm
-    const floodFill = (x, y, targetColor, replacementColor) => {
+    function floodFill(x, y, targetColor, replacementColor) {
       const isBackgroundColor = "#00000000"
       if (
         // targetColor === replacementColor ||
@@ -467,9 +500,10 @@ const Canvas = forwardRef(
 
         // Fill the current pixel
         visited.add(index);
-        setCanvasData((oldCanvas) =>
-          updatePixelAt(oldCanvas, currentX, currentY, replacementColor)
-        );
+        // setCanvasData((oldCanvas) =>
+        //   updatePixelAt(oldCanvas, currentX, currentY, replacementColor)
+        // );
+        queuePixelUpdate(currentX, currentY, replacementColor);
         drawPixelAt(currentX, currentY, replacementColor, width);
 
         // Add neighbors to the stack
@@ -478,7 +512,8 @@ const Canvas = forwardRef(
         stack.push([currentX, currentY + 1]);
         stack.push([currentX, currentY - 1]);
       }
-
+      // console.log("Flood Fill Complete ", pixelUpdatesRef.current);
+      applyPixelUpdates();
     };
 
     useEffect(() => {
