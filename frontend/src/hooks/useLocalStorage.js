@@ -6,7 +6,7 @@ import {useState, useEffect } from "react";
 
 export function getStorageValue(key, defaultValue) {
     const saved = localStorage.getItem(key);
-    let initial = ""; 
+    let initial = null; 
     try{initial = JSON.parse(saved)} catch(e) {
         console.log('error parsing json for ', saved, e);
         initial = saved
