@@ -44,7 +44,7 @@ const JobWatcherOverlay = () => {
     };
 
     // update on timer
-    useRecursiveTimeout(updatePercent, updatePercentEvery);
+    useRecursiveTimeout(updatePercent, updatePercentEvery, [currentJobEta, currentJobSubmittedAt]);
 
     return (
         <div className='job-watcher-overlay'>
