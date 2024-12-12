@@ -45,9 +45,20 @@
   /* z-index: 1000; */
 }
 .icon {
-  font-size: 16pt;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  font-size: 100%;
   background-color: transparent;
   aspect-ratio: 1 / 1;
+  align-items: center;
+  justify-content: center;
+}
+
+.one-hundo-pw {
+  width: 100%;
+  height: auto;
+  font-size: 100%;
 }
 
 .menuBox li {
