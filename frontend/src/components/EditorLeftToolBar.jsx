@@ -1,5 +1,5 @@
 import "../css/EditorPageCSS/EditorLeftToolBar.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ColorPickerToolbar from "./ColorPickerToolbar";
 import { FaEraser, FaPencilAlt, FaEyeDropper } from "react-icons/fa";
 import { PiPaintBucketFill } from "react-icons/pi";
@@ -8,7 +8,11 @@ import { MdOutlineGridOn } from "react-icons/md";
 const EditorLeftToolBar = ({ selectedColor, setSelectedColor, secondaryColor, setSecondaryColor, tool, setTool, onEyeDropperClicked, toggleGridLines, gridLinesVisible }) => {
 
   const [colorPickerActive, setColorPickerActive] = useState(false);
-
+  useEffect(() => {
+    if (tool === "eyedropper") {
+      console.log("tool: eyedropper"); 
+    }
+  }, [tool]);
   return (
     <div className="left-toolbar">
       <div className="icon-container">
@@ -31,12 +35,13 @@ const EditorLeftToolBar = ({ selectedColor, setSelectedColor, secondaryColor, se
           className={`icon ${colorPickerActive === true ? "active" : ""} tooltip-vertical`}
           button-name="Color Picker"
           onClick={async () => {
-            if (onEyeDropperClicked) {
+            if ("EyeDropper" in window) {
               setColorPickerActive(true);
               await onEyeDropperClicked();
               setColorPickerActive(false);
+            } else {
+              setTool("eyedropper");
             }
-
           }}>
           <FaEyeDropper />
         </button>

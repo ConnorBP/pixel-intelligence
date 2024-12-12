@@ -240,6 +240,22 @@ const Canvas = forwardRef(
     });
 
 
+    const getHexColor = (canvas , x, y)=> {
+
+      const context = canvas.getContext("2d");
+      const pixelData = context.getImageData(x, y, 1, 1).data;
+      const r = pixelData[0]; 
+      const g = pixelData[1]; 
+      const b = pixelData[2]; 
+    
+      const hexColor = `#${((1 << 24) + (r << 16) + (g << 8) + b)
+        .toString(16)
+        .slice(1)
+        .toUpperCase()}`;
+    
+      return hexColor; 
+    };
+
     // Handles the event of someone clicking on the canvas area
     // Currently only supports single click drawing
     async function handleCanvasClick(event) {
@@ -281,7 +297,19 @@ const Canvas = forwardRef(
         if (targetColor === brushColor) return; // Already filled with the same color
         floodFill(pixelX, pixelY, targetColor, brushColor);
         return;
-      } else {
+      }else if (tool === "eyedropper"){
+  
+        const hexColor = getHexColor(canvas, pixelX * pixelSize, pixelY * pixelSize);
+     
+        if(onColorSelected)
+        {
+          console.log("colorrrr",hexColor)
+          onColorSelected(hexColor);
+        }
+        return;
+       
+      }
+       else {
         // do nothing if no tool
         console.warn("No tool selected"); // this shouldn't happen
         return;

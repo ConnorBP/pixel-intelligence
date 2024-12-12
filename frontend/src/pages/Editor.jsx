@@ -48,7 +48,7 @@ const Editor = () => {
   // wether the grid lines are shown or not on the editor canvas
   const [gridLinesVisible, setGridLinesVisible] = useLocalStorage("gridLinesVisible", false);
   const [tool, setTool] = useLocalStorage("tool", "pencil");
-
+ 
   // for tracking current generation job id
   const { submitJob, clearJob, currentJobStatus, currentJobResult, canvasSize } = useJobWatcher()
 
@@ -467,6 +467,7 @@ const Editor = () => {
 
     setBrushColor(color);
   };
+
   const contextMenuOptions = [
     { text: "Generate New", onClick: onCreateNewImageClicked },
     { text: "Save", onClick: onSaveClicked },
@@ -537,7 +538,6 @@ const Editor = () => {
         gridLinesVisible={gridLinesVisible}
         tool={tool}
         setTool={setTool}
-
       />
       <div className="canvas-container">
         <Canvas
@@ -549,6 +549,7 @@ const Editor = () => {
           canvasRenderHeight={CANVAS_RENDER_WIDTH}
           gridLinesVisible={gridLinesVisible}
           tool={tool}
+          onColorSelected={handleEyeDropperColor} 
         />
       </div>
       {/* Hidden file input for opening images */}
