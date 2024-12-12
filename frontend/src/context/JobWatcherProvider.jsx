@@ -15,7 +15,7 @@ const jobWatcherReducer = (state, action) => {
                 currentJobId: action.jobId,
                 canvasSize: action.canvasSize,
                 currentJobStatus: 'running',
-                currentJobSubmittedAt: Date.now(),
+                currentJobSubmittedAt: new Date().getTime(),
 
                 currentJobWaitTime: action.wait_time,
                 currentJobEta: action.eta,
@@ -169,7 +169,7 @@ export const JobWatcherProvider = ({ children, jobCheckIntervalMsMin = 10000, jo
     }, [state.currentJobStatus, state.currentJobId, pollJobStatus]);
 
     const submitJob = (jobId, canvasSize) => {
-        dispatch({ type: 'start', jobId, canvasSize, eta: Date.now() + jobCheckIntervalMsMin, wait_time: (jobCheckIntervalMsMin/1000) });
+        dispatch({ type: 'start', jobId, canvasSize, eta: new Date().getTime() + jobCheckIntervalMsMin, wait_time: (jobCheckIntervalMsMin/1000) });
     };
 
     const clearJob = () => {
