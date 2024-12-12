@@ -48,6 +48,7 @@ const Editor = () => {
   // wether the grid lines are shown or not on the editor canvas
   const [gridLinesVisible, setGridLinesVisible] = useLocalStorage("gridLinesVisible", false);
   const [tool, setTool] = useLocalStorage("tool", "pencil");
+  const [previousTool, setPreviousTool] = useState(null);
 
   // for tracking current generation job id
   const { submitJob, clearJob, currentJobStatus, currentJobResult, canvasSize } = useJobWatcher()
@@ -464,7 +465,14 @@ const Editor = () => {
   };
   const handleEyeDropperColor = (color) => {
     console.log("color from canvas:", color);
-
+    // reset the tool choice to the previous tool in tool mode
+    if (!("EyeDropper" in window)) {
+      if (previousTool != undefined && previousTool !== 'eyedropper') {
+        setTool(previousTool)
+      } else {
+        setTool("pencil");
+      }
+    }
     setBrushColor(color);
   };
 
@@ -538,6 +546,7 @@ const Editor = () => {
         gridLinesVisible={gridLinesVisible}
         tool={tool}
         setTool={setTool}
+        setPreviousTool={setPreviousTool}
       />
       <div className="canvas-container">
         <Canvas

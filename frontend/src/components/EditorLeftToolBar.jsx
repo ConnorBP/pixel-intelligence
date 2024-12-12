@@ -5,7 +5,7 @@ import { FaEraser, FaPencilAlt, FaEyeDropper } from "react-icons/fa";
 import { PiPaintBucketFill } from "react-icons/pi";
 import { MdOutlineGridOn } from "react-icons/md";
 
-const EditorLeftToolBar = ({ selectedColor, setSelectedColor, secondaryColor, setSecondaryColor, tool, setTool, onEyeDropperClicked, toggleGridLines, gridLinesVisible }) => {
+const EditorLeftToolBar = ({ selectedColor, setSelectedColor, secondaryColor, setSecondaryColor, tool, setTool, setPreviousTool, onEyeDropperClicked, toggleGridLines, gridLinesVisible }) => {
 
   const [colorPickerActive, setColorPickerActive] = useState(false);
   useEffect(() => {
@@ -32,14 +32,20 @@ const EditorLeftToolBar = ({ selectedColor, setSelectedColor, secondaryColor, se
           button-name="Bucket Fill"
           onClick={() => setTool("paint")} ><PiPaintBucketFill /></button>
         <button
-          className={`icon ${colorPickerActive === true ? "active" : ""} tooltip-vertical`}
+          className={`icon ${(colorPickerActive === true || tool === 'eyedropper') ? "active" : ""} tooltip-vertical`}
           button-name="Color Picker"
           onClick={async () => {
+            // check if the browser supports eye dropper
             if ("EyeDropper" in window) {
               setColorPickerActive(true);
               await onEyeDropperClicked();
               setColorPickerActive(false);
             } else {
+              // if not then use the fallback "tool" eyedropper
+
+              // store previously selected tool first
+              setPreviousTool(tool);
+              // then change tool to eyedropper
               setTool("eyedropper");
             }
           }}>

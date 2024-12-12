@@ -4,7 +4,8 @@ import "../css/Canvas.css";
 import {
   drawCheckeredBackground,
   drawPixelToCtx,
-  drawCheckeredPixel
+  drawCheckeredPixel,
+  parseColor
 } from "../utils";
 
 const Canvas = forwardRef(
@@ -239,7 +240,6 @@ const Canvas = forwardRef(
 
     });
 
-
     const getHexColor = (canvas, x, y) => {
 
       const context = canvas.getContext("2d");
@@ -292,17 +292,21 @@ const Canvas = forwardRef(
 
         console.log("erasing");
       } else if (tool === "paint") {
-
+        // "Bucket" Fill the area with the brush color
         const targetColor = canvasData.pixels[pixelX + pixelY * canvasData.width];
-        if (targetColor === brushColor) return; // Already filled with the same color
+        // if (targetColor === brushColor) return; // Already filled with the same color
         floodFill(pixelX, pixelY, targetColor, brushColor);
         return;
       } else if (tool === "eyedropper") {
-
+        // this gets the color from the "rendered" canvas which includes gridlines
         const hexColor = getHexColor(canvas, pixelX * pixelSize, pixelY * pixelSize);
-
+        // instead we should get the color from the actual underlying canvasData state
+        // but the color picker in html doesn't support transparency yet https://github.com/whatwg/html/issues/3400
+        // so we have to replace the current color picker before we can do this
+        // const hexColor = canvasData.pixels[pixelX + pixelY * canvasData.width];
+        console.log("colorrrr", hexColor)
         if (onColorSelected) {
-          console.log("colorrrr", hexColor)
+          // console.log("colorrrr", hexColor)
           onColorSelected(hexColor);
         }
         return;
@@ -379,8 +383,9 @@ const Canvas = forwardRef(
     const floodFill = (x, y, targetColor, replacementColor) => {
       const isBackgroundColor = "#00000000"
       if (
-        targetColor === replacementColor ||
-        replacementColor === isBackgroundColor
+        // targetColor === replacementColor ||
+        replacementColor === isBackgroundColor ||
+        replacementColor == null
       ) {
         return;
       }
@@ -402,9 +407,26 @@ const Canvas = forwardRef(
           currentX >= width ||
           currentY < 0 ||
           currentY >= height ||
-          visited.has(index) ||
-          canvasData.pixels[index] !== targetColor
+          visited.has(index)
+          // || canvasData.pixels[index] !== targetColor
         ) {
+
+          continue;
+        }
+
+        // compare the distance between the target color and the current color
+        // using a distance formula
+        const minDistance = 0.002;
+
+        var [r, g, b, a] = parseColor(canvasData.pixels[index])
+        var [tr, tg, tb, ta] = parseColor(targetColor);
+
+        [r, g, b, a] = [r, g, b, a].map(x => x / 255.0);
+        [tr, tg, tb, ta] = [tr, tg, tb, ta].map(x => x / 255.0);
+
+        const distanceSquared = (r - tr) * (r - tr) + (g - tg) * (g - tg) + (b - tb) * (b - tb);// + (a - ta) * (a - ta);
+        console.log(distanceSquared);
+        if (distanceSquared > minDistance) {
           continue;
         }
 
