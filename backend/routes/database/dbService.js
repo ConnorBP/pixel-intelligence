@@ -128,7 +128,7 @@ export const updateImageJobStatus = async (jobId, status, downloadUrl) => {
 };
 
 
-// Cancel Image Job 
+// Cancel Image Job:  Not using this at this moment 
 export const cancelImageJob = async (jobId) => {
     const db = await connectToDB();
     try{
