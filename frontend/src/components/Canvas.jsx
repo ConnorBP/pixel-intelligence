@@ -240,20 +240,20 @@ const Canvas = forwardRef(
     });
 
 
-    const getHexColor = (canvas , x, y)=> {
+    const getHexColor = (canvas, x, y) => {
 
       const context = canvas.getContext("2d");
       const pixelData = context.getImageData(x, y, 1, 1).data;
-      const r = pixelData[0]; 
-      const g = pixelData[1]; 
-      const b = pixelData[2]; 
-    
+      const r = pixelData[0];
+      const g = pixelData[1];
+      const b = pixelData[2];
+
       const hexColor = `#${((1 << 24) + (r << 16) + (g << 8) + b)
         .toString(16)
         .slice(1)
         .toUpperCase()}`;
-    
-      return hexColor; 
+
+      return hexColor;
     };
 
     // Handles the event of someone clicking on the canvas area
@@ -267,7 +267,7 @@ const Canvas = forwardRef(
       const pixelSize = canvasRenderWidth / canvasData.width;
 
       // prevent events outside of the canvas
-      if(event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) {
+      if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) {
         return;
       }
 
@@ -297,19 +297,18 @@ const Canvas = forwardRef(
         if (targetColor === brushColor) return; // Already filled with the same color
         floodFill(pixelX, pixelY, targetColor, brushColor);
         return;
-      }else if (tool === "eyedropper"){
-  
+      } else if (tool === "eyedropper") {
+
         const hexColor = getHexColor(canvas, pixelX * pixelSize, pixelY * pixelSize);
-     
-        if(onColorSelected)
-        {
-          console.log("colorrrr",hexColor)
+
+        if (onColorSelected) {
+          console.log("colorrrr", hexColor)
           onColorSelected(hexColor);
         }
         return;
-       
+
       }
-       else {
+      else {
         // do nothing if no tool
         console.warn("No tool selected"); // this shouldn't happen
         return;
@@ -442,7 +441,7 @@ const Canvas = forwardRef(
           const y = Math.floor(index / canvasData.width);
           drawPixelToCtx(context, x, y, color, canvas.width / canvasData.width);
         });
-        if(gridLinesVisible) drawAllGridLines(canvas, canvasData.width, canvasData.height);
+        if (gridLinesVisible) drawAllGridLines(canvas, canvasData.width, canvasData.height);
       }
     }, [canvasData, gridLinesVisible]);
 
