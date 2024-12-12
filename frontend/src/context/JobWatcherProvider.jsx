@@ -177,7 +177,7 @@ export const JobWatcherProvider = ({ children, jobCheckIntervalMsMin = 10000, jo
     };
 
     return (
-        <JobWatcherContext.Provider value={{ ...state, submitJob, clearJob }}>
+        <JobWatcherContext.Provider value={{ ...state, currentTimeoutLength, submitJob, clearJob }}>
             {children}
         </JobWatcherContext.Provider>
     );
