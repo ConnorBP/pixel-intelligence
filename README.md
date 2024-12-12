@@ -5,7 +5,7 @@
 
 ## Overview
 
-Pixel Intelligence is a full-stack pixel art editor application with generative AI functionality, image downscale processing, image export, and a showcase gallery. This project was developed as part of the Comp229 Group Project (Fall 2024).
+Pixel Intelligence is a full-stack pixel art editor application with [generative AI functionality through stablehorde](https://stablehorde.net/), image downscale processing, image export, and a showcase gallery. This project was developed as part of the Comp229 Group Project (Fall 2024).
 
 ![picture of the editor page](./docs/this_is_fine.png)
 
