@@ -147,33 +147,6 @@ export const cancelImageJob = async (jobId) => {
     }
 };
 
-// Job error counter
-export const jobErrorCounter = async (jobId) => {
-    const db = await connectToDB();
-    try {
-        const collection = db.collection(imageJobsCollection);
-        const imageJob = await collection.findOne({jobId});
-        const errorCount = (imageJob.errorCount || 0) + 1;
-
-        const updateData = {errorCount};
-        if(errorCount > maxErrorRetries) {
-            updateData.status = "failed";
-        }
-
-        await collection.updateOne(
-            {jobId},
-            { $set: updateData }
-        );
-
-        console.log(`Job ${jobId} error count incremented to ${errorCount}`);
-    } catch (e) {
-        console.error("Error incrementing job error count: ", e.stack || e);
-        throw new Error("Failed to increment job error count.");
-    } finally {
-        await db.client.close();
-    }
-};
-
 //**********RETURN DB CONNECTION**********//
 
 // Function to return database connection
