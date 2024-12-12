@@ -6,6 +6,7 @@ import useRecursiveTimeout from '../hooks/useRecursiveHook';
 
 // how many milliseconds to wait before updating the percent display
 const updatePercentEvery = 300;
+const extraTimeBufferFactor = 1.2;
 
 const ProgressToastOverlay = () => {
     const {
@@ -27,13 +28,17 @@ const ProgressToastOverlay = () => {
         if (currentJobEta && currentJobSubmittedAt) {
             var totalWaitTime = currentJobEta - currentJobSubmittedAt;
             // add an extra buffer to the total wait time estimate
-            totalWaitTime *= 1.1;
+            totalWaitTime *= extraTimeBufferFactor;
             const currentWaitTime = new Date().getTime() - currentJobSubmittedAt;
 
+            const timeUntilEta = currentJobEta - new Date().getTime();
+            timeUntilEta *= extraTimeBufferFactor;
+
             // update the display of time remaining
-            const seconds = Math.floor((currentWaitTime / 1000) % 60);
-            const minutes = Math.floor((currentWaitTime / (1000 * 60)) % 60);
-            setTimeRemaining(`${minutes}m ${seconds}s`);
+            const seconds = Math.floor((timeUntilEta / 1000) % 60);
+            const minutes = Math.floor((timeUntilEta / (1000 * 60)) % 60);
+            const mDisplay = minutes > 0 ? `${minutes}m ` : '';
+            setTimeRemaining(`${mDisplay}${seconds}s`);
 
             percent = currentWaitTime / totalWaitTime;
             setCurrentPercent(percent);
