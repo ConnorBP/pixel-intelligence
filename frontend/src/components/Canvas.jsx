@@ -283,7 +283,6 @@ const Canvas = forwardRef(
 
       if (tool === "pencil") {
         color = brushColor;
-
       } else if (tool === "eraser") {
         color = "#00000000";
         // update the display for that pixel with clearcolor
@@ -425,7 +424,7 @@ const Canvas = forwardRef(
         [tr, tg, tb, ta] = [tr, tg, tb, ta].map(x => x / 255.0);
 
         const distanceSquared = (r - tr) * (r - tr) + (g - tg) * (g - tg) + (b - tb) * (b - tb);// + (a - ta) * (a - ta);
-        console.log(distanceSquared);
+
         if (distanceSquared > minDistance) {
           continue;
         }
