@@ -259,7 +259,6 @@ router.post("/generate", [
 
     res.status(202).json({ success: true, jobId });
   } catch (e) {
-    errorRetries += 1;
     console.error("Error starting generation: " + e.response ? e.response.data : e.message);
     res.status(500).json({ success: false, error: "Internal server error" });
   }

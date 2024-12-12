@@ -29,3 +29,8 @@
 .clear-job-btn, confirm-btn, cancel-btn {
     pointer-events: auto;
 }
+
+/* Allow pointer events on the popup overlay and its contents */
+.clear-job-popup-overlay, .popup-content, .popup-actions, .confirm-btn, .cancel-btn {
+    pointer-events: auto;
+}
