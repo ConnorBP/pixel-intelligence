@@ -8,7 +8,8 @@ import { authenticate } from "../auth/authentication.js";
 const router = express.Router();
 const baseUrl = "https://stablehorde.net/api/v2";
 const apiKey = process.env.API_KEY;
-
+const maxErrorRetries = process.env.MAX_ERROR_RETRIES;
+let errorRetries = 0;
 /**
  * Validates if the given jobId is in the correct format.
  * Pretty sure job id is uuid4. Is hex digits and 36 characters long including hyphens.
@@ -259,6 +260,7 @@ router.post("/generate", [
 
     res.status(202).json({ success: true, jobId });
   } catch (e) {
+    errorRetries += 1;
     console.error("Error starting generation: " + e.response ? e.response.data : e.message);
     res.status(500).json({ success: false, error: "Internal server error" });
   }
@@ -297,7 +299,13 @@ router.get("/poll/:jobId",
       return res.status(400).json({ success: false, error: "Invalid job Id." });
     }
 
-    try {
+    try {  
+      
+      if (errorCount >= maxErrorRetries) {
+        await updateImageJobStatus(jobId, "failed", null);
+        return res.status(429).json({ success: false, error: "Too many errors. Please try again later." });
+      }
+      
       const imageJob = await getImageJobData(jobId);
 
       if (!imageJob) {
