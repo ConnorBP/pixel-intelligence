@@ -2,7 +2,7 @@
 export default () => {
     if(import.meta.env.MODE === 'development') {
         const hostname = window.location.hostname;
-        console.log('host: ', hostname);
+        // console.log('host: ', hostname);
         return `http://${hostname}:3000/api`;
 
     } else {
