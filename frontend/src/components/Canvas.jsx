@@ -289,7 +289,7 @@ const Canvas = forwardRef(
 
         drawCheckeredPixel(canvas.getContext("2d"), pixelX, pixelY, pixelSize);
 
-        console.log("erasing");
+        // console.log("erasing");
       } else if (tool === "paint") {
         // "Bucket" Fill the area with the brush color
         const targetColor = canvasData.pixels[pixelX + pixelY * canvasData.width];
@@ -303,7 +303,7 @@ const Canvas = forwardRef(
         // but the color picker in html doesn't support transparency yet https://github.com/whatwg/html/issues/3400
         // so we have to replace the current color picker before we can do this
         // const hexColor = canvasData.pixels[pixelX + pixelY * canvasData.width];
-        console.log("colorrrr", hexColor)
+        // console.log("colorrrr", hexColor)
         if (onColorSelected) {
           // console.log("colorrrr", hexColor)
           onColorSelected(hexColor);
