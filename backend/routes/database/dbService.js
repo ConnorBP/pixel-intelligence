@@ -153,7 +153,7 @@ export const jobErrorCounter = async (jobId) => {
     try {
         const collection = db.collection(imageJobsCollection);
         const imageJob = await collection.findOne({jobId});
-        const errorCount = (jobErrorCounter.errorCount || 0) + 1;
+        const errorCount = (imageJob.errorCount || 0) + 1;
 
         const updateData = {errorCount};
         if(errorCount > maxErrorRetries) {
