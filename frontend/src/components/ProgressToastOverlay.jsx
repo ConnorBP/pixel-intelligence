@@ -84,7 +84,7 @@ const ProgressToastOverlay = () => {
                 showCancelJobPopup && (
                     <div className="clear-job-popup-overlay">
                         <div className="popup-content">
-                            <h3>Confirm Image Job Clear!</h3>
+                            <h3>Confirm Image Job Cancellation!</h3>
                             <p>Are you sure you want to clear the current image generation job?</p>
                             <div className='popup-actions'>
                                 <button

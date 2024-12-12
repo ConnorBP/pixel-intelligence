@@ -9,7 +9,7 @@
   justify-content: center;
   align-items: center;
   z-index: 1001;
-  font-family: "Pixelify Sans", sans-serif;
+  font-family: inherit;
   font-optical-sizing: auto;
   font-weight: 200;
   font-style: normal;
