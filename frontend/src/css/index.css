@@ -78,3 +78,7 @@ h1 {
     background: var(--overlay-bg-dark);
   }
 }
+/* default the text input font size to at least 16px to prevent safari zoom in */
+input[type="text"] {
+  font-size: 16px;
+}
