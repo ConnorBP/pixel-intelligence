@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import '../css/JobWatcherOverlay.css';
 import useJobWatcher from '../context/useJobWatcher';
 import ProgressBar from './ProgressBar';
@@ -9,7 +9,7 @@ const updatePercentEvery = 300;
 
 const JobWatcherOverlay = () => {
     // only show job watcher overlay on development build
-    if(import.meta.env.MODE !== 'development') {
+    if (import.meta.env.MODE !== 'development') {
         return null;
     }
 
@@ -20,10 +20,12 @@ const JobWatcherOverlay = () => {
         currentJobStatus,
         currentJobWaitTime,
         currentJobSubmittedAt,
-        currentQueuePosition
+        currentQueuePosition,
+        clearJob
     } = useJobWatcher();
 
     const [currentPercent, setCurrentPercent] = React.useState(0);
+    const [showCancelJobPopup, setShowCancelJobPopup] = useState(false);
 
     // const [testStartTime, setTestStartTime] = React.useState(new Date().getTime());
     // const [testEndTime, setTestEndTime] = React.useState(new Date().getTime() + 10000);
@@ -74,6 +76,38 @@ const JobWatcherOverlay = () => {
                 Result: {JSON.stringify(currentJobResult)}
             </p>
             <ProgressBar percent={currentPercent} />
+            <button
+                className="clear-job-btn"
+                onClick={() => setShowPopup(true)}
+            >
+                Clear Job
+            </button>
+            {/* Custom Job Popup Overlay */}
+            {showCancelJobPopup && (
+                <div className="clear-job-popup-overlay">
+                    <div className="popup-content">
+                        <h3>Confirm Image Job Clear!</h3>
+                        <p>Are you sure you want to clear the current image generation job?</p>
+                        <div className='popup-actions'>
+                            <button
+                                className="confirm-btn"
+                                onClick={() => {
+                                    clearJob();
+                                    setShowCancelJobPopup(false);
+                                }}
+                            >
+                                Yes
+                            </button>
+                            <button
+                                className="cancel-btn"
+                                onClick={() => setShowCancelJobPopup(false)}
+                            >
+                                No
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     )
 }
