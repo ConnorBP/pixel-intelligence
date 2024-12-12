@@ -3,6 +3,7 @@ import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
 import { query, check, validationResult } from "express-validator";
 import { saveImageJobData, getImageJobData, updateImageJobStatus, connectToDB, doesJobIdExist } from "../database/dbService.js";
+import { authenticate } from "../auth/authentication.js";
 
 const router = express.Router();
 const baseUrl = "https://stablehorde.net/api/v2";
@@ -39,10 +40,18 @@ const header = {
   }
 }
 
-const validSizes = [8, 16, 32, 64];
+// Valid pixel sizes
+// we are removing 8px because the models are having trouble with it
+const validSizes = [
+  // 8,
+  16, 
+  32, 
+  64
+];
 
 // POST route to start image generation
 router.post("/generate", [
+  authenticate,
   // filter the input
   query("prompt")
     .optional()
@@ -50,39 +59,52 @@ router.post("/generate", [
     .trim()
     .customSanitizer(value => value?.replace(/[^a-zA-Z0-9 ]/g, ''))
     .isLength({ min: 1, max: 64 })
-    .withMessage('Prompt must be between 1 and 32 characters')
-    .default("pixel art"),
+    .withMessage('Prompt must be between 1 and 32 characters'),
+  // .default("pixel art"),
 
   query("size")
     .optional()
-    .trim()
     .isString()
+    .trim()
     .customSanitizer(value => parseInt(value) || undefined)
     .custom(value => {
       const size = parseInt(value);
       return validSizes.includes(size);
     })
-    .withMessage(`Size must be one of: ${validSizes.join(', ')}`)
-    .default(16),
+    .withMessage(`Size must be one of: ${validSizes.join(', ')}`),
+  // .default(16),
 
   check("seed")
     .optional()
+    .isString()
     .trim()
-    .isInt()
-    .withMessage('Seed must be an integer')
-    // .customSanitizer(value => parseInt(value))
-    .default(() => Math.floor(Math.random() * 1000000000)),
+    .customSanitizer(value => parseInt(value) || undefined),
+    // .isInt()
+    // .withMessage('Seed must be an integer')
+    // .default(() => Math.floor(Math.random() * 1000000000)),
   check("model")
-    .optional()
     .isString()
     .trim()
     .toLowerCase()
     .custom(value => value === "sd" || value === "sdxl")
-    .default("sdxl")
+    .optional(), // optional has to be seperate from default
+  // check("model").default("sdxl")
 ], async (req, res) => {
   // optional prompt and pixel size query parameters: ?promt=pixel+art&size=16
   // if not provided defaults to pixel art and 16px
-  const { prompt, size, seed, model } = req.query;// || { prompt: "pixel art", size: 16 };
+  let { prompt, size, seed, model } = req.query;
+
+  // set some defaults:
+  prompt = prompt || "pixel art";
+  size = size || 16;
+  model = model || "sdxl";//(size <= 32 ? "sd" : "sdxl");
+  // seed must be a string:
+  seed = JSON.stringify(seed || Math.floor(Math.random() * 1000000000));
+  const closeup = size <= 32 ? "closeup, " : "";
+
+  // debug verification
+  // console.log(`promt, size, seed, model: ${prompt}, ${size}, ${seed}, ${model}`);
+  // return res.status(200).json({ success: true, message: "Image generation disabled" });
 
 
   const errors = validationResult(req);
@@ -91,7 +113,7 @@ router.post("/generate", [
   }
 
   if (!validSizes.includes(parseInt(size))) {
-    return res.status(400).json({ success: false, error: "Invalid pixel size. Valid sizes are 8, 16, 32, 64." });
+    return res.status(400).json({ success: false, error: `Invalid pixel size. Valid sizes are: ${validSizes.toString()}.` });
   }
 
   // we don't go lower than 256px because then the images turn out a bloody mess
@@ -118,7 +140,7 @@ router.post("/generate", [
   // sd 1.5 pixel art model:
   if (model === "sd") {
     data = {
-      "prompt": `${prompt}, ${size}bit pixel style, ${size}px, side view, pixelart, gamedev. game asset, pixelsprite, pixel-art, pixel_art, retro_artstyle, colorful, low-res, blocky, pixel art style, 16-bit graphics ### out of frame, duplicate, watermark, signature, text, error, deformed, sloppy, messy, blurry, noisy, highly detailed, ultra textured, photo, realisticlogo`,
+      "prompt": `pixel_art, ${prompt}, ${size}px, 8bit pixel style, ${size}px, ${closeup}side view, pixelart, gamedev. game asset, pixelsprite, pixel-art, pixel_art, retro_artstyle, colorful, low-res, blocky, pixel art style, 16-bit graphics ### out of frame, duplicate, watermark, signature, text, error, deformed, sloppy, messy, blurry, noisy, highly detailed, ultra textured, photo, realisticlogo`,
       "params": {
         "cfg_scale": 7,
         "seed": seed,
@@ -163,7 +185,7 @@ router.post("/generate", [
     };
   } else {
     // sdxl pixel art model:
-    const closeup = size <= 32 ? "closeup," : "";
+    
     data = {
       "prompt": `pixel-art, ${prompt}, ${size}px, ${closeup} low-res, blocky, pixel art style, 16-bit graphics###sloppy, messy, blurry, noisy, highly detailed, ultra textured, photo, realistic`,
       "params": {
@@ -191,6 +213,12 @@ router.post("/generate", [
             "model": 1,
             "clip": 1,
             "is_version": false
+          },
+          {
+            "name": "636318",
+            "model": 1,
+            "clip": 1,
+            "is_version": true
           }
         ]
       },
@@ -221,7 +249,12 @@ router.post("/generate", [
       generationId: response.data.id,
       status: "pending",
       downloadUrl: null,
-      createdAt: new Date()
+      createdAt: new Date(),
+      prompt,
+      generationResolution,
+      pixelArtSize: size,
+      seed,
+      model
     });
 
     res.status(202).json({ success: true, jobId });
@@ -233,108 +266,141 @@ router.post("/generate", [
 });
 
 // GET request to poll generation status
-router.get("/poll/:jobId", async (req, res) => {
-  const { jobId } = req.params;
-  // console.log("Job ID: " + jobId);
-
-  // Checking if the job id format is valid or not
-  if (!isValidJobId(jobId)) {
-    return res.status(400).json({ success: false, error: "Invalid job Id." });
-  }
-
-  try {
-    const imageJob = await getImageJobData(jobId);
-
-    if (!imageJob) {
-      return res.status(404).json({ success: false, error: "Image Job not found" });
+router.get("/poll/:jobId",
+  [
+    authenticate,
+    check('jobId').isString().isUUID()
+  ],
+  async (req, res) => {
+    // return res.status(200).json({ 
+    //   success: true,
+    //   message: "Image generation disabled",
+    //   success: true,
+    //   status: "waiting",
+    //   processing: 1,
+    //   restarted: false,
+    //   done: false,
+    //   wait_time: 65,
+    //   queue_position: 42
+    // });
+    
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ success: false, error: "Validation error", errors: errors.array() });
     }
 
-    if (imageJob.status === "completed") {
-      return res.status(200).json({ success: true, status: "completed", image: imageJob.downloadUrl });
-    } else if (imageJob.status === "expired" || imageJob.status === "failed") {
-      return res.status(404).json({ success: false, error: "Image Job already failed" });
-    }
-    else {
-      const response = await axios.get(`${baseUrl}/generate/status/${imageJob.generationId}`, header);
+    const { jobId } = req.params;
+    // console.log("Job ID: " + jobId);
 
-      if (response.data.done && response.data.waiting == 0) {
-        await updateImageJobStatus(jobId, "completed", response.data.generations[0].img);
-        return res.status(200).json({ success: true, status: "completed" });
-      }
-
-      res.status(200).json({
-        success: true,
-        status: "waiting",
-        // fill out all fields from response data
-        // ex
-        // processing (count of currently processing images),
-        // restarted 
-        // done (boolean for is completed),
-        // wait_time (time in seconds estimated to wait),
-        // queue_position: how many images are in front of this one
-        ...response.data
-
-      });
+    // Checking if the job id format is valid or not
+    if (!isValidJobId(jobId)) {
+      return res.status(400).json({ success: false, error: "Invalid job Id." });
     }
 
-  } catch (e) {
-    console.error("Error polling status: ", e.response ? e.response.data : e.message);
-    if (e.response && (e.response.status === 404 || e.response.data.rc == 'RequestNotFound')) {
-      await updateImageJobStatus(jobId, "expired", null);
-      return res.status(404).json({ success: false, error: "Image Job not found" });
-    } else {
-      await updateImageJobStatus(jobId, "failed", null);
-      res.status(500).json({ success: false, status: 500, error: "Internal server error" });
-    }
-  }
-});
-
-// GET request to download the image
-router.get("/download/:jobId", async (req, res) => {
-  const { jobId } = req.params;
-  console.log("Job ID: " + jobId);
-  // Checking if the job id format is valid or not
-  if (!isValidJobId(jobId)) {
-    return res.status(400).json({ success: false, error: "Invalid job Id." });
-  }
-  let db;
-  try {
-    db = await connectToDB();
-    if (db) {
-      if (!doesJobIdExist(jobId, db)) {
-        db.client.close();
-        return res.status(404).json({ success: false, error: "Image Job not found" });
-      }
+    try {
       const imageJob = await getImageJobData(jobId);
 
-      if (imageJob.status !== "completed") {
-        return res.status(404).json({ success: false, error: "Image is not ready yet." });
+      if (!imageJob) {
+        return res.status(404).json({ success: false, error: "Image Job not found" });
       }
-      // res.redirect(imageJob.downloadURL);
 
-      // Fetching the image from the downloadUrl
-      const response = await axios.get(imageJob.downloadUrl, {
-        responseType: 'arraybuffer'
-      });
+      if (imageJob.status === "completed") {
+        return res.status(200).json({ success: true, status: "completed" });
+      } else if (imageJob.status === "expired" || imageJob.status === "failed") {
+        return res.status(404).json({ success: false, error: "Image Job already failed" });
+      }
+      else {
+        const response = await axios.get(`${baseUrl}/generate/status/${imageJob.generationId}`, header);
 
-      const imageBlob = "data:image/png;base64," + Buffer.from(response.data, 'binary').toString('base64');
+        if (response.data.done && response.data.waiting == 0) {
+          await updateImageJobStatus(jobId, "completed", response.data.generations[0].img);
+          return res.status(200).json({ success: true, status: "completed" });
+        }
 
-      res.status(200).json({
-        success: true,
-        downloadUrl: imageJob.downloadUrl,
-        imageBlob
-      });
+        res.status(200).json({
+          success: true,
+          status: "waiting",
+          // fill out all fields from response data
+          // ex
+          // processing (count of currently processing images),
+          // restarted 
+          // done (boolean for is completed),
+          // wait_time (time in seconds estimated to wait),
+          // queue_position: how many images are in front of this one
+          ...response.data
 
-    } else {
-      return res.status(500).json({ success: false, error: "Database connection failed." });
+        });
+      }
+
+    } catch (e) {
+      console.error("Error polling status: ", e.response ? e.response.data : e.message);
+      if (e.response && (e.response.status === 404 || e.response.data.rc == 'RequestNotFound')) {
+        await updateImageJobStatus(jobId, "expired", null);
+        return res.status(404).json({ success: false, error: "Image Job not found" });
+      } else {
+        await updateImageJobStatus(jobId, "failed", null);
+        res.status(500).json({ success: false, status: 500, error: "Internal server error" });
+      }
+    }
+  });
+
+// GET request to download the image
+router.get("/download/:jobId",
+  [
+    authenticate,
+    check('jobId').isString().isUUID()
+  ],
+  async (req, res) => {
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ success: false, error: "Validation error", errors: errors.array() });
     }
 
-  } catch (e) {
-    console.error("Error downloading image: ", e.response ? e.response.data : e.message);
-    res.status(500).json({ success: false, error: "Internal server error" });
-  } finally {
-    if (db) db.client.close();
-  }
-});
+    const { jobId } = req.params;
+    console.log("Job ID: " + jobId);
+    // Checking if the job id format is valid or not
+    if (!isValidJobId(jobId)) {
+      return res.status(400).json({ success: false, error: "Invalid job Id." });
+    }
+    let db;
+    try {
+      db = await connectToDB();
+      if (db) {
+        if (!doesJobIdExist(jobId, db)) {
+          db.client.close();
+          return res.status(404).json({ success: false, error: "Image Job not found" });
+        }
+        const imageJob = await getImageJobData(jobId);
+
+        if (imageJob.status !== "completed") {
+          return res.status(404).json({ success: false, error: "Image is not ready yet." });
+        }
+        // res.redirect(imageJob.downloadURL);
+
+        // Fetching the image from the downloadUrl
+        const response = await axios.get(imageJob.downloadUrl, {
+          responseType: 'arraybuffer'
+        });
+
+        const imageBlob = "data:image/png;base64," + Buffer.from(response.data, 'binary').toString('base64');
+
+        res.status(200).json({
+          success: true,
+          downloadUrl: imageJob.downloadUrl,
+          imageBlob
+        });
+
+      } else {
+        return res.status(500).json({ success: false, error: "Database connection failed." });
+      }
+
+    } catch (e) {
+      console.error("Error downloading image: ", e.response ? e.response.data : e.message);
+      res.status(500).json({ success: false, error: "Internal server error" });
+    } finally {
+      if (db) db.client.close();
+    }
+  });
 
 export default router;

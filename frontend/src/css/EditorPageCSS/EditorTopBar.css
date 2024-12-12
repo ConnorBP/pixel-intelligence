@@ -16,6 +16,10 @@
 
 }
 
+/* disable text selection on toolbar buttons */
+.top-toolbar >* {
+  user-select: none;
+}
 
 .top-controls {
   display: flex;

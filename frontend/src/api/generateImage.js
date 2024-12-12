@@ -4,9 +4,9 @@ import { getApiEndpoint } from '../utils';
 export default async function generateImage(prompt, size, seed) {
     let resp;
     try {
-        const seedParam = seed ? `&seed=${seed}` : '';
-        const sizeParam = size ? `&size=${size}` : '';
-        resp = await fetch(getApiEndpoint() + `/image/generate?prompt=${prompt}${sizeParam}${seedParam}`, {
+        const seedParam = seed ? `&seed=${encodeURIComponent(JSON.stringify(seed))}` : '';
+        const sizeParam = size ? `&size=${encodeURIComponent(JSON.stringify(size))}` : '';
+        resp = await fetch(getApiEndpoint() + `/image/generate?prompt=${encodeURIComponent(prompt)}${sizeParam}${seedParam}`, {
             method: 'POST',
             credentials: 'include',
             headers: {

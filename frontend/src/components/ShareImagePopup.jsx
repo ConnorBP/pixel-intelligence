@@ -1,28 +1,28 @@
 import { useState, useRef } from "react";
 import { ThreeDots } from "react-loader-spinner";
-import "../css/NewImagePopup.css";
+import "../css/ShareImagePopup.css";
 // import popUpTabHadler from "../hooks/popUpTabHandler";
-
-const NewImagePopup = ({ isOpen, onClose, onCreate }) => {
+const ShareImagePopUp = ({ isOpen, onClose, onShare }) => {
   if (!isOpen) {
     return <></>;
   }
 
   const [description, setDescription] = useState("");
-  const [canvasSize, setCanvasSize] = useState(64);
-
+  const [name, setName] = useState("");
+  const [author, setAuthor] = useState("");
   const [waitingForResponse, setWaitingForResponse] = useState(false);
 
   const tabPopupRef = useRef(null);
-  // popUpTabHadler({ tabPopupRef, isOpen: onCreate, onClose })
+  // popUpTabHadler({ tabPopupRef, isOpen, onClose })
 
-  const handleCreate = async () => {
-    // call the create image callback
+  const handleShare = async () => {
+    // don't double send the request
     if (waitingForResponse) {
       return false;
     }
+    // call the share image callback
     setWaitingForResponse(true);
-    await onCreate({ description, canvasSize });
+    await onShare({ name, description, author });
     setWaitingForResponse(false);
     // the caller is responsible for closing the popup
   };
@@ -30,34 +30,38 @@ const NewImagePopup = ({ isOpen, onClose, onCreate }) => {
   return (
     <div className="popup-overlay">
       <div className="popup-box" ref={tabPopupRef} tabIndex={-1}>
-        <h3 className="popup-title">New Image</h3>
+        <h3 className="popup-title">Share Image</h3>
         <div className="popup-line"></div>
         <div className="popup-form">
-          <label className="popup-label">What would you like to draw?</label>
+          <label className="popup-label">What would you like to Share?</label>
           <input
             type="text"
-            placeholder="Describe what your image will be..."
+            placeholder="What is the name of the image..."
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className="input"
+            maxLength={32}
+          />
+          <input
+            type="text"
+            placeholder="Describe your image..."
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             className="input"
+            maxLength={255}
+          />
+          <input
+            type="text"
+            placeholder="What is your name?"
+            value={author}
+            onChange={(e) => setAuthor(e.target.value)}
+            className="input"
+            maxLength={32}
           />
           <div className="popup-preview-wrapper">
             <div className="popup-preview">
               {/* <img src="" alt="Image Preview" className="popup-preview-image" /> */}
               <div alt="Preview" className="" />
-            </div>
-            <div className="popup-canvas-size">
-              <label className="popup-label">Canvas Size:</label>
-              <select
-                value={canvasSize}
-                onChange={(e) => setCanvasSize(e.target.value)}
-                className="select"
-              >
-                <option value={8}>08x08</option>
-                <option value={16}>16x16</option>
-                <option value={32}>32x32</option>
-                <option value={64}>64x64</option>
-              </select>
             </div>
           </div>
           <div className="flex flex-end">
@@ -69,14 +73,14 @@ const NewImagePopup = ({ isOpen, onClose, onCreate }) => {
               Cancel
             </button>
             <button
-              onClick={handleCreate}
+              onClick={handleShare}
               disabled={waitingForResponse}
               className="button popup-button create-button"
             >
               {waitingForResponse ? (
                 <ThreeDots color="var(--text-color)" height="100%" />
               ) : (
-                "Create"
+                "Share"
               )}
             </button>
           </div>
@@ -86,4 +90,4 @@ const NewImagePopup = ({ isOpen, onClose, onCreate }) => {
   );
 };
 
-export default NewImagePopup;
+export default ShareImagePopUp;

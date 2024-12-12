@@ -9,41 +9,57 @@ import { paginatedResults } from "./paginatedResults.js";
 const router = express.Router();
 
 // POST Route to upload canvas Data
-router.post("/upload", authenticate, async (req, res) => {
-  try {
-    const canvasData = req.body;
+router.post("/upload",
+  [
+    authenticate
 
-    // validating the canvas data
-    const validationError = validateCanvasData(canvasData);
-    if (validationError) {
-      return res.status(400).json({ success: false, error: validationError });
-    }
-    // Generating a unique filename for the image 
-    // code here
+  ],
+  async (req, res) => {
+    try {
 
-    // Convert canvas to image
-    // code here
+      // if we add any non json params:
+      // const errors = validationResult(req);
+      // if (!errors.isEmpty()) {
+      //   return res.status(400).json({ success: false, error: "Validation error", errors: errors.array() });
+      // }
 
-    // Save canvas data to the database
-    const result = await saveCanvasData(
-      {
-        // manually destructured for security purposes
-        name: canvasData.name,
-        description: canvasData.description,
-        pixels: canvasData.pixels,
-        width: canvasData.width,
-        height: canvasData.height,
-        creation_date: new Date().getTime(),
+      const canvasData = req.body;
+
+      // validating the canvas data
+      const validationError = validateCanvasData(canvasData);
+      if (validationError) {
+        return res.status(400).json({ success: false, error: validationError });
       }
-    );
+      // Generating a unique filename for the image 
+      // code here
 
-    // Returning success code if there is no error
-    return res.status(200).json({ success: true, message: "Canvas uploaded successfully." })
-  } catch (e) {
-    console.error('Error uploading canvas data to the database:', e.stack || e);
-    res.status(500).json({ success: false, error: 'Internal Server Error in upload route' });
-  }
-});
+      // Convert canvas to image
+      // code here
+
+      // Save canvas data to the database
+      const result = await saveCanvasData(
+        {
+          // manually destructured for security purposes
+          name: canvasData.name,
+          description: canvasData.description,
+          author: canvasData.author,
+          pixels: canvasData.pixels,
+          width: canvasData.width,
+          height: canvasData.height,
+          creation_date: new Date().getTime(),
+        }
+      );
+
+      // get the id of the insertion
+      result.insertedId = result.insertedId.toString();
+
+      // Returning success code if there is no error
+      return res.status(200).json({ success: true, message: "Canvas uploaded successfully.", id: result.insertedId });
+    } catch (e) {
+      console.error('Error uploading canvas data to the database:', e.stack || e);
+      res.status(500).json({ success: false, error: 'Internal Server Error in upload route' });
+    }
+  });
 
 router.get("/image/:id",
   [
@@ -67,8 +83,9 @@ router.get("/image/:id",
       const objectId = new ObjectId(id);
 
       const image = await collection.findOne({ _id: objectId });
-      if (db) db.client.close();
-      db = null;
+      // this gets closed in the finally block
+      // if (db) db.client.close();
+      // db = null;
       // console.log('found image:', image);
       if (!image) {
         return res.status(404).json({ success: false, status: 404, error: "Image not found" });

@@ -12,6 +12,11 @@ export const validateCanvasData = (canvasData) => {
         errors.push('Description is required and must be less than 255 characters.');
     }
 
+    // check for optional author field length
+    if (canvasData.author && canvasData.author.length > 32) {
+        errors.push('Author name must be less than 32 characters.');
+    }
+
     // Check if pixels is an array and not empty
     if (!Array.isArray(canvasData.pixels) || canvasData.pixels.length === 0) {
         errors.push('Pixels array is required and cannot be empty.');

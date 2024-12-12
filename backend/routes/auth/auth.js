@@ -18,7 +18,7 @@ router.get("/", (req, res) => {
       const decoded = validate_token(req.cookies.access_token, req.ip);
       if (decoded != null) {
         // if the user is already authorized, return success and the time remaining
-        const currentTime = Math.floor(Date.now() / 1000);
+        const currentTime = Math.floor(new Date().getTime() / 1000);
         return res.status(200).json({
           success: true,
           message: "Already authorized.",
@@ -37,7 +37,7 @@ router.get("/", (req, res) => {
     let expiresIn = 60 * 60 * 24; // 24 hours in seconds
     const token = jwt.sign({
       ip: userIP,
-      exp: Math.floor(Date.now() / 1000) + expiresIn,
+      exp: Math.floor(new Date().getTime() / 1000) + expiresIn,
     }, key, {
       // expiresIn
     });
@@ -57,7 +57,7 @@ router.get("/", (req, res) => {
       console.log("Cookie not generated: " + e.stack || e);
     }
 
-    const currentTime = Math.floor(Date.now() / 1000);
+    const currentTime = Math.floor(new Date().getTime() / 1000);
     res.status(200).json({ success: true, message: "Token generated.", issuedAt: currentTime, expiresIn: expiresIn, expiresAt: currentTime + expiresIn });
   } catch (e) {
     console.error("Error generating token:", e.stack || e);

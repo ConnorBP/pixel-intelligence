@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import "../css/NewImagePopup.css";
-import popUpTabHandler from "../hooks/popUpTabHandler";
+// import popUpTabHandler from "../hooks/popUpTabHandler";
 
 const ScaleImagePopup = ({ isOpen, setIsOpen = (val)=>{}, onCancel = ()=>{}, onConfirm = ()=>{}, currentCanvasSize = 16 }) => {
     if (!isOpen) return (<></>);
@@ -15,14 +15,14 @@ const ScaleImagePopup = ({ isOpen, setIsOpen = (val)=>{}, onCancel = ()=>{}, onC
         setCanvasSize(newSize);
     };
 
-    popUpTabHandler({
-        tabPopupRef: canvasRef,
-        isOpen,
-        onClose: () => {
-          setIsOpen(false);
-          onCancel();
-        },
-      });
+    // popUpTabHandler({
+    //     tabPopupRef: canvasRef,
+    //     isOpen,
+    //     onClose: () => {
+    //       setIsOpen(false);
+    //       onCancel();
+    //     },
+    //   });
     
 
     return (

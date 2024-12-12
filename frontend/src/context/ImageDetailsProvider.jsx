@@ -15,12 +15,12 @@ export const ImageDetailsProvider = ({ children }) => {
                     return state;
                 }
                 // console.log('adding image ', action.id, ' ', action.image, ' to map ', state.map);
-                return { ...state, map: currentMap.set(action.id, action.image), lastUpdate: Date.now() };
+                return { ...state, map: currentMap.set(action.id, action.image), lastUpdate: new Date().getTime() };
             case 'remove':
                 currentMap.delete(action.id);
-                return { ...state, map: currentMap, lastUpdate: Date.now() };
+                return { ...state, map: currentMap, lastUpdate: new Date().getTime() };
             case 'clear':
-                return { map: new Map(), lastUpdate: Date.now() };
+                return { map: new Map(), lastUpdate: new Date().getTime() };
             default:
                 return state;
         }

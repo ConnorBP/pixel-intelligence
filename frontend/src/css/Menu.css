@@ -12,6 +12,15 @@
   /* height: 0px; */
 }
 
+.menu-container button:focus,
+.menu-container button:focus-visible {
+  border-radius: 8px;
+  /* set border color with fallbacks */
+  border: 1px solid var(--primary-color);
+  border-color: 4px auto -webkit-focus-ring-color;
+  border-color: 4px auto var(--primary-color);
+}
+
 .menu-button {
   padding: 10px 20px;
   background-color: transparent;

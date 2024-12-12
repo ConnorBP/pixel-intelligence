@@ -16,8 +16,9 @@ const jobWatcherReducer = (state, action) => {
                 canvasSize: action.canvasSize,
                 currentJobStatus: 'running',
                 currentJobSubmittedAt: Date.now(),
-                currentJobWaitTime: 0,
-                currentJobEta: 0,
+
+                currentJobWaitTime: action.wait_time,
+                currentJobEta: action.eta,
                 currentJobResult: null,
             };
         case 'update':
@@ -44,6 +45,12 @@ const jobWatcherReducer = (state, action) => {
                 ...state,
                 currentJobStatus: 'failed',
                 currentJobResult: action.error,
+            };
+            case 'timeout':
+            return {
+                ...state,
+                currentJobResult: action.error,
+                currentJobWaitTime: action.wait_time,
             };
         case 'clear':
             return {
@@ -88,7 +95,7 @@ export const JobWatcherProvider = ({ children, jobCheckIntervalMsMin = 10000, jo
         const timeOutLength =
         Math.min(
             Math.max(
-                state.currentJobWaitTime || jobCheckIntervalMsMin,
+                (state.currentJobWaitTime * 1000) || jobCheckIntervalMsMin,
                 jobCheckIntervalMsMin
             ),
             jobCheckIntervalMsMax
@@ -109,21 +116,28 @@ export const JobWatcherProvider = ({ children, jobCheckIntervalMsMin = 10000, jo
                 if (response.status === 'completed') {
                     dispatch({ type: 'fetch' });
                 } else {
-                    console.log("updating with response: " + JSON.stringify(response));
+                    // console.log("updating with response: " + JSON.stringify(response));
+                    const time = ( parseInt(new Date().getTime() || 0) + ((parseInt(response.wait_time) || 0) * 1000));
+                    // console.log(`time till expected generation finish is: ${time} Date is: ${new Date(time)} wait time is: ${response.wait_time}`);
                     dispatch({
                         type: 'update',
                         responseStatus: response.status,
                         wait_time: response.wait_time,
-                        eta: Date.now() + (response.wait_time * 1000),
+                        eta: time,
                         position: response.queue_position,
                         result: response.result
                     });
                 }
             } else {
+                console.error('Error (inside try) polling job status:', error);
                 dispatch({ type: 'fail', error: response.error });
             }
         } catch (error) {
-            dispatch({ type: 'fail', error: error.message });
+
+            // dispatch({ type: 'fail', error: error.message });
+             // dispatch({ type: 'timeout', error: response.error,wait_time: 60 });
+            console.error('Error polling job status:', error);
+            setCurrentTimeoutLength(60000);
         }
     }, []);
 
@@ -155,7 +169,7 @@ export const JobWatcherProvider = ({ children, jobCheckIntervalMsMin = 10000, jo
     }, [state.currentJobStatus, state.currentJobId, pollJobStatus]);
 
     const submitJob = (jobId, canvasSize) => {
-        dispatch({ type: 'start', jobId, canvasSize });
+        dispatch({ type: 'start', jobId, canvasSize, eta: Date.now() + jobCheckIntervalMsMin, wait_time: (jobCheckIntervalMsMin/1000) });
     };
 
     const clearJob = () => {
