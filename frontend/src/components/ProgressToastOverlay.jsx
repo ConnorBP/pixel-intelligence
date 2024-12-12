@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import "../css/ProgressToastOverlay.css";
 import useJobWatcher from '../context/useJobWatcher';
 import ProgressBar from './ProgressBar';
@@ -13,29 +13,23 @@ const ProgressToastOverlay = () => {
         currentJobEta,
         currentJobStatus,
         currentJobSubmittedAt,
-        currentQueuePosition
+        currentQueuePosition,
+        currentTimeoutLength
     } = useJobWatcher();
-
-    if(currentJobStatus === 'fetching') {
-        return (
-            <div className='progress-toast-overlay'>
-                <h6>Done. Fetching...</h6>
-            </div>
-        );
-    }
-
-    if(currentJobStatus !== 'running') {
-        return null;
-    }
 
     const [currentPercent, setCurrentPercent] = useState(0);
     const [timeRemaining, setTimeRemaining] = useState("N/A");
+    const [nextPollTime, setNextPollTime] = useState(new Date().getTime() + currentTimeoutLength);
+
+    useEffect(() => {
+        setNextPollTime(new Date().getTime() + currentTimeoutLength);
+    }, [currentTimeoutLength]);
 
     const updatePercent = () => {
         // console.log('updating percent');
         let percent = 0;
         if (currentJobEta && currentJobSubmittedAt) {
-            var totalWaitTime = currentJobEta - currentJobSubmittedAt;
+            var totalWaitTime = Math.max(currentJobEta, nextPollTime) - currentJobSubmittedAt
             // add an extra buffer to the total wait time estimate
             totalWaitTime *= extraTimeBufferFactor;
             const currentWaitTime = new Date().getTime() - currentJobSubmittedAt;
@@ -60,7 +54,19 @@ const ProgressToastOverlay = () => {
     };
 
     // update on timer (and reset it if currentJobEta or currentJobSubmittedAt changes)
-    useRecursiveTimeout(updatePercent, updatePercentEvery, [currentJobEta, currentJobSubmittedAt]);
+    useRecursiveTimeout(updatePercent, updatePercentEvery, [currentJobEta, currentJobSubmittedAt, nextPollTime]);
+
+    if(currentJobStatus === 'fetching') {
+        return (
+            <div className='progress-toast-overlay'>
+                <h6>Done. Fetching...</h6>
+            </div>
+        );
+    }
+
+    if(currentJobStatus !== 'running') {
+        return null;
+    }
 
     return (
         <div className='progress-toast-overlay'>

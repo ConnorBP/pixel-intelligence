@@ -27,18 +27,17 @@ function ConfirmationPopup({ popupData, children }) {
 
   if (popupData.imageSrc && popupData.extraContent) {
     extraContent = (
-      <>
+      <div className="popup-preview-wrapper flex-between" >
         <div className="popup-preview">
           <img src={popupData.imageSrc} alt="Image Preview" className="popup-preview-image popup-image" />
           <div alt="Preview" className="" />
         </div>
-      </>
+        {popupData.extraContent}
+      </div>
     );
-  } else if(popupData.imageSrc) {
+  } else if (popupData.imageSrc) {
     extraContent = (
-      <>
-          <img src={popupData.imageSrc} alt="Image Preview" className="popup-preview-image popup-image" />
-      </>
+      <img src={popupData.imageSrc} alt="Image Preview" className="popup-preview-image popup-image" />
     );
   } else {
     extraContent = popupData.extraContent;

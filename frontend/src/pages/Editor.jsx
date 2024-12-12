@@ -13,6 +13,7 @@ import { SimpleImage, DownScaler, RGBAToHex, ExportPng, DownloadJson, handleEyeD
 import { uploadToGallery } from "../api";
 import generateImage from "../api/generateImage";
 import useJobWatcher from "../context/useJobWatcher";
+import SizeSelector from "../components/SizeSelector";
 
 const Editor = () => {
   // brush colors are stored as html color codes
@@ -382,6 +383,13 @@ const Editor = () => {
     }
   }, [requestedImageLoad]);
 
+  // const [loadImageGenWithSize, setLoadImageGenWithSize] = useState(canvasSize || canvasData.width);
+
+  // useEffect(() => {
+  //   console.log('canvasSize changed:', canvasSize);
+  //   setLoadImageGenWithSize(canvasSize || canvasData.width);
+  // }, [canvasSize]);
+
   // load the new image from the generation job when it completes
   useEffect(() => {
     if (currentJobStatus === 'completed' && currentJobResult && currentJobResult.success) {
@@ -392,6 +400,8 @@ const Editor = () => {
         message2: "This will overwrite the current canvas data.",
         imageSrc: currentJobResult.imageBlob,
         // imageSrc: currentJobResult.downloadUrl,
+        // it would seem that extra content is not reactive :(
+        // extraContent: (<SizeSelector label="Import with size:" currentSize={loadImageGenWithSize} updateSize={setLoadImageGenWithSize}/>),
         onCancel: () => {
           setConfirmationPopupData(null);
         },
