@@ -79,7 +79,7 @@
     height: 80px;
     border: 1px solid #aaa;
     border-radius: var(--border-radius);
-    background: #fff;
+    /* background: #fff; */
     display: flex;
     align-items: center;
     justify-content: center;
