@@ -97,6 +97,13 @@ The goal of this project is to provide a comprehensive tool for creating and sha
     cd ..
     ```
 
+5. Set up the environment variables
+    [Variables can be found example.env](./backend/example.env)
+    ```sh
+    cp ./backend/example.env ./backend/.env
+    vim .env
+    ```
+
 ### Running the Project
 
 To start the development server, run:
