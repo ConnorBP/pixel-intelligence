@@ -8,11 +8,11 @@ function tabHandler(menuRef, setMenuOpen) {
         menuRef.current?.querySelectorAll("li, button") || []
       );
       const currentIndex = menuItems.indexOf(document.activeElement);
-    
-       if (e.key === "Escape") {
+
+      if (e.key === "Escape") {
         e.preventDefault();
-        setMenuOpen(false); 
-    
+        setMenuOpen(false);
+
       } else if (e.key === "Enter" && currentIndex !== -1) {
         e.preventDefault();
         if (currentIndex !== -1 && menuItems[currentIndex]) {
