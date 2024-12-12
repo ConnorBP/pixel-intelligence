@@ -48,7 +48,7 @@ const Editor = () => {
   // wether the grid lines are shown or not on the editor canvas
   const [gridLinesVisible, setGridLinesVisible] = useLocalStorage("gridLinesVisible", false);
   const [tool, setTool] = useLocalStorage("tool", "pencil");
- 
+
   // for tracking current generation job id
   const { submitJob, clearJob, currentJobStatus, currentJobResult, canvasSize } = useJobWatcher()
 
@@ -179,7 +179,7 @@ const Editor = () => {
 
 
   const toggleGrid = () => {
- 
+
     setGridLinesVisible((prev) => !prev)
   };
   // takes in a new square resolution and scales the current canvas data to it
@@ -237,7 +237,7 @@ const Editor = () => {
   const handleCreateNewImageConfirmed = async (newImage) => {
     console.log("New Canvas requested:", newImage);
 
-    if(newImage.description.length > 64) {
+    if (newImage.description.length > 64) {
       setConfirmationPopupData({
         title: "Image Generation Failed",
         message1: "Failed to generate image.",
@@ -254,7 +254,7 @@ const Editor = () => {
 
     // check if a job is already in progress
     // we only allow one at a time
-    if(currentJobStatus!=='idle' && currentJobStatus!=='completed' && currentJobStatus!=='failed') {
+    if (currentJobStatus !== 'idle' && currentJobStatus !== 'completed' && currentJobStatus !== 'failed') {
       setConfirmationPopupData({
         title: "Image Generation Failed",
         message1: "Failed to generate image.",
@@ -531,7 +531,7 @@ const Editor = () => {
         setSelectedColor={setBrushColor}
         secondaryColor={secondaryBrushColor}
         setSecondaryColor={setSecondaryBrushColor}
-        onEyeDropperClicked={async ()=> {
+        onEyeDropperClicked={async () => {
           await handleEyeDropper(handleEyeDropperColor);
         }}
         toggleGridLines={toggleGrid}
@@ -549,7 +549,7 @@ const Editor = () => {
           canvasRenderHeight={CANVAS_RENDER_WIDTH}
           gridLinesVisible={gridLinesVisible}
           tool={tool}
-          onColorSelected={handleEyeDropperColor} 
+          onColorSelected={handleEyeDropperColor}
         />
       </div>
       {/* Hidden file input for opening images */}
