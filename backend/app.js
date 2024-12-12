@@ -24,6 +24,9 @@ app.use(cookieParser());
 
 // allow any origin in dev mode
 const corsOptions = {
+    // replace with your lan address if you want to test over lan on your phone
+    // example: '192.168.2.21:5173'
+    // origin: 'http://192.168.2.21:5173',
     origin: 'http://localhost:5173',
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
