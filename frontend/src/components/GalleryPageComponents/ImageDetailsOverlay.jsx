@@ -72,7 +72,7 @@ function ImageDetailsOverlay() {
                 {/* Metadata Section */}
                 <h2>{image.name || "Untitled Image"}</h2>
                 <p><b>Description:</b> {image.description || "No description available."}</p>
-                <p><b>Creator:</b> {image.creator || "Unknown"}</p>
+                <p><b>Creator:</b> {image.author || "Unknown"}</p>
                 <p><b>Date Uploaded:</b> {new Date(image.creation_date).toLocaleString() || "Unknown"}</p>
                 {image.tags && (
                     <p><b>Tags:</b> {image.tags.join(", ")}</p>

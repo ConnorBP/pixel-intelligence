@@ -58,7 +58,7 @@ export const SessionProvider = ({ children }) => {
     // check if the session is expired yet based on our saved expiryTime
     function isSessionStillValid() {
         // if the session is expired
-        if (sessionExpiry < Math.floor(Date.now() / 1000)) {
+        if (sessionExpiry < Math.floor(new Date().getTime() / 1000)) {
             // clear the session
             // setCurrentSession(null);
             setSessionLoaded(false);

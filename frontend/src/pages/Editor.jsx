@@ -3,7 +3,7 @@ import Canvas from "../components/Canvas";
 import EditorLeftToolBar from "../components/EditorLeftToolBar";
 import EditorTopBar from "../components/EditorTopBar";
 import NewImagePopup from "../components/NewImagePopup";
-import ShareImagePopUp from "../components/ShareImagePopUp";
+import ShareImagePopUp from "../components/ShareImagePopup";
 import ScaleImagePopup from "../components/ScaleImagePopup";
 import ConfirmationPopup from "../components/ConfirmationPopup";
 import "../css/EditorPageCSS/Editor.css";
@@ -252,6 +252,23 @@ const Editor = () => {
       return false;
     }
 
+    // check if a job is already in progress
+    // we only allow one at a time
+    if(currentJobStatus!=='idle' && currentJobStatus!=='completed' && currentJobStatus!=='failed') {
+      setConfirmationPopupData({
+        title: "Image Generation Failed",
+        message1: "Failed to generate image.",
+        message2: "A generation job is already in progress.",
+        onCancel: () => {
+          setConfirmationPopupData(null);
+        },
+        onConfirm: () => {
+          setConfirmationPopupData(null);
+        },
+      });
+      return false;
+    }
+
     const response = await generateImage(newImage.description, newImage.canvasSize);
     console.log('generated image response:', JSON.stringify(response));
 
@@ -278,8 +295,8 @@ const Editor = () => {
 
     canvasData.name = shareImg.name;
     canvasData.description = shareImg.description;
-    canvasData.author = 'unknown';
-    canvasData.tags = ['test', 'image'];
+    canvasData.author = shareImg.author || "unknown";
+    canvasData.tags = ['test', 'image']; // todo implement tags support on backend
     console.log('sharing canvas data:', canvasData);
     // send the canvas data to the server
 

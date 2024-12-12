@@ -50,7 +50,7 @@ function Gallery() {
 
     useEffect(() => {
         let newPage = parseInt(searchPage) || 1;
-        // console.log(`${newPage} ${galleryStateCache.page} ${galleryStateCache.lastRefresh} ${Date.now() - galleryCacheInvalidationTime}`);
+        // console.log(`${newPage} ${galleryStateCache.page} ${galleryStateCache.lastRefresh} ${new Date().getTime() - galleryCacheInvalidationTime}`);
         
         // load gallery data once a valid session is loaded
         // and:( the page has changed or the cache is stale)
@@ -58,7 +58,7 @@ function Gallery() {
             sessionLoaded &&
             (
                 newPage != galleryStateCache.page
-                || galleryStateCache.lastRefresh < Date.now() - galleryCacheInvalidationTime
+                || galleryStateCache.lastRefresh < new Date().getTime() - galleryCacheInvalidationTime
             )
         ) {
             // refresh the session before fetching gallery data
@@ -80,7 +80,7 @@ function Gallery() {
                     });
                     // update our localstorage cached gallery page state
                     setGalleryStateCache((oldState) => {
-                        let newState = { ...oldState, page: newPage, images: dataWithImages, lastRefresh: Date.now() };
+                        let newState = { ...oldState, page: newPage, images: dataWithImages, lastRefresh: new Date().getTime() };
                         return newState;
                     });
                     // console.log('loaded: ', data);
