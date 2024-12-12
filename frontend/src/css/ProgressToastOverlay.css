@@ -1,0 +1,26 @@
+.progress-toast-overlay {
+    position: fixed;
+    bottom: 1em;
+    right: 1em;
+    width: 20%;
+    padding-left: 8pt;
+    padding-right: 8pt;
+    padding-top: 2pt;
+    padding-bottom: 2pt;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1001;
+    /*dalmatians*/display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 6pt;
+    border-radius: 0.25em;
+    -webkit-border-radius: 0.25em;
+    -moz-border-radius: 0.25em;
+    -ms-border-radius: 0.25em;
+    -o-border-radius: 0.25em;
+}
+
+.progress-toast-overlay, .progress-toast-overlay >* {
+    pointer-events: none;
+}

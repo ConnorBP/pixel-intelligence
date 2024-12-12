@@ -4,6 +4,7 @@ import { Outlet } from 'react-router-dom'
 import ImageDetailsProvider from './ImageDetailsProvider'
 import JobWatcherProvider from './JobWatcherProvider'
 import JobWatcherOverlay from '../components/JobWatcherOverlay'
+import ProgressToastOverlay from '../components/ProgressToastOverlay'
 
 // this nicely wraps the entire app in the context providers
 // these are useful for cases where you need the same persistent 
@@ -15,7 +16,8 @@ const ContextRouteWrapper = () => {
             <ImageDetailsProvider>
                 <JobWatcherProvider>
                     <Outlet />
-                    <JobWatcherOverlay/>
+                    <JobWatcherOverlay />
+                    <ProgressToastOverlay />
                 </JobWatcherProvider>
             </ImageDetailsProvider>
         </SessionProvider>
