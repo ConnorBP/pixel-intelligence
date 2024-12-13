@@ -33,6 +33,13 @@ This was my first time participating in a project like this. This project taught
 
 ### Parmila "Parmilashams" Shams (301426195)
 
+This project was the most challenging project I have had. It was also an amazing learning experience. In this project I learned how to code with different components. I learned is from challenging I faced and then ask from chatGpt and Conner to solve it. 
+
+I sometimes forgot where I had written specific CSS styles because different components required different stylesheets. When I tried to adjust the gallery layout, I accidentally overwrote the Navbar styles, which broke the design on mobile devices. It took hours of debugging and learning how to use better naming conventions for classes and organizing CSS files to fix this issue. This taught me the importance of keeping my styles modular and organized.
+
+Another challenge was losing my work multiple times. For instance, I worked for two days on styling and functionality changes, thinking I had successfully pushed my code to GitHub, only to find out later that I hadn’t created a pull request. My teammate helped me retrieve the code, but I learned to double-check my commits and ensure I followed the correct GitHub workflow.
+
+Totally I can say I got valuable skills in GitHub collaboration, React.js, and CSS styling. I learned to debug more efficiently, organize my code better, and work with dynamic layouts. This project taught me the importance of teamwork, and I am especially thankful to my team members, particularly Connor, for their support and guidance throughout the process.
 
 # Requirements
 
