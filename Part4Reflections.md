@@ -32,3 +32,46 @@ When I started to work on this project I did not much about the React and how th
 
 ### Parmila "Parmilashams" Shams (301426195)
 
+
+# Requirements
+
+- [x] have a maximum canvas size of 64px by 64px
+- [x] have a minimum canvas size of 8px by 8px
+- [x] allow users to select a resolution for their pixel art image on start
+- [x] load with a sensible default canvas size initially
+- [x] allow a prompt to generate an image on canvas creation
+- [x] store all editor state (especially pixels) on page reload using local storage
+- [x] allow the user to download a png copy of the image
+- [x] have drawing tools including: pencil, eraser, clear, eyedropper, and fill-bucket
+- [x] have a color selection tool with primary color, secondary color, and a swap button
+- [x] have a database for storing gallery entries
+- [x] have some sort of storage for storing gallery uploads (maybe s3 bucket)
+- [x] allow users to share their creations
+## Stretch Goals
+Crochet pattern export
+encoded URL share codes for pixel art (could use RLE encoding format by ConnorBP)
+extended color palette presets
+- [ ] additional file export formats (popular sprite editor formats, JSON, WebP, etc)
+    - [x] JSON
+- [ ] login page (user login system)
+    - [x] JWT sessions 
+- [ ] transaction support / undo-redo
+    - [x] partial or initial implementation started for line and bucket drawing
+
+## Extra stuff we did
+- [x] Full mobile phone support for drawing and everything
+- [x] More detailed, and elaborate, stable diffusion generation system using style Loras, prompt injection, and stable diffusion
+- [x] share to editor from gallery page
+- [x] extended gallery listing metadata (name, description, author, date)
+- [x] adaptive grid lines
+- [x] fully browser refresh resistant state management system
+- [x] composable pop ups
+- [x] responsive design
+- [x] advanced modern css styling such as variables, calculation, animation, and filters
+- [x] nearest neighbour scaling mode for upscale
+- [x] dynamic canvas scaling tool
+- [x] adaptive color picker
+- [x] image import mode (turn any image into pixel art)
+- [x] netlify serverless functions based deployment for express backend
+- [x] input validation on api endpoints
+- [x] probably so much more
