@@ -11,7 +11,7 @@ A Pixel Art Editor with generative AI functionality, image downscale processing,
  - Sanjeevkumar "[sanjeev-cs](https://github.com/sanjeev-cs)" Chauhan (301480021)
  - Parmila "[Parmilashams](https://github.com/Parmilashams)" Shams (301426195)
 
-![image-20241208002125209](.\docs\gallery2.png)
+![image-20241208002125209](./docs/gallery2.png)
 
 # Steps to use app
 open [https://229-pixelai.netlify.app](https://229-pixelai.netlify.app) in your desktop or mobile browser, feel free to browse the gallery listing pages and click on any image to view it. Then you may download, share, or even edit that photo with the provided options on the popup. If you click edit it will bring you to the editor and ask if you want to overwrite the current canvas. You can also get to the editor from the top bar. Once in the editor you will see all your document options in the top buttons or context menu, and all drawing tools on the left. In the top right there is also a shortcut to the gallery on desktop mode, or on mobile it is in the context menu. You may now draw with your cursor or finger, or click on the + icon to generate a new ai image to start with. Once you have an image you like you can download it in json form or in png form with the top buttons, then you can import it again later. On the top right of the buttons is also a share option to share your image on the front page gallery.
@@ -49,9 +49,9 @@ This was my first time participating in a project like this. This project taught
 - [x] have some sort of storage for storing gallery uploads (maybe s3 bucket)
 - [x] allow users to share their creations
 ## Stretch Goals
-Crochet pattern export
-encoded URL share codes for pixel art (could use RLE encoding format by ConnorBP)
-extended color palette presets
+- [ ] Crochet pattern export
+- [ ] encoded URL share codes for pixel art (could use RLE encoding format by ConnorBP)
+- [ ] extended color palette presets
 - [ ] additional file export formats (popular sprite editor formats, JSON, WebP, etc)
     - [x] JSON
 - [ ] login page (user login system)
