@@ -8,6 +8,8 @@
 Pixel Intelligence is a full-stack pixel art editor application with [generative AI functionality through stablehorde](https://stablehorde.net/), image downscale processing, image export, and a showcase gallery. This project was developed as part of the Comp229 Group Project (Fall 2024).
 
 ![picture of the editor page](./docs/this_is_fine.png)
+![picture of the gallery page](./docs/gallery.png)
+![picture of the gallery page with image details overlay](./docs/gallery2.png)
 
 ## Features
 
