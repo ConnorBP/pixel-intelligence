@@ -67,7 +67,7 @@ Totally I can say I got valuable skills in GitHub collaboration, React.js, and C
     - [x] partial or initial implementation started for line and bucket drawing
 
 ## Extra stuff we did
-- [x] build in support for first class light and dark modes using the modern prefers-color-scheme media query. My eyes are saved!
+- [x] built in support for first class light and dark modes using the modern prefers-color-scheme media query. My eyes are saved!
 - [x] Full mobile phone support for drawing and everything
 - [x] More detailed, and elaborate, stable diffusion generation system using style Loras, prompt injection, and stable diffusion
 - [x] share to editor from gallery page
