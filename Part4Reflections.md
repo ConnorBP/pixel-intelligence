@@ -1,4 +1,4 @@
-# Pixel Intelligence Part 3 Reflections [![Netlify Status](https://api.netlify.com/api/v1/badges/e2ce0974-8673-4cd8-bc26-cbcb41fe36e6/deploy-status)](https://app.netlify.com/sites/229-pixelai/deploys)
+# Group 21, Pixel Intelligence Part 4 Reflections [![Netlify Status](https://api.netlify.com/api/v1/badges/e2ce0974-8673-4cd8-bc26-cbcb41fe36e6/deploy-status)](https://app.netlify.com/sites/229-pixelai/deploys)
 A Pixel Art Editor with generative AI functionality, image downscale processing, image export, and a showcase gallery. Comp229 Group Project (Fall 2024).
 
 
@@ -30,8 +30,8 @@ For a full list of completed tasks please see our [issues tracker on Github](htt
 
 When I started to work on this project I did not much about the React and how the backend works behind the UI. After spending so much time doing this project it help me a lot to learn so many things about React and how the components in react works. Additionally, when I started to work on the image generation api endpoints it seem really hard in the beginning but after discussing with my team member Connor his explanation really helped me to think through the solution to how to make the api work. Finally, just before an hour before our group presentation I found a small CSS error I can say and I also implemented the image creation cancellation button but We forgot to merge the branch to the main thanks to the a person, he will probably know I'm talking about him if he reads this 😂. Anyways, it was quite fun to work on this project and with the contribution and collaboration of our group members we were able to finish thi. So Kudos to every group members🎉🎉🍾. We do have many stretch goals for this application and will work on that also but for now, at least for today, we are done😁. Lol I wrote quite a bit without noticing. XD
 
-### Yoon "superYM222" Min (301317593)
+### Yoon Min(301317593) - Github: superYM222
 
+This was my first time participating in a project like this. This project taught me how to share code with others using GitHub. In addition, if Conner finds bugs, he uploaded to the GitHub issue page, we can assign them to ourselves to ensure without duplication. At first, GitHub seemed very challenging, but I learned a lot by making many mistakes. I learned about React, and working with multiple pages simultaneously was difficult. However, by looking at other people's code, I realized there are many different ways to implement things. Also, I worked on fixing bugs and improving editors in the features of the left toolbar. one of the issues was with the eyedropper tool—it worked on Chrome but wasn’t supported in Safari or mobile. To address this, I added an HTML color picker feature. I also tried to add a gridLine on/off button, but Connor fixed my code, and I learned how to simplify it and make it more reusable from his code. Additionally, I attempted functionality to close a window when clicking the mouse on the background or pressing the ESC key. However, I faced a warning and couldn’t resolve it. The issue seems to be related to breaking a React rule. 
 
 ### Parmila "Parmilashams" Shams (301426195)
-
