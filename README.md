@@ -38,6 +38,12 @@ Pixel Intelligence is a full-stack pixel art editor application with [generative
 - Optimized for pixel art style output
 - Generation prompt on canvas creation
 
+### Backend
+- Node + Express JS
+- API routes can be run as a traditional Express JS server or as a netlify serverless function
+- Mongo DB for storing gallery listings
+- User sessions for gallery API use JWT (Json Web Tokens)
+
 ## Current Implementation Status
 
 ### Completed
@@ -49,9 +55,8 @@ Pixel Intelligence is a full-stack pixel art editor application with [generative
 - Client-side caching
 
 ### In Progress
-- AI image generation frontend integration
-- Clone to editor from gallery
 - Additional file format support
+- various [feature requests](./issues)
 
 ### Stretch Goals Status
 - ✅ Extended metadata support
